@@ -1,0 +1,82 @@
+[
+  {
+    "level": "info",
+    "category": "system",
+    "message": "Server started successfully",
+    "details": {
+      "port": 8080,
+      "mode": "development"
+    },
+    "timestamp": "2025-08-21T10:57:04.260Z"
+  },
+  {
+    "level": "info",
+    "category": "user",
+    "message": "Admin logged into dashboard",
+    "details": {
+      "userAgent": "Browser"
+    },
+    "timestamp": "2025-08-21T10:57:04.261Z"
+  },
+  {
+    "level": "info",
+    "category": "order",
+    "message": "New order created",
+    "details": {
+      "orderId": "order_001",
+      "total": 25.5
+    },
+    "timestamp": "2025-08-21T10:57:04.261Z"
+  },
+  {
+    "level": "info",
+    "category": "customer",
+    "message": "New customer registered",
+    "details": {
+      "customerName": "Ahmed Al-Rashid"
+    },
+    "timestamp": "2025-08-21T10:57:04.261Z"
+  },
+  {
+    "level": "info",
+    "category": "product",
+    "message": "Product inventory updated",
+    "details": {
+      "productName": "USB Cable",
+      "newStock": 45
+    },
+    "timestamp": "2025-08-21T10:57:04.262Z"
+  },
+  {
+    "level": "warning",
+    "category": "system",
+    "message": "High memory usage detected",
+    "details": {
+      "usage": "85%"
+    },
+    "timestamp": "2025-08-21T10:57:04.264Z"
+  },
+  {
+    "level": "info",
+    "category": "analytics",
+    "message": "Analytics data refreshed",
+    "details": {
+      "recordsProcessed": 1250
+    },
+    "timestamp": "2025-08-21T10:57:04.265Z"
+  },
+  {
+    "level": "info",
+    "category": "product",
+    "message": "New product added: I",
+    "details": {
+      "productId": "1755791007379tanpejwjs",
+      "productName": "I",
+      "price": 0.9,
+      "variants": 0
+    },
+    "ip": "::ffff:127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15",
+    "timestamp": "2025-08-21T15:43:27.590Z"
+  }
+]

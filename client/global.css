@@ -1,0 +1,492 @@
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 302 50% 26%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 308 44% 21%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Custom RTL utilities */
+  .text-start {
+    text-align: start;
+  }
+
+  .text-end {
+    text-align: end;
+  }
+
+  /* Direction-specific overrides */
+  [dir="rtl"] .text-start {
+    text-align: right;
+  }
+
+  [dir="ltr"] .text-start {
+    text-align: left;
+  }
+
+  [dir="rtl"] .text-end {
+    text-align: left;
+  }
+
+  [dir="ltr"] .text-end {
+    text-align: right;
+  }
+
+  /* Font families */
+  html {
+    font-family: "Funnel Display", sans-serif;
+    font-optical-sizing: auto;
+  }
+
+  html[lang="ar"] {
+    font-family: "Noto Kufi Arabic", sans-serif;
+    font-optical-sizing: auto;
+  }
+
+  /* RTL support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+
+  [dir="ltr"] {
+    direction: ltr;
+  }
+
+  /* RTL-specific spacing adjustments */
+  [dir="rtl"] .ml-3 {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+
+  [dir="rtl"] .mr-3 {
+    margin-right: 0;
+    margin-left: 0.75rem;
+  }
+
+  [dir="rtl"] .ml-2 {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  [dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+
+  [dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+
+  [dir="rtl"] .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+
+  [dir="rtl"] .pl-6 {
+    padding-left: 0;
+    padding-right: 1.5rem;
+  }
+
+  [dir="rtl"] .pr-6 {
+    padding-right: 0;
+    padding-left: 1.5rem;
+  }
+
+  /* RTL sidebar positioning */
+  [dir="rtl"] .fixed.left-0 {
+    left: auto;
+    right: 0;
+  }
+
+  [dir="rtl"] .fixed.right-0 {
+    right: auto;
+    left: 0;
+  }
+
+  /* RTL text alignment improvements */
+  [dir="rtl"] .text-start {
+    text-align: right;
+  }
+
+  [dir="rtl"] .text-end {
+    text-align: left;
+  }
+
+  /* RTL flex direction improvements */
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] .flex-row-reverse {
+    flex-direction: row;
+  }
+
+  /* RTL space improvements */
+  [dir="rtl"] .space-x-2 > * + * {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  [dir="rtl"] .space-x-3 > * + * {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+
+  [dir="rtl"] .space-x-4 > * + * {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+
+  /* RTL Dialog Header */
+  [dir="rtl"] .text-center.sm\\:text-left {
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    [dir="rtl"] .text-center.sm\\:text-left {
+      text-align: right;
+    }
+  }
+
+  /* RTL Form spacing */
+  [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  [dir="rtl"] .flex-row.sm\\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  /* RTL Button margins */
+  [dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+
+  [dir="rtl"] .ml-1 {
+    margin-left: 0;
+    margin-right: 0.25rem;
+  }
+
+  [dir="rtl"] .mr-1 {
+    margin-right: 0;
+    margin-left: 0.25rem;
+  }
+
+  /* RTL Form elements */
+  [dir="rtl"] input[type="text"],
+  [dir="rtl"] input[type="number"],
+  [dir="rtl"] input[type="email"],
+  [dir="rtl"] textarea,
+  [dir="rtl"] select {
+    text-align: right;
+  }
+
+  [dir="rtl"] input::placeholder,
+  [dir="rtl"] textarea::placeholder {
+    text-align: right;
+  }
+
+  /* RTL Labels */
+  [dir="rtl"] label {
+    text-align: right;
+  }
+
+  /* RTL Text alignment for key content */
+  [dir="rtl"] h1:not(.text-center),
+  [dir="rtl"] h2:not(.text-center),
+  [dir="rtl"] h3:not(.text-center),
+  [dir="rtl"] h4:not(.text-center),
+  [dir="rtl"] h5:not(.text-center),
+  [dir="rtl"] h6:not(.text-center) {
+    text-align: right;
+  }
+
+  [dir="rtl"] p:not(.text-center) {
+    text-align: right;
+  }
+
+  [dir="ltr"] h1:not(.text-center),
+  [dir="ltr"] h2:not(.text-center),
+  [dir="ltr"] h3:not(.text-center),
+  [dir="ltr"] h4:not(.text-center),
+  [dir="ltr"] h5:not(.text-center),
+  [dir="ltr"] h6:not(.text-center) {
+    text-align: left;
+  }
+
+  [dir="ltr"] p:not(.text-center) {
+    text-align: left;
+  }
+
+  /* RTL Table headers and cells */
+  [dir="rtl"] th,
+  [dir="rtl"] td {
+    text-align: right;
+  }
+
+  /* Touch optimization for mobile devices */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better touch targets for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .touch-manipulation {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Improve scrolling performance on mobile */
+  .scroll-smooth {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Scroll area improvements for mobile */
+  .radix-scroll-area[data-orientation="vertical"] .radix-scroll-area-thumb,
+  .radix-scroll-area[data-orientation="vertical"] .ScrollAreaThumb,
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Ensure dialog content scroll */
+  .dialog-content-scroll .radix-viewport,
+  .dialog-content-scroll [data-radix-scroll-area-viewport] {
+    max-height: 80vh !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Payment method sticky positioning */
+  .payment-method-sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(239, 246, 255, 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Improved scroll behavior */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* RTL specific scroll improvements */
+  [dir="rtl"] .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Auto text direction */
+  .auto-text {
+    direction: auto;
+  }
+
+  /* LTR text direction for numbers and codes */
+  .ltr-text {
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* RTL flip for icons */
+  .rtl-flip {
+    transform: scaleX(-1);
+  }
+
+  [dir="ltr"] .rtl-flip {
+    transform: none;
+  }
+
+  /* Override any problematic classes with higher specificity */
+  html[dir="rtl"] input,
+  html[dir="rtl"] textarea,
+  html[dir="rtl"] .form-input {
+    text-align: right !important;
+  }
+
+  html[dir="ltr"] input,
+  html[dir="ltr"] textarea,
+  html[dir="ltr"] .form-input {
+    text-align: left !important;
+  }
+
+  /* Force RTL for text elements when in Arabic mode */
+  html[dir="rtl"] p,
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] h4,
+  html[dir="rtl"] h5,
+  html[dir="rtl"] h6,
+  html[dir="rtl"] span:not(.text-center),
+  html[dir="rtl"] div:not(.flex):not(.text-center),
+  html[dir="rtl"] label {
+    text-align: right !important;
+  }
+
+  html[dir="ltr"] p,
+  html[dir="ltr"] h1,
+  html[dir="ltr"] h2,
+  html[dir="ltr"] h3,
+  html[dir="ltr"] h4,
+  html[dir="ltr"] h5,
+  html[dir="ltr"] h6,
+  html[dir="ltr"] span:not(.text-center),
+  html[dir="ltr"] div:not(.flex):not(.text-center),
+  html[dir="ltr"] label {
+    text-align: left !important;
+  }
+
+  /* Exceptions for center-aligned content */
+  html[dir="rtl"] .text-center,
+  html[dir="ltr"] .text-center,
+  .text-center {
+    text-align: center !important;
+  }
+
+  /* Exceptions for number/price content that should stay LTR */
+  html[dir="rtl"] .ltr-text,
+  html[dir="ltr"] .ltr-text {
+    text-align: left !important;
+    direction: ltr;
+  }
+
+  /* RTL flex direction adjustments */
+  [dir="rtl"] .justify-start {
+    justify-content: flex-end;
+  }
+
+  [dir="rtl"] .justify-end {
+    justify-content: flex-start;
+  }
+
+  /* Simple, reliable RTL classes with higher specificity */
+  .rtl-text {
+    text-align: right !important;
+  }
+
+  .ltr-text {
+    text-align: left !important;
+  }
+
+  .auto-text {
+    text-align: left !important;
+  }
+
+  html[dir="rtl"] .auto-text {
+    text-align: right !important;
+  }
+
+  html[dir="ltr"] .auto-text {
+    text-align: left !important;
+  }
+}
