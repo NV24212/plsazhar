@@ -70,6 +70,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { DataProvider } from "@/contexts/DataContext";
 import { DialogProvider } from "@/contexts/DialogContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 import { CartProvider } from "@/contexts/CartContext";
 import LoginPage from "@/components/LoginPage";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -148,14 +149,16 @@ const App = () => (
       <BrowserRouter>
         <LanguageProvider>
           <CartProvider>
-            <AuthProvider>
-              <DataProvider>
-                <DialogProvider>
-                  <PageTracker />
-                  <AppContent />
-                </DialogProvider>
-              </DataProvider>
-            </AuthProvider>
+            <SettingsProvider>
+              <AuthProvider>
+                <DataProvider>
+                  <DialogProvider>
+                    <PageTracker />
+                    <AppContent />
+                  </DialogProvider>
+                </DataProvider>
+              </AuthProvider>
+            </SettingsProvider>
           </CartProvider>
         </LanguageProvider>
       </BrowserRouter>

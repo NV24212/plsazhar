@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useDialog } from "@/contexts/DialogContext";
 import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSettings } from "@/contexts/SettingsContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -155,131 +156,35 @@ export default function Settings() {
   const { showConfirm, showAlert } = useDialog();
   const { products, orders, customers, refetchData } = useData();
   const { changePassword, updateEmail, adminInfo, fetchAdminInfo } = useAuth();
-  const [settings, setSettings] = useState<StoreSettings>({
-    storeName: "",
-    storeDescription: "",
-    currency: "BHD",
-    currencySymbol: "BD",
-    contactPhone: "",
-    contactEmail: "",
-    contactAddress: "",
-    orderSuccessMessageEn:
-      "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
-    orderSuccessMessageAr:
-      "شكراً لك على طلبك! سنقوم بمعالجته خلال 2-4 ساعات والتوصيل خلال 1-3 أيام عم��.",
-    orderInstructionsEn:
-      "For any changes or questions about your order, please contact us.",
-    orderInstructionsAr: "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا.",
-    businessHours: {
-      monday: { open: "09:00", close: "18:00", isOpen: true },
-      tuesday: { open: "09:00", close: "18:00", isOpen: true },
-      wednesday: { open: "09:00", close: "18:00", isOpen: true },
-      thursday: { open: "09:00", close: "18:00", isOpen: true },
-      friday: { open: "09:00", close: "18:00", isOpen: true },
-      saturday: { open: "09:00", close: "18:00", isOpen: true },
-      sunday: { open: "09:00", close: "18:00", isOpen: true },
-    },
-    pickupMessageEn:
-      "Please collect your order from our location during business hours.",
-    pickupMessageAr: "يرجى استلام طلبك من موقعنا خلال ساعات العمل.",
-    deliveryMessageEn:
-      "Your order will be delivered to your address within 1-3 business days.",
-    deliveryMessageAr: "سيتم توصيل طلبك إلى عنوانك خلال 1-3 أيام عمل.",
-    cashOnDeliveryEnabled: true,
-    bankTransferEnabled: false,
-    bankAccountInfo: "",
-    autoOrderConfirmation: true,
-    lowStockThreshold: 5,
-    maxOrderQuantity: 10,
-    orderProcessingTime: "2-4 hours",
-    deliveryConcerns: 1.5,
-    pickupOrderConfig: 0,
-    successHeadlineEn: "Order Confirmed!",
-    successHeadlineAr: "تم تأكيد الطلب!",
-    successSubtextEn: "We'll share updates by phone as your order progresses.",
-    successSubtextAr: "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك.",
-    displayOrderNumber: true,
-    displayOrderItems: true,
-    displayTotals: true,
-    displayNextSteps: true,
-    displayContact: true,
-    enableDialogScroll: true,
-    autoScrollToSummary: true,
-    adminPassword: "",
-    adminEmail: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-    enableNotifications: true,
-    enableAnalytics: true,
-    enableBackup: true,
-    maxImageSize: 5,
-    enableImageCompression: true,
-    enableAutoSave: true,
-    enableDarkMode: false,
-    enableAccessibility: true,
-    enablePerformanceMode: false,
-    enableDebugMode: false,
-    deliveryFee: 1.5,
-    freeDeliveryMinimum: 20,
-    deliveryAreaSitra: 1.0,
-    deliveryAreaMuharraq: 1.5,
-    deliveryAreaOther: 2.0,
-    deliveryAreaSitraNameEn: "Sitra",
-    deliveryAreaSitraNameAr: "سترة",
-    deliveryAreaMuharraqlNameEn: "Muharraq, Askar, Jao",
-    deliveryAreaMuharraqNameAr: "المحرق، عسكر، جو",
-    deliveryAreaOtherNameEn: "Other Cities",
-    deliveryAreaOtherNameAr: "مدن أخرى",
-  });
+  const {
+    settings: contextSettings,
+    loading,
+    refetchSettings,
+  } = useSettings();
+  const [formState, setFormState] = useState<StoreSettings | null>(null);
 
   const [hasChanges, setHasChanges] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
   const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isFixingCharacters, setIsFixingCharacters] = useState(false);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch("/api/settings");
-        const data = await response.json();
-        if (response.ok) {
-          if (Object.keys(data).length > 0) {
-            setSettings((prev) => ({ ...prev, ...data }));
-          }
-        } else {
-          throw new Error(data.error || "Failed to fetch settings");
-        }
-      } catch (error) {
-        console.error(error);
-        showAlert({
-          title: "Error",
-          message: "Could not load settings from the server.",
-          type: "error",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSettings();
-    // This is a pattern for running an async effect once on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (contextSettings) {
+      setFormState(contextSettings);
+    }
+  }, [contextSettings]);
 
   useEffect(() => {
     // Load admin email from context
-    if (adminInfo?.email) {
-      setSettings((prev) => ({ ...prev, adminEmail: adminInfo.email }));
+    if (adminInfo?.email && formState) {
+      setFormState((prev) => ({ ...prev, adminEmail: adminInfo.email }));
     }
-  }, [adminInfo]);
+  }, [adminInfo, formState]);
 
   const handleInputChange = (field: string, value: any) => {
-    setSettings((prev) => ({ ...prev, [field]: value }));
+    setFormState((prev) => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
 
@@ -288,7 +193,7 @@ export default function Settings() {
     field: string,
     value: any,
   ) => {
-    setSettings((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       businessHours: {
         ...prev.businessHours,
@@ -303,9 +208,9 @@ export default function Settings() {
 
   const handlePasswordChange = async () => {
     if (
-      !settings.currentPassword ||
-      !settings.newPassword ||
-      !settings.confirmPassword
+      !formState.currentPassword ||
+      !formState.newPassword ||
+      !formState.confirmPassword
     ) {
       showAlert({
         title: t("message.error"),
@@ -315,7 +220,7 @@ export default function Settings() {
       return;
     }
 
-    if (settings.newPassword !== settings.confirmPassword) {
+    if (formState.newPassword !== formState.confirmPassword) {
       showAlert({
         title: t("message.error"),
         message: t("settings.passwordsDoNotMatch"),
@@ -324,7 +229,7 @@ export default function Settings() {
       return;
     }
 
-    if (settings.newPassword.length < 6) {
+    if (formState.newPassword.length < 6) {
       showAlert({
         title: t("message.error"),
         message: "Password must be at least 6 characters long",
@@ -336,8 +241,8 @@ export default function Settings() {
     setIsChangingPassword(true);
     try {
       const success = await changePassword(
-        settings.currentPassword,
-        settings.newPassword,
+        formState.currentPassword,
+        formState.newPassword,
       );
 
       if (success) {
@@ -348,7 +253,7 @@ export default function Settings() {
         });
 
         // Clear password fields
-        setSettings((prev) => ({
+        setFormState((prev) => ({
           ...prev,
           currentPassword: "",
           newPassword: "",
@@ -374,13 +279,15 @@ export default function Settings() {
   };
 
   const saveSettings = async () => {
+    if (!formState) return;
+
     setIsSaving(true);
     try {
       // Save settings to the server via API
       const response = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(formState),
       });
 
       const result = await response.json();
@@ -391,10 +298,10 @@ export default function Settings() {
       // Handle admin email update if it changed
       if (
         adminInfo?.email &&
-        settings.adminEmail &&
-        adminInfo.email !== settings.adminEmail
+        formState.adminEmail &&
+        adminInfo.email !== formState.adminEmail
       ) {
-        const emailUpdateSuccess = await updateEmail(settings.adminEmail);
+        const emailUpdateSuccess = await updateEmail(formState.adminEmail);
         if (!emailUpdateSuccess) {
           showAlert({
             title: t("message.error"),
@@ -414,6 +321,7 @@ export default function Settings() {
         message: t("settings.saveSuccess"),
         type: "success",
       });
+      refetchSettings(); // Refetch settings to update the context
     } catch (error) {
       console.error("Save settings error:", error);
       showAlert({
@@ -441,7 +349,7 @@ export default function Settings() {
   };
 
   const exportSettings = () => {
-    const dataStr = JSON.stringify(settings, null, 2);
+    const dataStr = JSON.stringify(formState, null, 2);
     const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
@@ -458,7 +366,7 @@ export default function Settings() {
       reader.onload = (e) => {
         try {
           const importedSettings = JSON.parse(e.target?.result as string);
-          setSettings((prev) => ({ ...prev, ...importedSettings }));
+          setFormState((prev) => ({ ...prev, ...importedSettings }));
           setHasChanges(true);
           showAlert({
             title: t("checkout.settingsImported"),
@@ -545,7 +453,7 @@ export default function Settings() {
     { id: "system", label: t("settings.systemSettings"), icon: Monitor },
   ];
 
-  if (isLoading) {
+  if (loading || !formState) {
     return (
       <div className="flex items-center justify-center h-64">
         <RefreshCw className="w-8 h-8 animate-spin text-primary" />
@@ -632,7 +540,7 @@ export default function Settings() {
                   </Label>
                   <Input
                     id="storeName"
-                    value={settings.storeName}
+                    value={formState.storeName}
                     onChange={(e) =>
                       handleInputChange("storeName", e.target.value)
                     }
@@ -646,7 +554,7 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="storeDescription"
-                    value={settings.storeDescription}
+                    value={formState.storeDescription}
                     onChange={(e) =>
                       handleInputChange("storeDescription", e.target.value)
                     }
@@ -661,7 +569,7 @@ export default function Settings() {
                       {t("settings.currency")}
                     </Label>
                     <Select
-                      value={settings.currency}
+                      value={formState.currency}
                       onValueChange={(value) =>
                         handleInputChange("currency", value)
                       }
@@ -688,7 +596,7 @@ export default function Settings() {
                     </Label>
                     <Input
                       id="currencySymbol"
-                      value={settings.currencySymbol}
+                      value={formState.currencySymbol}
                       onChange={(e) =>
                         handleInputChange("currencySymbol", e.target.value)
                       }
@@ -723,7 +631,7 @@ export default function Settings() {
                     type="number"
                     step="0.1"
                     min="0"
-                    value={settings.freeDeliveryMinimum || 0}
+                    value={formState.freeDeliveryMinimum || 0}
                     onChange={(e) =>
                       handleInputChange(
                         "freeDeliveryMinimum",
@@ -779,7 +687,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaSitraNameEn"
-                        value={settings.deliveryAreaSitraNameEn || ""}
+                        value={formState.deliveryAreaSitraNameEn || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaSitraNameEn",
@@ -799,7 +707,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaSitraNameAr"
-                        value={settings.deliveryAreaSitraNameAr || ""}
+                        value={formState.deliveryAreaSitraNameAr || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaSitraNameAr",
@@ -820,7 +728,7 @@ export default function Settings() {
                       type="number"
                       step="0.1"
                       min="0"
-                      value={settings.deliveryAreaSitra || 0}
+                      value={formState.deliveryAreaSitra || 0}
                       onChange={(e) =>
                         handleInputChange(
                           "deliveryAreaSitra",
@@ -860,7 +768,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaMuharraqlNameEn"
-                        value={settings.deliveryAreaMuharraqlNameEn || ""}
+                        value={formState.deliveryAreaMuharraqlNameEn || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaMuharraqlNameEn",
@@ -880,7 +788,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaMuharraqNameAr"
-                        value={settings.deliveryAreaMuharraqNameAr || ""}
+                        value={formState.deliveryAreaMuharraqNameAr || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaMuharraqNameAr",
@@ -901,7 +809,7 @@ export default function Settings() {
                       type="number"
                       step="0.1"
                       min="0"
-                      value={settings.deliveryAreaMuharraq || 0}
+                      value={formState.deliveryAreaMuharraq || 0}
                       onChange={(e) =>
                         handleInputChange(
                           "deliveryAreaMuharraq",
@@ -941,7 +849,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaOtherNameEn"
-                        value={settings.deliveryAreaOtherNameEn || ""}
+                        value={formState.deliveryAreaOtherNameEn || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaOtherNameEn",
@@ -961,7 +869,7 @@ export default function Settings() {
                       </Label>
                       <Input
                         id="deliveryAreaOtherNameAr"
-                        value={settings.deliveryAreaOtherNameAr || ""}
+                        value={formState.deliveryAreaOtherNameAr || ""}
                         onChange={(e) =>
                           handleInputChange(
                             "deliveryAreaOtherNameAr",
@@ -982,7 +890,7 @@ export default function Settings() {
                       type="number"
                       step="0.1"
                       min="0"
-                      value={settings.deliveryAreaOther || 0}
+                      value={formState.deliveryAreaOther || 0}
                       onChange={(e) =>
                         handleInputChange(
                           "deliveryAreaOther",
@@ -1024,7 +932,7 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="pickupMessageEn"
-                    value={settings.pickupMessageEn || ""}
+                    value={formState.pickupMessageEn || ""}
                     onChange={(e) =>
                       handleInputChange("pickupMessageEn", e.target.value)
                     }
@@ -1039,7 +947,7 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="pickupMessageAr"
-                    value={settings.pickupMessageAr || ""}
+                    value={formState.pickupMessageAr || ""}
                     onChange={(e) =>
                       handleInputChange("pickupMessageAr", e.target.value)
                     }
@@ -1066,7 +974,7 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="deliveryMessageEn"
-                    value={settings.deliveryMessageEn || ""}
+                    value={formState.deliveryMessageEn || ""}
                     onChange={(e) =>
                       handleInputChange("deliveryMessageEn", e.target.value)
                     }
@@ -1081,7 +989,7 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="deliveryMessageAr"
-                    value={settings.deliveryMessageAr || ""}
+                    value={formState.deliveryMessageAr || ""}
                     onChange={(e) =>
                       handleInputChange("deliveryMessageAr", e.target.value)
                     }
@@ -1114,7 +1022,7 @@ export default function Settings() {
                   <Input
                     id="adminEmail"
                     type="email"
-                    value={settings.adminEmail}
+                    value={formState.adminEmail}
                     onChange={(e) =>
                       handleInputChange("adminEmail", e.target.value)
                     }
@@ -1141,7 +1049,7 @@ export default function Settings() {
                   <Input
                     id="currentPassword"
                     type="password"
-                    value={settings.currentPassword || ""}
+                    value={formState.currentPassword || ""}
                     onChange={(e) =>
                       handleInputChange("currentPassword", e.target.value)
                     }
@@ -1156,7 +1064,7 @@ export default function Settings() {
                   <Input
                     id="newPassword"
                     type="password"
-                    value={settings.newPassword || ""}
+                    value={formState.newPassword || ""}
                     onChange={(e) =>
                       handleInputChange("newPassword", e.target.value)
                     }
@@ -1171,7 +1079,7 @@ export default function Settings() {
                   <Input
                     id="confirmPassword"
                     type="password"
-                    value={settings.confirmPassword || ""}
+                    value={formState.confirmPassword || ""}
                     onChange={(e) =>
                       handleInputChange("confirmPassword", e.target.value)
                     }
@@ -1179,9 +1087,9 @@ export default function Settings() {
                     className="ltr-text"
                   />
                 </div>
-                {settings.newPassword &&
-                  settings.confirmPassword &&
-                  settings.newPassword !== settings.confirmPassword && (
+                {formState.newPassword &&
+                  formState.confirmPassword &&
+                  formState.newPassword !== formState.confirmPassword && (
                     <p className="text-sm text-red-600 auto-text">
                       {t("settings.passwordsDoNotMatch")}
                     </p>
@@ -1189,10 +1097,10 @@ export default function Settings() {
                 <Button
                   onClick={handlePasswordChange}
                   disabled={
-                    !settings.currentPassword ||
-                    !settings.newPassword ||
-                    !settings.confirmPassword ||
-                    settings.newPassword !== settings.confirmPassword ||
+                    !formState.currentPassword ||
+                    !formState.newPassword ||
+                    !formState.confirmPassword ||
+                    formState.newPassword !== formState.confirmPassword ||
                     isChangingPassword
                   }
                   className="w-full"
