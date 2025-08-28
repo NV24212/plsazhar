@@ -258,6 +258,49 @@ GRANT SELECT ON order_details TO service_role;
 GRANT EXECUTE ON FUNCTION get_order_stats() TO service_role;
 
 -- =================================================================
+-- Step 12: Create app_settings table
+-- =================================================================
+CREATE TABLE IF NOT EXISTS app_settings (
+    key TEXT PRIMARY KEY,
+    value JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+COMMENT ON TABLE app_settings IS 'Stores application-wide settings as key-value pairs. The ''key'' is a unique identifier for the setting (e.g., ''storeConfig''), and the ''value'' is a JSONB object containing the setting data.';
+
+DROP TRIGGER IF EXISTS update_app_settings_updated_at ON app_settings;
+CREATE TRIGGER update_app_settings_updated_at
+    BEFORE UPDATE ON app_settings
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+GRANT ALL ON app_settings TO service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON app_settings TO authenticated;
+
+INSERT INTO app_settings (key, value)
+VALUES (
+    'storeConfig',
+    '{
+        "storeName": "",
+        "storeDescription": "",
+        "currency": "BHD",
+        "currencySymbol": "BD",
+        "contactPhone": "",
+        "contactEmail": "",
+        "contactAddress": "",
+        "orderSuccessMessageEn": "Thank you for your order! We''ll process it within 2-4 hours and deliver within 1-3 business days.",
+        "orderSuccessMessageAr": "شكراً لك على طلبك! سنقوم بمعالجته خلال 2-4 ساعات والتوصيل خلال 1-3 أيام عمل.",
+        "orderInstructionsEn": "For any changes or questions about your order, please contact us.",
+        "orderInstructionsAr": "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا.",
+        "cashOnDeliveryEnabled": true,
+        "bankTransferEnabled": false,
+        "bankAccountInfo": ""
+    }'::jsonb
+)
+ON CONFLICT (key) DO NOTHING;
+
+-- =================================================================
 -- Final success message
 -- =================================================================
-SELECT 'Database migration script V2.1 executed successfully.' as status;
+SELECT 'Database migration script V2.2 executed successfully.' as status;
