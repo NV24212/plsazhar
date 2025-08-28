@@ -83,8 +83,8 @@ export const createOrder: RequestHandler = async (req, res) => {
     const deliveryFee = deliveryType === "delivery" ? 1.5 : 0;
     const expectedTotal = itemsTotal + deliveryFee;
 
-    // Use the total from request if provided, otherwise use calculated total
-    const finalTotal = total !== undefined ? total : expectedTotal;
+    // Always use the server-calculated total as the source of truth.
+    const finalTotal = expectedTotal;
 
     console.log("Total calculation:", {
       itemsTotal: itemsTotal.toFixed(2),
