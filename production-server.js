@@ -4,7 +4,7 @@ import path from "path";
 
 async function startProductionServer() {
   const app = await createServer();
-  const PORT = process.env.PORT || 8080;
+  const PORT = process.env.PORT || 3001;
 
   // Start server
   app.listen(PORT, "0.0.0.0", () => {

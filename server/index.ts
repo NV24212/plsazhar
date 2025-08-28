@@ -148,6 +148,11 @@ export async function setupRoutes(app: Express) {
   // Initialize sample logs
   initializeLogs();
 
+  // Health check for Dokploy
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   // Health check endpoint
   app.get("/api/ping", (_req, res) => {
     res.json({ message: "ping", timestamp: new Date().toISOString() });
