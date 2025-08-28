@@ -34,6 +34,7 @@ import {
   deleteCategory,
   getCategoryById,
 } from "./routes/categories";
+import { getSettings, updateSettings } from "./routes/settings";
 import {
   uploadMiddleware,
   handleImageUpload,
@@ -116,6 +117,10 @@ export async function setupRoutes(app: Express) {
   app.post("/api/categories", createCategory);
   app.put("/api/categories/:id", updateCategory);
   app.delete("/api/categories/:id", deleteCategory);
+
+  // Settings routes
+  app.get("/api/settings", getSettings);
+  app.post("/api/settings", updateSettings);
 
   // Analytics routes
   app.post("/api/analytics/track", trackEvent);
