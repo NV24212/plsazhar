@@ -2,7 +2,10 @@ import "dotenv/config";
 import express, { Express } from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 import { handleDemo } from "./routes/demo";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import {
   getAllCustomers,
   createCustomer,
@@ -71,6 +74,11 @@ export async function setupRoutes(app: Express) {
 
   // Serve uploaded files statically
   app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+  // Serve static files from React build (only in production)
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../spa")));
+  }
 
   // Example API routes
   app.get("/api/demo", handleDemo);
@@ -144,6 +152,13 @@ export async function setupRoutes(app: Express) {
   app.get("/api/ping", (_req, res) => {
     res.json({ message: "ping", timestamp: new Date().toISOString() });
   });
+
+  // Catch-all handler: send back React's index.html file for any non-API routes (production only)
+  if (process.env.NODE_ENV === "production") {
+    app.get("*", (_req, res) => {
+      res.sendFile(path.join(__dirname, "../spa/index.html"));
+    });
+  }
 }
 
 // Note: Server startup is handled by production-server.js in production
