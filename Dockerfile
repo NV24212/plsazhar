@@ -29,6 +29,9 @@ COPY . .
 # Build application
 RUN npm run build:full
 
+# List the contents of the dist directory for debugging
+RUN ls -R /app/dist
+
 # Final stage for app image
 FROM node:${NODE_VERSION}-slim
 
