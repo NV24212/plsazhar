@@ -51,7 +51,7 @@ RUN chown -R nodejs:nodejs /app
 USER nodejs
 
 # Expose port
-EXPOSE 8080
+EXPOSE 3001
 
 # Start the server
-CMD ["node", "dist/server/index.js"]
+CMD ["node", "production-server.js"]
