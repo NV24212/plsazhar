@@ -37,6 +37,11 @@ async function startServer() {
   // Serve static files from dist/spa
   app.use(express.static(path.join(__dirname, "../spa")));
 
+  // Handle favicon.ico specifically
+  app.get('/favicon.ico', (_req, res) => {
+    res.status(204).end(); // No Content response
+  });
+
   // Handle client-side routing - serve index.html for all non-API routes
   app.get("*", (req, res) => {
     if (!req.path.startsWith("/api")) {
