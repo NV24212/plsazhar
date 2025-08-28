@@ -418,19 +418,19 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   if (orderSuccess) {
     return (
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto overflow-hidden">
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-2xl border-gray-700 shadow-lg bg-gray-900 text-gray-100 mx-auto overflow-hidden">
           <div className="flex flex-col h-full">
             {/* Header with Success Animation */}
-            <DialogHeader className="p-6 pb-4 border-b bg-gradient-to-br from-green-50 to-emerald-50">
+            <DialogHeader className="p-6 pb-4 border-b border-gray-800 bg-gradient-to-br from-green-900/50 to-emerald-900/50">
               <div className="flex items-center justify-center mb-4">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-pulse shadow-lg">
-                  <CheckCircle className="h-10 w-10 text-green-600" />
+                <div className="w-20 h-20 bg-green-800/50 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+                  <CheckCircle className="h-10 w-10 text-green-400" />
                 </div>
               </div>
-              <DialogTitle className="text-center text-2xl font-bold text-green-800 auto-text leading-tight">
+              <DialogTitle className="text-center text-2xl font-bold text-green-300 auto-text leading-tight">
                 {orderMessages.headline}
               </DialogTitle>
-              <p className="text-center text-green-700 auto-text text-sm mt-2 leading-relaxed">
+              <p className="text-center text-green-400 auto-text text-sm mt-2 leading-relaxed">
                 {orderMessages.subtext}
               </p>
             </DialogHeader>
@@ -443,8 +443,8 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
               >
                 {/* Single Success Message */}
                 <div className="text-center max-w-md mx-auto">
-                  <div className="bg-green-50 p-8 rounded-lg border border-green-200">
-                    <p className="text-gray-800 auto-text text-lg leading-relaxed">
+                  <div className="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                    <p className="text-gray-200 auto-text text-lg leading-relaxed">
                       {orderMessages.successMessage}
                     </p>
                   </div>
@@ -453,7 +453,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
             </ScrollArea>
 
             {/* Footer */}
-            <div className="border-t p-4 bg-white">
+            <div className="border-t border-gray-800 p-4 bg-gray-900">
               <Button
                 onClick={onClose}
                 className="w-full bg-primary hover:bg-primary/90 touch-manipulation h-12 text-base font-semibold"
@@ -469,10 +469,10 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto dialog-content-scroll">
+      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-2xl border-gray-700 shadow-lg bg-gray-900 text-gray-100 mx-auto dialog-content-scroll">
         {/* Header */}
-        <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b flex-shrink-0 bg-white">
-          <DialogTitle className="text-xl sm:text-2xl font-bold text-center auto-text leading-tight">
+        <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b border-gray-800 flex-shrink-0 bg-gray-900">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-gray-100 auto-text leading-tight">
             {t("checkout.title")}
           </DialogTitle>
 
@@ -485,7 +485,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-medium transition-all duration-200 ${
                       step >= stepNum
                         ? "bg-primary text-white shadow-lg"
-                        : "bg-gray-200 text-gray-600"
+                        : "bg-gray-700 text-gray-300"
                     }`}
                   >
                     {stepNum}
@@ -493,7 +493,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                   {stepNum < 3 && (
                     <div
                       className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 rounded-full transition-all duration-200 ${
-                        step > stepNum ? "bg-primary" : "bg-gray-200"
+                        step > stepNum ? "bg-primary" : "bg-gray-700"
                       }`}
                     />
                   )}
@@ -510,9 +510,9 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
           <div className="p-4 sm:p-6 pb-32 sm:pb-36 auto-text">
             {/* Step 1: Customer Information */}
             {step === 1 && (
-              <Card className="border-2 shadow-sm">
+              <Card className="border-2 border-gray-700 shadow-sm bg-gray-800">
                 <CardHeader className="pb-4 sm:pb-6">
-                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl">
+                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl text-gray-100">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary text-white rounded-full flex items-center justify-center">
                       <span className="font-bold text-sm sm:text-base">1</span>
                     </div>
@@ -526,7 +526,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     <div className="space-y-2">
                       <Label
                         htmlFor="name"
-                        className="block auto-text text-sm sm:text-base font-medium"
+                        className="block auto-text text-sm sm:text-base font-medium text-gray-300"
                       >
                         {t("checkout.customerName")}
                       </Label>
@@ -537,7 +537,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                           handleInputChange("name", e.target.value)
                         }
                         placeholder={t("checkout.customerName")}
-                        className="auto-text h-12 sm:h-11 text-base touch-manipulation"
+                        className="auto-text h-12 sm:h-11 text-base touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                         required
                       />
                     </div>
@@ -545,7 +545,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     <div className="space-y-2">
                       <Label
                         htmlFor="phone"
-                        className="block auto-text text-sm sm:text-base font-medium"
+                        className="block auto-text text-sm sm:text-base font-medium text-gray-300"
                       >
                         {t("checkout.customerPhone")}
                       </Label>
@@ -557,14 +557,14 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                           handleInputChange("phone", e.target.value)
                         }
                         placeholder={t("checkout.customerPhone")}
-                        className="ltr-text h-12 sm:h-11 text-base touch-manipulation"
+                        className="ltr-text h-12 sm:h-11 text-base touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                         required
                       />
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="block auto-text text-sm sm:text-base font-medium">
+                    <Label className="block auto-text text-sm sm:text-base font-medium text-gray-300">
                       {t("checkout.customerAddress")}
                     </Label>
                     <div className="grid grid-cols-1 gap-4">
@@ -572,7 +572,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         <div className="space-y-2">
                           <Label
                             htmlFor="home"
-                            className="text-sm text-gray-600 auto-text"
+                            className="text-sm text-gray-400 auto-text"
                           >
                             {t("checkout.customerHome")}
                           </Label>
@@ -583,13 +583,13 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                               handleInputChange("home", e.target.value)
                             }
                             placeholder="123"
-                            className="text-center auto-text h-12 sm:h-11 touch-manipulation"
+                            className="text-center auto-text h-12 sm:h-11 touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                           />
                         </div>
                         <div className="space-y-2">
                           <Label
                             htmlFor="road"
-                            className="text-sm text-gray-600 auto-text"
+                            className="text-sm text-gray-400 auto-text"
                           >
                             {t("checkout.customerRoad")}
                           </Label>
@@ -600,7 +600,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                               handleInputChange("road", e.target.value)
                             }
                             placeholder="456"
-                            className="text-center auto-text h-12 sm:h-11 touch-manipulation"
+                            className="text-center auto-text h-12 sm:h-11 touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                           />
                         </div>
                       </div>
@@ -608,7 +608,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         <div className="space-y-2">
                           <Label
                             htmlFor="block"
-                            className="text-sm text-gray-600 auto-text"
+                            className="text-sm text-gray-400 auto-text"
                           >
                             {t("checkout.customerBlock")}
                           </Label>
@@ -619,13 +619,13 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                               handleInputChange("block", e.target.value)
                             }
                             placeholder="789"
-                            className="text-center auto-text h-12 sm:h-11 touch-manipulation"
+                            className="text-center auto-text h-12 sm:h-11 touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                           />
                         </div>
                         <div className="space-y-2">
                           <Label
                             htmlFor="town"
-                            className="text-sm text-gray-600 auto-text"
+                            className="text-sm text-gray-400 auto-text"
                           >
                             {t("checkout.customerTown")}
                           </Label>
@@ -636,7 +636,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                               handleInputChange("town", e.target.value)
                             }
                             placeholder="Manama"
-                            className="auto-text h-12 sm:h-11 touch-manipulation"
+                            className="auto-text h-12 sm:h-11 touch-manipulation bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400"
                             required
                           />
                         </div>
@@ -649,9 +649,9 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
             {/* Step 2: Delivery Options - Removed Description */}
             {step === 2 && (
-              <Card className="border-2 shadow-sm">
+              <Card className="border-2 border-gray-700 shadow-sm bg-gray-800">
                 <CardHeader className="pb-4 sm:pb-6">
-                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl">
+                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl text-gray-100">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary text-white rounded-full flex items-center justify-center">
                       <span className="font-bold text-sm sm:text-base">2</span>
                     </div>
@@ -671,20 +671,24 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     <div
                       className={`flex items-center space-x-4 [dir=rtl]:space-x-reverse p-5 sm:p-6 border-2 rounded-xl cursor-pointer transition-all touch-manipulation hover:shadow-md ${
                         deliveryType === "delivery"
-                          ? "border-primary bg-primary/5 shadow-md"
-                          : "hover:bg-gray-50"
+                          ? "border-primary bg-primary/10 shadow-md"
+                          : "border-gray-600 hover:bg-gray-700"
                       }`}
                       onClick={() => setDeliveryType("delivery")}
                       role="button"
                       tabIndex={0}
                     >
-                      <RadioGroupItem value="delivery" id="delivery" />
+                      <RadioGroupItem
+                        value="delivery"
+                        id="delivery"
+                        className="text-primary border-gray-600"
+                      />
                       <div className="flex items-center space-x-4 [dir=rtl]:space-x-reverse flex-1">
                         <Truck className="w-6 h-6 sm:w-7 sm:h-7 text-primary flex-shrink-0" />
                         <div className="flex-1">
                           <Label
                             htmlFor="delivery"
-                            className="text-base sm:text-lg font-medium cursor-pointer auto-text block"
+                            className="text-base sm:text-lg font-medium cursor-pointer auto-text block text-gray-100"
                           >
                             {t("checkout.delivery")}
                           </Label>
@@ -695,20 +699,24 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     <div
                       className={`flex items-center space-x-4 [dir=rtl]:space-x-reverse p-5 sm:p-6 border-2 rounded-xl cursor-pointer transition-all touch-manipulation hover:shadow-md ${
                         deliveryType === "pickup"
-                          ? "border-primary bg-primary/5 shadow-md"
-                          : "hover:bg-gray-50"
+                          ? "border-primary bg-primary/10 shadow-md"
+                          : "border-gray-600 hover:bg-gray-700"
                       }`}
                       onClick={() => setDeliveryType("pickup")}
                       role="button"
                       tabIndex={0}
                     >
-                      <RadioGroupItem value="pickup" id="pickup" />
+                      <RadioGroupItem
+                        value="pickup"
+                        id="pickup"
+                        className="text-primary border-gray-600"
+                      />
                       <div className="flex items-center space-x-4 [dir=rtl]:space-x-reverse flex-1">
                         <Package className="w-6 h-6 sm:w-7 sm:h-7 text-primary flex-shrink-0" />
                         <div className="flex-1">
                           <Label
                             htmlFor="pickup"
-                            className="text-base sm:text-lg font-medium cursor-pointer auto-text block"
+                            className="text-base sm:text-lg font-medium cursor-pointer auto-text block text-gray-100"
                           >
                             {t("checkout.pickup")}
                           </Label>
@@ -719,8 +727,8 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
                   {/* Delivery Area Selection - Only show when delivery is selected */}
                   {deliveryType === "delivery" && (
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                      <h4 className="text-base sm:text-lg font-medium auto-text mb-4 flex items-center gap-2">
+                    <div className="mt-6 pt-6 border-t border-gray-700">
+                      <h4 className="text-base sm:text-lg font-medium auto-text mb-4 flex items-center gap-2 text-gray-100">
                         <MapPin className="w-5 h-5 text-primary" />
                         {language === "ar"
                           ? "اختر منطقة التوصيل"
@@ -738,24 +746,28 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         <div
                           className={`flex items-center justify-between space-x-4 [dir=rtl]:space-x-reverse p-4 border-2 rounded-xl cursor-pointer transition-all touch-manipulation hover:shadow-md ${
                             deliveryArea === "sitra"
-                              ? "border-primary bg-primary/5 shadow-md"
-                              : "hover:bg-gray-50"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-600 hover:bg-gray-700"
                           }`}
                           onClick={() => setDeliveryArea("sitra")}
                           role="button"
                           tabIndex={0}
                         >
                           <div className="flex items-center space-x-3 [dir=rtl]:space-x-reverse">
-                            <RadioGroupItem value="sitra" id="sitra" />
+                            <RadioGroupItem
+                              value="sitra"
+                              id="sitra"
+                              className="text-primary border-gray-600"
+                            />
                             <Label
                               htmlFor="sitra"
-                              className="text-sm sm:text-base font-medium cursor-pointer auto-text"
+                              className="text-sm sm:text-base font-medium cursor-pointer auto-text text-gray-100"
                             >
                               {getDeliveryAreaName("sitra")}
                             </Label>
                           </div>
                           <span
-                            className="text-sm font-medium text-primary ltr-text"
+                            className="text-sm font-medium text-primary-300 ltr-text"
                             dir="ltr"
                           >
                             {formatPriceWithSymbol(
@@ -769,24 +781,28 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         <div
                           className={`flex items-center justify-between space-x-4 [dir=rtl]:space-x-reverse p-4 border-2 rounded-xl cursor-pointer transition-all touch-manipulation hover:shadow-md ${
                             deliveryArea === "muharraq"
-                              ? "border-primary bg-primary/5 shadow-md"
-                              : "hover:bg-gray-50"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-600 hover:bg-gray-700"
                           }`}
                           onClick={() => setDeliveryArea("muharraq")}
                           role="button"
                           tabIndex={0}
                         >
                           <div className="flex items-center space-x-3 [dir=rtl]:space-x-reverse">
-                            <RadioGroupItem value="muharraq" id="muharraq" />
+                            <RadioGroupItem
+                              value="muharraq"
+                              id="muharraq"
+                              className="text-primary border-gray-600"
+                            />
                             <Label
                               htmlFor="muharraq"
-                              className="text-sm sm:text-base font-medium cursor-pointer auto-text"
+                              className="text-sm sm:text-base font-medium cursor-pointer auto-text text-gray-100"
                             >
                               {getDeliveryAreaName("muharraq")}
                             </Label>
                           </div>
                           <span
-                            className="text-sm font-medium text-primary ltr-text"
+                            className="text-sm font-medium text-primary-300 ltr-text"
                             dir="ltr"
                           >
                             {formatPriceWithSymbol(
@@ -800,24 +816,28 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         <div
                           className={`flex items-center justify-between space-x-4 [dir=rtl]:space-x-reverse p-4 border-2 rounded-xl cursor-pointer transition-all touch-manipulation hover:shadow-md ${
                             deliveryArea === "other"
-                              ? "border-primary bg-primary/5 shadow-md"
-                              : "hover:bg-gray-50"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-600 hover:bg-gray-700"
                           }`}
                           onClick={() => setDeliveryArea("other")}
                           role="button"
                           tabIndex={0}
                         >
                           <div className="flex items-center space-x-3 [dir=rtl]:space-x-reverse">
-                            <RadioGroupItem value="other" id="other" />
+                            <RadioGroupItem
+                              value="other"
+                              id="other"
+                              className="text-primary border-gray-600"
+                            />
                             <Label
                               htmlFor="other"
-                              className="text-sm sm:text-base font-medium cursor-pointer auto-text"
+                              className="text-sm sm:text-base font-medium cursor-pointer auto-text text-gray-100"
                             >
                               {getDeliveryAreaName("other")}
                             </Label>
                           </div>
                           <span
-                            className="text-sm font-medium text-primary ltr-text"
+                            className="text-sm font-medium text-primary-300 ltr-text"
                             dir="ltr"
                           >
                             {formatPriceWithSymbol(
@@ -836,9 +856,9 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
             {/* Step 3: Order Summary & Payment - Improved RTL Support */}
             {step === 3 && (
-              <Card className="border-2 shadow-sm">
+              <Card className="border-2 border-gray-700 shadow-sm bg-gray-800">
                 <CardHeader className="pb-4 sm:pb-6">
-                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl">
+                  <CardTitle className="flex items-center gap-3 [dir=rtl]:flex-row-reverse auto-text text-lg sm:text-xl text-gray-100">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary text-white rounded-full flex items-center justify-center">
                       <span className="font-bold text-sm sm:text-base">3</span>
                     </div>
@@ -852,32 +872,32 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                   className="space-y-6 sm:space-y-8"
                 >
                   {/* Customer Info Review */}
-                  <div className="p-4 sm:p-5 bg-gray-50 rounded-lg space-y-4">
-                    <h4 className="font-medium auto-text border-b border-gray-200 pb-3 text-base sm:text-lg">
+                  <div className="p-4 sm:p-5 bg-gray-700/50 rounded-lg space-y-4">
+                    <h4 className="font-medium auto-text border-b border-gray-600 pb-3 text-base sm:text-lg text-gray-100">
                       {t("checkout.customerInfo")}
                     </h4>
                     <div className="space-y-3 sm:space-y-4 text-sm sm:text-base">
                       <div className="flex justify-between items-start [dir=rtl]:flex-row-reverse gap-3">
-                        <span className="font-medium text-gray-600 auto-text min-w-0">
+                        <span className="font-medium text-gray-300 auto-text min-w-0">
                           {t("checkout.customerName")}:
                         </span>
-                        <span className="font-medium auto-text text-end min-w-0 flex-1">
+                        <span className="font-medium text-gray-100 auto-text text-end min-w-0 flex-1">
                           {customerInfo.name}
                         </span>
                       </div>
                       <div className="flex justify-between items-start [dir=rtl]:flex-row-reverse gap-3">
-                        <span className="font-medium text-gray-600 auto-text min-w-0">
+                        <span className="font-medium text-gray-300 auto-text min-w-0">
                           {t("checkout.customerPhone")}:
                         </span>
-                        <span className="font-medium ltr-text text-end min-w-0 flex-1">
+                        <span className="font-medium text-gray-100 ltr-text text-end min-w-0 flex-1">
                           {customerInfo.phone}
                         </span>
                       </div>
                       <div className="flex justify-between items-start [dir=rtl]:flex-row-reverse gap-3">
-                        <span className="font-medium text-gray-600 auto-text min-w-0">
+                        <span className="font-medium text-gray-300 auto-text min-w-0">
                           {t("checkout.customerAddress")}:
                         </span>
-                        <span className="font-medium auto-text text-end min-w-0 flex-1 leading-relaxed">
+                        <span className="font-medium text-gray-100 auto-text text-end min-w-0 flex-1 leading-relaxed">
                           {language === "ar"
                             ? [
                                 customerInfo.town,
@@ -908,13 +928,13 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
                   {/* Items Review */}
                   <div className="space-y-4 sm:space-y-5">
-                    <h4 className="font-medium auto-text border-b border-gray-200 pb-3 text-base sm:text-lg">
+                    <h4 className="font-medium auto-text border-b border-gray-600 pb-3 text-base sm:text-lg text-gray-100">
                       {t("checkout.orderItems")}
                     </h4>
                     <div className="space-y-3 sm:space-y-4 max-h-60 overflow-y-auto">
                       {items.length === 0 ? (
                         <div className="text-center py-8">
-                          <p className="text-gray-500 auto-text text-sm italic">
+                          <p className="text-gray-400 auto-text text-sm italic">
                             {language === "ar"
                               ? "لا توجد عناصر في الطلب"
                               : "No items in order"}
@@ -924,13 +944,13 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         items.map((item, index) => (
                           <div
                             key={index}
-                            className="flex justify-between items-start [dir=rtl]:flex-row-reverse gap-3 sm:gap-4 py-3 sm:py-4 border-b border-gray-100 last:border-b-0"
+                            className="flex justify-between items-start [dir=rtl]:flex-row-reverse gap-3 sm:gap-4 py-3 sm:py-4 border-b border-gray-700 last:border-b-0"
                           >
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium auto-text leading-relaxed text-sm sm:text-base">
+                              <p className="font-medium auto-text leading-relaxed text-sm sm:text-base text-gray-100">
                                 {item.productName}
                               </p>
-                              <p className="text-xs sm:text-sm text-gray-500 auto-text mt-1">
+                              <p className="text-xs sm:text-sm text-gray-400 auto-text mt-1">
                                 {item.variantName} ×{" "}
                                 <span className="ltr-text">
                                   {item.quantity}
@@ -939,7 +959,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                             </div>
                             <div className="text-end auto-text min-w-0">
                               <p
-                                className="font-medium ltr-text text-sm sm:text-lg"
+                                className="font-medium ltr-text text-sm sm:text-lg text-gray-100"
                                 dir="ltr"
                               >
                                 {formatPriceWithSymbol(
@@ -955,22 +975,22 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                     </div>
                   </div>
 
-                  <Separator />
+                  <Separator className="bg-gray-700" />
 
                   {/* Total Calculation - Enhanced Design */}
-                  <div className="space-y-4 bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl border-2 border-gray-200 shadow-lg">
-                    <h4 className="font-bold text-lg text-gray-900 auto-text mb-4 flex items-center gap-2 [dir=rtl]:flex-row-reverse">
+                  <div className="space-y-4 bg-gray-900 p-6 rounded-2xl border-2 border-gray-700 shadow-lg">
+                    <h4 className="font-bold text-lg text-gray-100 auto-text mb-4 flex items-center gap-2 [dir=rtl]:flex-row-reverse">
                       <CreditCard className="h-5 w-5 text-primary" />
                       {t("checkout.orderTotal")}
                     </h4>
 
                     <div className="space-y-3">
                       <div className="flex justify-between [dir=rtl]:flex-row-reverse items-center py-2">
-                        <span className="auto-text text-gray-700 text-base font-medium">
+                        <span className="auto-text text-gray-300 text-base font-medium">
                           {t("checkout.subtotal")}:
                         </span>
                         <span
-                          className="ltr-text font-semibold text-lg text-gray-900"
+                          className="ltr-text font-semibold text-lg text-gray-100"
                           dir="ltr"
                         >
                           {formatPriceWithSymbol(
@@ -982,10 +1002,10 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                       </div>
 
                       <div className="flex justify-between [dir=rtl]:flex-row-reverse items-center py-2">
-                        <span className="auto-text text-gray-700 text-base font-medium">
+                        <span className="auto-text text-gray-300 text-base font-medium">
                           {t("checkout.deliveryFee")}:
                         </span>
-                        <span className="ltr-text font-semibold text-lg text-gray-900">
+                        <span className="ltr-text font-semibold text-lg text-gray-100">
                           {deliveryType === "delivery"
                             ? totalPrice >= freeDeliveryMinimum
                               ? language === "ar"
@@ -1016,13 +1036,13 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                       {deliveryType === "delivery" && (
                         <div className="text-center mb-2">
                           {totalPrice >= freeDeliveryMinimum ? (
-                            <p className="text-sm text-green-600 font-medium auto-text">
+                            <p className="text-sm text-green-400 font-medium auto-text">
                               {language === "ar"
                                 ? "🎉 تأهلت للتوصيل المجاني!"
                                 : "🎉 You qualified for free delivery!"}
                             </p>
                           ) : (
-                            <p className="text-sm text-gray-500 auto-text">
+                            <p className="text-sm text-gray-400 auto-text">
                               {language === "ar"
                                 ? `أضف ${formatPriceWithSymbol(freeDeliveryMinimum - totalPrice, currencySymbol, language)} للحصول على توصيل مجاني`
                                 : `Add ${formatPriceWithSymbol(freeDeliveryMinimum - totalPrice, currencySymbol, language)} more for free delivery`}
@@ -1031,15 +1051,15 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                         </div>
                       )}
 
-                      <Separator className="my-3" />
+                      <Separator className="my-3 bg-gray-700" />
 
                       <div className="bg-primary/10 rounded-xl p-4">
                         <div className="flex justify-between [dir=rtl]:flex-row-reverse items-center">
-                          <span className="text-xl font-bold auto-text text-gray-900">
+                          <span className="text-xl font-bold auto-text text-gray-100">
                             {t("checkout.total")}:
                           </span>
                           <span
-                            className="text-3xl font-bold text-primary ltr-text"
+                            className="text-3xl font-bold text-primary-300 ltr-text"
                             dir="ltr"
                           >
                             {formatPriceWithSymbol(
@@ -1068,14 +1088,14 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         </ScrollArea>
 
         {/* Footer with Navigation - Fixed at bottom */}
-        <div className="border-t p-4 sm:p-6 bg-white flex-shrink-0">
+        <div className="border-t border-gray-800 p-4 sm:p-6 bg-gray-900 flex-shrink-0">
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Back Button */}
             {step > 1 && (
               <Button
                 variant="outline"
                 onClick={handleBack}
-                className="flex items-center gap-2 h-12 sm:h-14 px-4 sm:px-6 touch-manipulation"
+                className="flex items-center gap-2 h-12 sm:h-14 px-4 sm:px-6 touch-manipulation border-gray-600 text-gray-200 hover:bg-gray-700 hover:text-white"
                 size="sm"
               >
                 <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 rtl-flip" />
