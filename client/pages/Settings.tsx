@@ -236,16 +236,39 @@ export default function Settings() {
   const [hasChanges, setHasChanges] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isFixingCharacters, setIsFixingCharacters] = useState(false);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
-    const savedSettings = localStorage.getItem("storeSettings");
-    if (savedSettings) {
-      const parsed = JSON.parse(savedSettings);
-      setSettings((prev) => ({ ...prev, ...parsed }));
-    }
+    const fetchSettings = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/settings");
+        const data = await response.json();
+        if (response.ok) {
+          if (Object.keys(data).length > 0) {
+            setSettings((prev) => ({ ...prev, ...data }));
+          }
+        } else {
+          throw new Error(data.error || "Failed to fetch settings");
+        }
+      } catch (error) {
+        console.error(error);
+        showAlert({
+          title: "Error",
+          message: "Could not load settings from the server.",
+          type: "error",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSettings();
+    // This is a pattern for running an async effect once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -353,8 +376,17 @@ export default function Settings() {
   const saveSettings = async () => {
     setIsSaving(true);
     try {
-      // Save regular settings to localStorage
-      localStorage.setItem("storeSettings", JSON.stringify(settings));
+      // Save settings to the server via API
+      const response = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to save settings");
+      }
 
       // Handle admin email update if it changed
       if (
@@ -383,9 +415,10 @@ export default function Settings() {
         type: "success",
       });
     } catch (error) {
+      console.error("Save settings error:", error);
       showAlert({
         title: t("settings.saveError"),
-        message: t("settings.saveError"),
+        message: (error as Error).message || t("settings.saveError"),
         type: "error",
       });
     } finally {
@@ -401,7 +434,8 @@ export default function Settings() {
     });
 
     if (confirmed) {
-      localStorage.removeItem("storeSettings");
+      // Just reload the page. This will trigger a re-fetch of settings from the server,
+      // effectively resetting any unsaved client-side changes.
       window.location.reload();
     }
   };
@@ -510,6 +544,14 @@ export default function Settings() {
     { id: "admin", label: t("settings.adminSettings"), icon: Shield },
     { id: "system", label: t("settings.systemSettings"), icon: Monitor },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4 sm:p-6 space-y-6">

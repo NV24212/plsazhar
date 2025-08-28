@@ -50,7 +50,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="w-[90vw] max-w-md sm:max-w-lg max-h-[85vh] flex flex-col p-0 rounded-2xl border shadow-2xl bg-white mx-auto">
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border shadow-lg bg-background mx-auto">
           <DialogHeader className="px-4 py-4 border-b">
             <DialogTitle className="flex items-center gap-2 text-lg font-semibold">
               <ShoppingBag className="h-5 w-5 text-primary" />
