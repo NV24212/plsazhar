@@ -89,6 +89,22 @@ CREATE TABLE IF NOT EXISTS admin_users (
 );
 
 -- =================================================================
+-- Step 3.5: Alter existing tables idempotently
+-- This ensures that older database schemas are updated correctly.
+-- =================================================================
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'orders'
+        AND column_name = 'delivery_area'
+        AND table_schema = 'public'
+    ) THEN
+        ALTER TABLE orders ADD COLUMN delivery_area TEXT DEFAULT 'sitra' CHECK (delivery_area IN ('sitra', 'muharraq', 'other'));
+    END IF;
+END $$;
+
+-- =================================================================
 -- Step 4: Create indexes for performance
 -- =================================================================
 CREATE INDEX IF NOT EXISTS idx_products_category_id ON products(category_id);
