@@ -418,7 +418,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   if (orderSuccess) {
     return (
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border shadow-lg bg-background mx-auto overflow-hidden">
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto overflow-hidden">
           <div className="flex flex-col h-full">
             {/* Header with Success Animation */}
             <DialogHeader className="p-6 pb-4 border-b bg-gradient-to-br from-green-50 to-emerald-50">
@@ -469,7 +469,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border shadow-lg bg-background mx-auto dialog-content-scroll">
+      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto dialog-content-scroll">
         {/* Header */}
         <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b flex-shrink-0 bg-white">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center auto-text leading-tight">
