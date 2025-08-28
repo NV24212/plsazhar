@@ -109,15 +109,12 @@ export const customerDb = {
   async create(
     customer: Omit<Customer, "id" | "created_at" | "updated_at" | "createdAt">,
   ): Promise<Customer> {
-    const newCustomer: Customer = {
-      ...customer,
-      id: generateId(),
-      createdAt: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
     if (!supabase) {
+      const newCustomer: Customer = {
+        ...customer,
+        id: generateId(),
+        createdAt: new Date().toISOString(),
+      };
       fallbackCustomers.push(newCustomer);
       return newCustomer;
     }
@@ -127,33 +124,33 @@ export const customerDb = {
         .from("customers")
         .insert([
           {
-            id: newCustomer.id,
-            name: newCustomer.name,
-            phone: newCustomer.phone,
-            address: newCustomer.address,
-            home: newCustomer.home,
-            road: newCustomer.road,
-            block: newCustomer.block,
-            town: newCustomer.town,
-            created_at: newCustomer.created_at,
-            updated_at: newCustomer.updated_at,
+            name: customer.name,
+            phone: customer.phone,
+            address: customer.address,
+            home: customer.home,
+            road: customer.road,
+            block: customer.block,
+            town: customer.town,
           },
         ])
         .select()
         .single();
 
       if (error) {
-        console.warn(
-          "Supabase error, falling back to in-memory storage:",
-          error.message,
-        );
-        fallbackCustomers.push(newCustomer);
-        return newCustomer;
+        throw new Error(error.message);
       }
 
       return transformCustomer(data);
     } catch (error) {
-      console.warn("Supabase connection failed, using in-memory storage");
+      console.warn(
+        "Supabase error, falling back to in-memory storage:",
+        error,
+      );
+      const newCustomer: Customer = {
+        ...customer,
+        id: generateId(),
+        createdAt: new Date().toISOString(),
+      };
       fallbackCustomers.push(newCustomer);
       return newCustomer;
     }
