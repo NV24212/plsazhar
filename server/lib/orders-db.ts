@@ -114,7 +114,6 @@ export const orderDb = {
     >,
   ): Promise<Order> {
     const newOrderPayload = {
-      id: generateId(), // remove if DB auto-generates
       customer_id: order.customerId,
       items: order.items,
       total: order.total,
@@ -127,7 +126,7 @@ export const orderDb = {
     if (!supabase) {
       const fallbackOrder: Order = {
         ...order,
-        id: newOrderPayload.id,
+        id: generateId(),
         customerId: order.customerId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -149,7 +148,7 @@ export const orderDb = {
       console.warn("Supabase insert failed, using fallback orders:", err);
       const fallbackOrder: Order = {
         ...order,
-        id: newOrderPayload.id,
+        id: generateId(),
         customerId: order.customerId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
