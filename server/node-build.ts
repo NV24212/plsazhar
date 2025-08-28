@@ -35,12 +35,12 @@ async function startServer() {
   });
 
   // Serve static files from dist/spa
-  app.use(express.static(path.join(__dirname, "../dist/spa")));
+  app.use(express.static(path.join(__dirname, "../spa")));
 
   // Handle client-side routing - serve index.html for all non-API routes
   app.get("*", (req, res) => {
     if (!req.path.startsWith("/api")) {
-      res.sendFile(path.join(__dirname, "../dist/spa/index.html"));
+      res.sendFile(path.join(__dirname, "../spa/index.html"));
     } else {
       res.status(404).json({ error: "API endpoint not found" });
     }
@@ -50,7 +50,7 @@ async function startServer() {
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
     console.log(
-      `📁 Serving static files from: ${path.join(__dirname, "../dist/spa")}`,
+      `📁 Serving static files from: ${path.join(__dirname, "../spa")}`,
     );
     console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
   });
