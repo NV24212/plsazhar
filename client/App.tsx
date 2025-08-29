@@ -70,6 +70,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { DataProvider } from "@/contexts/DataContext";
 import { DialogProvider } from "@/contexts/DialogContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 import { CartProvider } from "@/contexts/CartContext";
 import LoginPage from "@/components/LoginPage";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -78,8 +79,6 @@ import Products from "@/pages/Products";
 import Orders from "@/pages/Orders";
 import Customers from "@/pages/Customers";
 import Categories from "@/pages/Categories";
-import Revenue from "@/pages/Revenue";
-import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
 import Store from "@/pages/Store";
 import ProductDetail from "@/pages/ProductDetail";
@@ -124,8 +123,6 @@ function AppContent() {
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/customers" element={<Customers />} />
-                  <Route path="/revenue" element={<Revenue />} />
-                  <Route path="/analytics" element={<Analytics />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
@@ -148,14 +145,16 @@ const App = () => (
       <BrowserRouter>
         <LanguageProvider>
           <CartProvider>
-            <AuthProvider>
-              <DataProvider>
-                <DialogProvider>
-                  <PageTracker />
-                  <AppContent />
-                </DialogProvider>
-              </DataProvider>
-            </AuthProvider>
+            <SettingsProvider>
+              <AuthProvider>
+                <DataProvider>
+                  <DialogProvider>
+                    <PageTracker />
+                    <AppContent />
+                  </DialogProvider>
+                </DataProvider>
+              </AuthProvider>
+            </SettingsProvider>
           </CartProvider>
         </LanguageProvider>
       </BrowserRouter>

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
-import { useSettings } from "../contexts/SettingsContext";
 import { createCustomer, createOrder } from "../services/api";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -23,7 +22,6 @@ export default function Checkout() {
   const { language } = useLanguage();
   const { t } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCart();
-  const { settings } = useSettings();
   const navigate = useNavigate();
 
   const [customerInfo, setCustomerInfo] = useState({
@@ -85,10 +83,13 @@ export default function Checkout() {
         price: item.price,
       }));
 
-      // Get delivery settings from context
-      const deliveryFeeSetting = Number(settings?.deliveryFee ?? 1.5);
+      // Get delivery settings from localStorage
+      const savedSettings = JSON.parse(
+        localStorage.getItem("storeSettings") || "{}",
+      );
+      const deliveryFeeSetting = Number(savedSettings?.deliveryFee ?? 1.5);
       const freeDeliveryMinimum = Number(
-        settings?.freeDeliveryMinimum ?? 20,
+        savedSettings?.freeDeliveryMinimum ?? 20,
       );
 
       // Calculate final total including delivery fee with free delivery threshold
@@ -161,21 +162,35 @@ export default function Checkout() {
               <Check className="h-8 w-8 text-green-600" />
             </div>
             <h2 className="text-xl font-semibold auto-text">
-              {settings
-                ? language === "ar"
-                  ? settings.successHeadlineAr || t("orderSuccess.headlineAr")
-                  : settings.successHeadlineEn || t("orderSuccess.headline")
-                : t("checkout.orderSuccess") || "Order Placed Successfully!"}
+              {(() => {
+                const savedSettings = localStorage.getItem("storeSettings");
+                if (savedSettings) {
+                  const settings = JSON.parse(savedSettings);
+                  return language === "ar"
+                    ? settings.successHeadlineAr || t("orderSuccess.headlineAr")
+                    : settings.successHeadlineEn || t("orderSuccess.headline");
+                }
+                return (
+                  t("checkout.orderSuccess") || "Order Placed Successfully!"
+                );
+              })()}
             </h2>
             <p className="text-muted-foreground auto-text leading-relaxed">
-              {settings
-                ? language === "ar"
-                  ? settings.orderSuccessMessageAr ||
-                    "شكراً لك على طلبك! سنقوم بتجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل."
-                  : settings.orderSuccessMessageEn ||
-                    "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days."
-                : t("checkout.thankYou") ||
-                  "Thank you for your order! We have received your order and will process it shortly."}
+              {(() => {
+                const savedSettings = localStorage.getItem("storeSettings");
+                if (savedSettings) {
+                  const settings = JSON.parse(savedSettings);
+                  return language === "ar"
+                    ? settings.orderSuccessMessageAr ||
+                        "شكراً لك على طلبك! سنقوم بتجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل."
+                    : settings.orderSuccessMessageEn ||
+                        "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.";
+                }
+                return (
+                  t("checkout.thankYou") ||
+                  "Thank you for your order! We have received your order and will process it shortly."
+                );
+              })()}
             </p>
             <div className="space-y-2">
               <p className="text-sm font-medium auto-text">

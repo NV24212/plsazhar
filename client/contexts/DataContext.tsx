@@ -270,14 +270,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const addProduct = async (productData: Omit<Product, "id">) => {
     try {
-      await productApi.create(productData);
-      await refetchData(); // Refetch data to get the new product
+      const newProduct = await productApi.create(productData);
+      setProducts((prev) => [...prev, newProduct]);
 
       // Log product creation
-      addLog("info", "product", `New product added: ${productData.name}`, {
-        productName: productData.name,
-        price: productData.price,
-        variants: productData.variants?.length || 0,
+      addLog("info", "product", `New product added: ${newProduct.name}`, {
+        productId: newProduct.id,
+        productName: newProduct.name,
+        price: newProduct.price,
+        variants: newProduct.variants?.length || 0,
       });
     } catch (error) {
       console.error("Failed to add product:", error);

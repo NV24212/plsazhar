@@ -43,8 +43,11 @@ export default function ImprovedOrderSummary({
     );
   }
 
-  const { deliveryFee: deliveryFeeSetting = 1.5, freeDeliveryMinimum = 20 } =
-    settings;
+  const {
+    currencySymbol = "BD",
+    deliveryFee: deliveryFeeSetting = 1.5,
+    freeDeliveryMinimum = 20,
+  } = settings;
 
   // Calculate delivery fee with free delivery threshold
   const deliveryFee =

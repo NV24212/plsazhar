@@ -8,8 +8,7 @@
 -- =================================================================
 
 -- Step 1: Enable necessary extensions
--- Step 1: Add any necessary extensions here in the future
--- CREATE EXTENSION IF NOT EXISTS "some_extension";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =================================================================
 -- Step 2: Define and create core functions
@@ -28,23 +27,9 @@ $$ language 'plpgsql';
 -- Step 3: Define and create tables
 -- =================================================================
 
--- =================================================================
--- !! WARNING: DESTRUCTIVE OPERATION !!
--- The following DROP TABLE commands will permanently delete all data
--- in the specified tables. This is intended for development and
--- ensuring a clean slate, but should NOT be run on a production
--- database with valuable data.
--- =================================================================
-
--- Drop existing tables in reverse order of dependency to ensure a clean slate
-DROP TABLE IF EXISTS orders CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS customers CASCADE;
-DROP TABLE IF EXISTS categories CASCADE;
-
 -- Categories for products
 CREATE TABLE IF NOT EXISTS categories (
-    id TEXT PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
     name_ar TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -52,7 +37,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 -- Customers table
 CREATE TABLE IF NOT EXISTS customers (
-    id TEXT PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
     address TEXT NOT NULL,
@@ -66,7 +51,7 @@ CREATE TABLE IF NOT EXISTS customers (
 
 -- Products table, depends on categories
 CREATE TABLE IF NOT EXISTS products (
-    id TEXT PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
     name_ar TEXT,
     description TEXT,
@@ -74,7 +59,7 @@ CREATE TABLE IF NOT EXISTS products (
     price DECIMAL(10,2) NOT NULL DEFAULT 0,
     images JSONB DEFAULT '[]'::jsonb,
     variants JSONB DEFAULT '[]'::jsonb,
-    category_id TEXT REFERENCES categories(id) ON DELETE SET NULL,
+    category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
     total_stock INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -82,8 +67,8 @@ CREATE TABLE IF NOT EXISTS products (
 
 -- Orders table, depends on customers and products (via items JSON)
 CREATE TABLE IF NOT EXISTS orders (
-    id TEXT PRIMARY KEY,
-    customer_id TEXT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     items JSONB NOT NULL DEFAULT '[]'::jsonb,
     total DECIMAL(10,2) NOT NULL DEFAULT 0,
     status TEXT NOT NULL DEFAULT 'processing' CHECK (status IN ('processing', 'ready', 'delivered', 'picked-up')),
@@ -199,8 +184,12 @@ $$;
 -- =================================================================
 DO $$
 BEGIN
-    -- Note: Default categories are now initialized by the application
-    -- in `server/lib/supabase.ts` if the table is empty.
+    -- Insert default categories
+    INSERT INTO categories (name, name_ar) VALUES
+    ('Electronics', 'الأجهزة الإلكترونية'),
+    ('Accessories', 'الإكسسوارات'),
+    ('Home & Office', 'المنزل والمكتب')
+    ON CONFLICT (name) DO NOTHING;
 
     -- Insert a default admin user
     INSERT INTO admin_users (email, password_hash) VALUES
@@ -269,60 +258,6 @@ GRANT SELECT ON order_details TO service_role;
 GRANT EXECUTE ON FUNCTION get_order_stats() TO service_role;
 
 -- =================================================================
--- Step 12: Create app_settings table
--- =================================================================
-CREATE TABLE IF NOT EXISTS app_settings (
-    key TEXT PRIMARY KEY,
-    value JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Idempotently add the updated_at column if it's missing from an existing table
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'app_settings' AND column_name = 'updated_at'
-    ) THEN
-        ALTER TABLE app_settings ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
-    END IF;
-END $$;
-
-COMMENT ON TABLE app_settings IS 'Stores application-wide settings as key-value pairs. The ''key'' is a unique identifier for the setting (e.g., ''storeConfig''), and the ''value'' is a JSONB object containing the setting data.';
-
-DROP TRIGGER IF EXISTS update_app_settings_updated_at ON app_settings;
-CREATE TRIGGER update_app_settings_updated_at
-    BEFORE UPDATE ON app_settings
-    FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at_column();
-
-GRANT ALL ON app_settings TO service_role;
-GRANT SELECT, INSERT, UPDATE, DELETE ON app_settings TO authenticated;
-
-INSERT INTO app_settings (key, value)
-VALUES (
-    'storeConfig',
-    '{
-        "storeName": "",
-        "storeDescription": "",
-        "currency": "BHD",
-        "currencySymbol": "BD",
-        "contactPhone": "",
-        "contactEmail": "",
-        "contactAddress": "",
-        "orderSuccessMessageEn": "Thank you for your order! We''ll process it within 2-4 hours and deliver within 1-3 business days.",
-        "orderSuccessMessageAr": "شكراً لك على طلبك! سنقوم بمعالجته خلال 2-4 ساعات والتوصيل خلال 1-3 أيام عمل.",
-        "orderInstructionsEn": "For any changes or questions about your order, please contact us.",
-        "orderInstructionsAr": "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا.",
-        "cashOnDeliveryEnabled": true,
-        "bankTransferEnabled": false,
-        "bankAccountInfo": ""
-    }'::jsonb
-)
-ON CONFLICT (key) DO NOTHING;
-
--- =================================================================
 -- Final success message
 -- =================================================================
-SELECT 'Database migration script V2.2 executed successfully.' as status;
+SELECT 'Database migration script V2.1 executed successfully.' as status;
