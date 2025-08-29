@@ -32,27 +32,21 @@ export default function Categories() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-  });
+  const [formData, setFormData] = useState({ name: "" });
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const resetForm = () => {
-    setFormData({
-      name: "",
-    });
+    setFormData({ name: "" });
     setEditingCategory(null);
   };
 
   const openDialog = (category?: Category) => {
     if (category) {
       setEditingCategory(category);
-      setFormData({
-        name: category.name,
-      });
+      setFormData({ name: category.name });
     } else {
       resetForm();
     }
@@ -66,7 +60,6 @@ export default function Categories() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!formData.name.trim()) {
       showAlert({
         title: t("message.error"),
@@ -75,7 +68,6 @@ export default function Categories() {
       });
       return;
     }
-
     try {
       if (editingCategory) {
         await updateCategory(editingCategory.id, formData);
@@ -84,24 +76,21 @@ export default function Categories() {
       }
       closeDialog();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to save category. Please try again.";
       showAlert({
         title: t("message.error"),
-        message: errorMessage,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to save category.",
         type: "error",
       });
     }
   };
 
   const handleDeleteCategory = async (id: string) => {
-    // Check if category is being used by any products
     const productsUsingCategory = products.filter(
-      (product) => product.category_id === id,
+      (p) => p.category_id === id,
     );
-
     if (productsUsingCategory.length > 0) {
       showAlert({
         title: t("categories.cannotDeleteTitle"),
@@ -133,176 +122,144 @@ export default function Categories() {
       } catch (error) {
         showAlert({
           title: t("message.error"),
-          message: t("message.error"),
+          message:
+            error instanceof Error ? error.message : "An error occurred.",
           type: "error",
         });
       }
     }
   };
 
-  const getProductCountForCategory = (category_id: string) => {
-    return products.filter((product) => product.category_id === category_id)
-      .length;
-  };
+  const getProductCountForCategory = (categoryId: string) =>
+    products.filter((p) => p.category_id === categoryId).length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {t("nav.categories")}
-          </h1>
-          <p className="text-gray-600 mt-2">{t("products.subtitle")}</p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={() => openDialog()}
-              className="bg-dashboard-primary hover:bg-dashboard-primary-light"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {t("common.add")} {t("nav.categories")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-md max-h-[95vh] overflow-y-auto rounded-lg sm:rounded-md">
-            <DialogHeader>
-              <DialogTitle>
-                {editingCategory ? t("products.edit") : t("common.add")}{" "}
-                {t("nav.categories")}
-              </DialogTitle>
-              <DialogDescription>{t("products.subtitle")}</DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit}>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">
-                    {t("nav.categories")} {t("products.name")}
-                  </Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
-                    }
-                    placeholder={t("nav.categories")}
-                    required
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={closeDialog}>
-                  {t("common.cancel")}
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-dashboard-primary hover:bg-dashboard-primary-light"
-                >
-                  {editingCategory ? t("products.save") : t("common.save")}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Search Bar */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
-            <Input
-              placeholder={t("common.search")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 [dir=rtl]:pl-3 [dir=rtl]:pr-10"
-            />
+    <Card className="font-sans">
+      <CardHeader>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle>{t("nav.categories")}</CardTitle>
+            <CardDescription>{t("categories.subtitle")}</CardDescription>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCategories.map((category) => {
-          const productCount = getProductCountForCategory(category.id);
-
-          return (
-            <Card
-              key={category.id}
-              className="group hover:shadow-lg transition-shadow"
-            >
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-dashboard-primary/10 rounded-lg flex items-center justify-center">
-                      <FolderOpen className="w-6 h-6 text-dashboard-primary" />
-                    </div>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder={t("common.search")}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-full sm:w-64"
+              />
+            </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={() => openDialog()}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t("categories.addNew")}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingCategory
+                      ? t("categories.editTitle")
+                      : t("categories.addTitle")}
+                  </DialogTitle>
+                  <DialogDescription>
+                    {t("categories.dialogDescription")}
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">{t("categories.nameLabel")}</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      placeholder={t("categories.namePlaceholder")}
+                      required
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={closeDialog}
+                    >
+                      {t("common.cancel")}
+                    </Button>
+                    <Button type="submit">
+                      {editingCategory
+                        ? t("common.saveChanges")
+                        : t("common.create")}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {filteredCategories.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCategories.map((category) => (
+              <Card key={category.id} className="flex flex-col">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-lg">
+                      <CardTitle>
                         {translateCategory(category.name)}
                       </CardTitle>
                       <CardDescription>
-                        {productCount} {t("nav.products")}
+                        {getProductCountForCategory(category.id)}{" "}
+                        {t("nav.products")}
                       </CardDescription>
                     </div>
+                    <div className="p-2 bg-muted rounded-lg">
+                      <FolderOpen className="w-6 h-6 text-muted-foreground" />
+                    </div>
                   </div>
-                  <Badge variant="outline" className="text-xs">
-                    {productCount}
-                  </Badge>
+                </CardHeader>
+                <CardContent className="flex-grow"></CardContent>
+                <div className="p-4 border-t flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => openDialog(category)}
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    {t("common.edit")}
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => handleDeleteCategory(category.id)}
+                    disabled={getProductCountForCategory(category.id) > 0}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
-              </CardHeader>
-
-              <CardContent className="pt-0">
-                <div className="space-y-3">
-                  <div className="flex gap-2 pt-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => openDialog(category)}
-                    >
-                      <Edit className="w-4 h-4 mr-1" />
-                      {t("common.edit")}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => handleDeleteCategory(category.id)}
-                      disabled={productCount > 0}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      {filteredCategories.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-12">
-            <FolderOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchTerm ? t("common.noData") : t("empty.addFirstProduct")}
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 text-muted-foreground">
+            <FolderOpen className="w-16 h-16 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold">
+              {t("categories.noCategoriesFound")}
             </h3>
-            <p className="text-gray-600">{t("empty.adjustSearch")}</p>
-            {!searchTerm && (
-              <Button
-                className="mt-4 bg-dashboard-primary hover:bg-dashboard-primary-light"
-                onClick={() => openDialog()}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                {t("common.add")} {t("nav.categories")}
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      )}
-    </div>
+            <p className="mt-2">
+              {searchTerm
+                ? t("categories.adjustSearch")
+                : t("categories.addFirst")}
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

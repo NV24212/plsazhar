@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
+import { useSettings } from "@/contexts/SettingsContext";
 import { formatPrice } from "@/lib/formatters";
 import {
   Dialog,
@@ -27,6 +28,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   const { t, language, isRTL } = useLanguage();
   const { items, updateQuantity, removeItem, getTotalPrice, clearCart } =
     useCart();
+  const { settings } = useSettings();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleCheckout = () => {
@@ -168,7 +170,12 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                               className="text-lg font-bold text-primary ltr-text"
                               dir="ltr"
                             >
-                              {formatPrice(item.price, language)}
+                              {settings &&
+                                formatPrice(
+                                  item.price,
+                                  settings.currencySymbol,
+                                  language,
+                                )}
                             </span>
                           </div>
                         </div>
@@ -243,10 +250,12 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                               className="text-xl font-bold text-primary ltr-text"
                               dir="ltr"
                             >
-                              {formatPrice(
-                                item.price * item.quantity,
-                                language,
-                              )}
+                              {settings &&
+                                formatPrice(
+                                  item.price * item.quantity,
+                                  settings.currencySymbol,
+                                  language,
+                                )}
                             </span>
                           </div>
                         </div>
@@ -273,7 +282,12 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                         className="text-2xl font-bold text-primary ltr-text"
                         dir="ltr"
                       >
-                        {formatPrice(totalPrice, language)}
+                        {settings &&
+                          formatPrice(
+                            totalPrice,
+                            settings.currencySymbol,
+                            language,
+                          )}
                       </span>
                     </div>
                     <div className="text-center">

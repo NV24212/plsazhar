@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { useData } from "../contexts/DataContext";
+import { useSettings } from "@/contexts/SettingsContext";
 import { formatPrice } from "@/lib/formatters";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -47,6 +48,7 @@ export default function Store() {
   const { t, language, setLanguage, translateCategory } = useLanguage();
   const { getTotalItems, setIsCartOpen, isCartOpen } = useCart();
   const { products, categories, loading, getCategoryById } = useData();
+  const { settings } = useSettings();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isAddToCartOpen, setIsAddToCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,54 +103,35 @@ export default function Store() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header - Mobile Optimized */}
-      <header className="border-b bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between [dir=rtl]:flex-row-reverse">
+    <div className="min-h-screen bg-gray-50 font-sans">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-lg border-b shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between [dir=rtl]:flex-row-reverse">
           {/* Logo and Title */}
-          <div className="flex items-center gap-2 sm:gap-3 [dir=rtl]:flex-row-reverse min-w-0 flex-1">
-            <div className="h-16 sm:h-20 lg:h-24 xl:h-28 flex items-center">
-              <img
-                src={
-                  language === "ar"
-                    ? "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2F16a76df3c393470e995ec2718d67ab09?format=webp&width=800"
-                    : "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2Feb0b70b9250f4bfca41dbc5a78c2ce45?format=webp&width=800"
-                }
-                alt="أزهار ستور - azharstore"
-                className="h-16 sm:h-20 lg:h-24 xl:h-28 w-auto object-contain"
-              />
-            </div>
+          <div className="flex items-center gap-3 sm:gap-4 [dir=rtl]:flex-row-reverse">
+            <img
+              src={
+                language === "ar"
+                  ? "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2F16a76df3c393470e995ec2718d67ab09?format=webp&width=800"
+                  : "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2Feb0b70b9250f4bfca41dbc5a78c2ce45?format=webp&width=800"
+              }
+              alt="Azhar Store Logo"
+              className="h-12 sm:h-16 w-auto object-contain"
+            />
           </div>
 
           {/* Right side buttons */}
-          <div className="flex items-center gap-2 sm:gap-3 [dir=rtl]:flex-row-reverse">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Instagram Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={openInstagram}
-              className="h-10 px-2 sm:px-3 touch-manipulation hover:bg-primary/5 hover:border-primary transition-colors"
-            >
-              <Instagram className="h-4 w-4 flex-shrink-0" />
-              <span className="hidden sm:inline ml-1 sm:ml-2 [dir=rtl]:ml-0 [dir=rtl]:mr-1 [dir=rtl]:sm:mr-2">
-                Instagram
-              </span>
+            <Button variant="ghost" size="icon" onClick={openInstagram}>
+              <Instagram className="h-5 w-5" />
             </Button>
 
             {/* Language Switch */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1 sm:gap-2 h-10 px-2 sm:px-3 touch-manipulation"
-                >
-                  <Globe className="h-4 w-4 flex-shrink-0" />
-                  <span className="hidden sm:inline">
-                    {language === "ar"
-                      ? t("common.languageAr")
-                      : t("common.language")}
-                  </span>
+                <Button variant="ghost" size="icon">
+                  <Globe className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -163,16 +146,16 @@ export default function Store() {
 
             {/* Cart Button */}
             <Button
-              variant="outline"
+              variant="ghost"
               onClick={() => setIsCartOpen(true)}
-              className="relative hover:bg-primary/5 hover:border-primary transition-colors h-10 px-3 sm:px-4 touch-manipulation"
+              className="relative"
+              size="icon"
             >
-              <ShoppingCart className="h-5 w-5 [dir=rtl]:ml-1 [dir=ltr]:mr-1 sm:[dir=rtl]:ml-2 sm:[dir=ltr]:mr-2 flex-shrink-0" />
-              <span className="hidden sm:inline">{t("store.cart")}</span>
+              <ShoppingCart className="h-5 w-5" />
               {cartItemsCount > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-2 -right-1 [dir=rtl]:-left-1 [dir=rtl]:right-auto h-5 w-5 flex items-center justify-center p-0 text-xs animate-pulse"
+                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
                 >
                   {cartItemsCount}
                 </Badge>
@@ -182,101 +165,97 @@ export default function Store() {
         </div>
       </header>
 
-      {/* Search and Category Filter - Mobile Optimized */}
-      <div className="border-b bg-gray-50/50">
-        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4">
-          {/* Search Bar + Categories row */}
-          <div className="flex flex-col gap-4">
-            <div className="max-w-2xl mx-auto w-full relative">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground [dir=rtl]:left-auto [dir=rtl]:right-3" />
-                <Input
-                  type="text"
-                  placeholder={t("store.search")}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10 [dir=rtl]:pl-10 [dir=rtl]:pr-10 auto-text h-12 sm:h-10 text-base sm:text-sm"
-                />
-                {searchQuery && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearSearch}
-                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 [dir=rtl]:right-auto [dir=rtl]:left-1 touch-manipulation"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
+      {/* Search and Category Filter */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div className="max-w-2xl mx-auto w-full">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground [dir=rtl]:left-auto [dir=rtl]:right-4" />
+              <Input
+                type="text"
+                placeholder={t("store.search")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 pr-4 [dir=rtl]:pr-12 [dir=rtl]:pl-4 h-12 text-base"
+              />
               {searchQuery && (
-                <p className="text-sm text-muted-foreground mt-2 text-center auto-text">
-                  {filteredProducts.length} {t("store.searchResults")}
-                </p>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={clearSearch}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-9 w-9 [dir=rtl]:right-auto [dir=rtl]:left-2"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
               )}
             </div>
+            {searchQuery && (
+              <p className="text-sm text-muted-foreground mt-2 text-center">
+                {filteredProducts.length} {t("store.searchResults")}
+              </p>
+            )}
+          </div>
 
-            {/* Category chips - mobile optimized */}
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+          {/* Category chips */}
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button
+              variant={selectedCategory === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory("all")}
+              className="rounded-full px-4 py-2"
+            >
+              {t("store.allProducts")}
+            </Button>
+            {categories.map((category) => (
               <Button
-                variant={selectedCategory === "all" ? "default" : "outline"}
+                key={category.id}
+                variant={
+                  selectedCategory === category.id ? "default" : "outline"
+                }
                 size="sm"
-                onClick={() => setSelectedCategory("all")}
-                className="rounded-full h-10 sm:h-8 px-4 sm:px-3 touch-manipulation"
+                onClick={() => setSelectedCategory(category.id)}
+                className="rounded-full px-4 py-2"
               >
-                <span className="auto-text text-sm">
-                  {t("store.allProducts")}
-                </span>
+                {translateCategory(category.name)}
               </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  variant={
-                    selectedCategory === category.id ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() => setSelectedCategory(category.id)}
-                  className="rounded-full h-10 sm:h-8 px-4 sm:px-3 touch-manipulation"
-                >
-                  <span className="auto-text text-sm">
-                    {translateCategory(category.name)}
-                  </span>
-                </Button>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Product Grid - Mobile Optimized */}
-      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+      {/* Product Grid */}
+      <main className="container mx-auto px-4 sm:px-6 py-8">
         {searchQuery && filteredProducts.length === 0 ? (
-          <div className="text-center py-12">
-            <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4 text-center auto-text">
+          <div className="text-center py-16">
+            <Search className="h-16 w-16 text-gray-300 mx-auto mb-6" />
+            <h3 className="text-xl font-semibold mb-2">
               {t("store.noSearchResults")}
+            </h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              Try a different search term or clear the search to see all
+              products.
             </p>
-            <Button
-              variant="outline"
-              onClick={clearSearch}
-              className="touch-manipulation"
-            >
-              <span className="auto-text">{t("store.clearSearch")}</span>
+            <Button variant="outline" onClick={clearSearch}>
+              {t("store.clearSearch")}
             </Button>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4 text-center auto-text">
+          <div className="text-center py-16">
+            <StoreIcon className="h-16 w-16 text-gray-300 mx-auto mb-6" />
+            <h3 className="text-xl font-semibold mb-2">
               {t("empty.noProductsFound")}
+            </h3>
+            <p className="text-muted-foreground">
+              Please check back later for new products.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             {filteredProducts.map((product) => (
-              <div
+              <Card
                 key={product.id}
-                className="bg-white rounded-xl border shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group"
+                className="overflow-hidden cursor-pointer group flex flex-col"
               >
-                {/* Product Image */}
                 <div
                   className="aspect-square overflow-hidden bg-gray-100"
                   onClick={() => navigate(`/product/${product.id}`)}
@@ -285,70 +264,67 @@ export default function Store() {
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      <span className="text-xs sm:text-sm auto-text">
-                        {t("products.noImages")}
-                      </span>
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-gray-50">
+                      <StoreIcon className="h-10 w-10" />
                     </div>
                   )}
                 </div>
 
-                {/* Product Info - Mobile Optimized */}
-                <div className="p-2 sm:p-3 lg:p-4">
-                  <div onClick={() => navigate(`/product/${product.id}`)}>
-                    <h3 className="font-semibold text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 line-clamp-2 hover:text-primary transition-colors auto-text leading-tight">
+                <div className="p-4 flex flex-col flex-grow">
+                  <div
+                    className="flex-grow"
+                    onClick={() => navigate(`/product/${product.id}`)}
+                  >
+                    <h3 className="font-semibold text-base mb-2 line-clamp-2 hover:text-primary transition-colors leading-tight">
                       {product.name}
                     </h3>
-
-                    <p className="text-muted-foreground text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2 auto-text">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
                       {product.description}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between [dir=rtl]:flex-row-reverse gap-2">
-                    <div className="min-w-0 flex-1 flex flex-col justify-center">
-                      <div className="flex items-center gap-2 [dir=rtl]:flex-row-reverse">
-                        <span
-                          className="text-sm sm:text-base lg:text-lg font-bold text-primary ltr-text"
-                          dir="ltr"
-                        >
-                          {formatPrice(product.price, language)}
+                  <div className="flex items-end justify-between mt-auto pt-4 border-t">
+                    <div className="flex flex-col">
+                      <span
+                        className="text-lg font-bold text-primary ltr-text"
+                        dir="ltr"
+                      >
+                        {settings &&
+                          formatPrice(
+                            product.price,
+                            settings.currencySymbol,
+                            language,
+                          )}
+                      </span>
+                      {(product.total_stock || 0) > 0 && (
+                        <span className="text-xs text-green-600 font-medium mt-1">
+                          {product.total_stock} {t("products.stock")}
                         </span>
-                        {(product.total_stock || 0) > 0 && (
-                          <span className="text-xs text-muted-foreground auto-text">
-                            •{" "}
-                            <span className="ltr-text">
-                              {product.total_stock || 0}
-                            </span>{" "}
-                            {t("products.stock")}
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
-
                     <Button
-                      size="sm"
+                      size="icon"
                       onClick={() => handleAddToCart(product)}
                       disabled={(product.total_stock || 0) === 0}
-                      className="shrink-0 h-8 w-8 sm:h-9 sm:w-9 p-0 touch-manipulation"
+                      className="shrink-0 h-10 w-10"
                     >
-                      <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <Plus className="h-5 w-5" />
                     </Button>
                   </div>
 
                   {(product.total_stock || 0) === 0 && (
                     <Badge
                       variant="secondary"
-                      className="w-full mt-2 justify-center text-center text-xs"
+                      className="w-full mt-3 justify-center text-center py-1.5"
                     >
-                      <span className="auto-text">{t("store.outOfStock")}</span>
+                      {t("store.outOfStock")}
                     </Badge>
                   )}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         )}

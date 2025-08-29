@@ -29,9 +29,6 @@ COPY . .
 # Build application
 RUN npm run build:full
 
-# Prune dev dependencies
-RUN npm prune --production
-
 # Final stage for app image
 FROM node:${NODE_VERSION}-slim
 

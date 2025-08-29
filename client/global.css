@@ -137,12 +137,12 @@
 
   /* Font families */
   html {
-    font-family: "Funnel Display", sans-serif;
+    @apply font-sans;
     font-optical-sizing: auto;
   }
 
   html[lang="ar"] {
-    font-family: "Noto Kufi Arabic", sans-serif;
+    @apply font-arabic;
     font-optical-sizing: auto;
   }
 

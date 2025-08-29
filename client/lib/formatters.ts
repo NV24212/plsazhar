@@ -40,55 +40,30 @@ export function formatBHD(
 }
 
 /**
- * Gets currency formatting settings from localStorage
+ * Formats a price with a given currency symbol, handling LTR and RTL display.
+ * @param amount The numeric amount to format.
+ * @param currencySymbol The currency symbol (e.g., "BD", "$").
+ * @param language The current language ('ar' or 'en').
+ * @returns A formatted price string (e.g., "10.500 BD").
  */
-export function getCurrencySettings(): {
-  currencySymbol: string;
-  currency: string;
-  locale: string;
-} {
-  try {
-    const savedSettings = localStorage.getItem("storeSettings");
-    if (savedSettings) {
-      const settings = JSON.parse(savedSettings);
-      return {
-        currencySymbol: settings.currencySymbol || "BD",
-        currency: settings.currency || "BHD",
-        locale: settings.language || "en-BH",
-      };
-    }
-  } catch (error) {
-    console.warn("Error reading currency settings:", error);
-  }
-
-  return {
-    currencySymbol: "BD",
-    currency: "BHD",
-    locale: "en-BH",
-  };
-}
-
-/**
- * Formats price using current app settings
- * @param amount The amount to format
- * @param language Current language ("ar" or "en")
- * @returns Formatted price string
- */
-export function formatPrice(amount: number, language?: string): string {
-  const settings = getCurrencySettings();
-
-  // Always use 3 decimal places for BHD
+export function formatPrice(
+  amount: number,
+  currencySymbol: string,
+  language?: string,
+): string {
   const formattedAmount = Number(amount).toFixed(3);
 
   if (language === "ar") {
-    return `${formattedAmount} د.ب`;
+    const arabicSymbol = currencySymbol === "BD" ? "د.ب" : currencySymbol;
+    return `${formattedAmount} ${arabicSymbol}`;
   }
 
-  return `${formattedAmount}BD`;
+  return `${formattedAmount} ${currencySymbol}`;
 }
 
 /**
- * Formats price with custom currency symbol (for backward compatibility)
+ * DEPRECATED: This function is now an alias for formatPrice.
+ * Use formatPrice directly instead.
  * @param amount The amount to format
  * @param currencySymbol The currency symbol to use
  * @param language Current language
@@ -99,13 +74,5 @@ export function formatPriceWithSymbol(
   currencySymbol: string,
   language?: string,
 ): string {
-  const formattedAmount = Number(amount).toFixed(3);
-
-  if (language === "ar") {
-    // Use Arabic currency symbol if available, otherwise use provided symbol
-    const arabicSymbol = currencySymbol === "BD" ? "د.ب" : currencySymbol;
-    return `${formattedAmount} ${arabicSymbol}`;
-  }
-
-  return `${formattedAmount}${currencySymbol}`;
+  return formatPrice(amount, currencySymbol, language);
 }

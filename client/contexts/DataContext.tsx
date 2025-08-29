@@ -140,81 +140,35 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setMounted(true);
   }, []);
 
-  const loadData = async (retryCount = 0) => {
-    const maxRetries = 3;
-    const delay = Math.min(1000 * Math.pow(2, retryCount), 5000); // Exponential backoff with max 5s
-
+  const loadData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-
-      // Load data with better error recovery - try individual endpoints if Promise.all fails
-      try {
-        const [customersData, productsData, ordersData, categoriesData] =
-          await Promise.all([
-            customerApi.getAll(),
-            productApi.getAll(),
-            orderApi.getAll(),
-            categoryApi.getAll(),
-          ]);
-        setCustomers(customersData);
-        const normalizedProducts = productsData as Product[];
-        setProducts(normalizedProducts);
-        setOrders(ordersData);
-        setCategories(categoriesData);
-      } catch (parallelError) {
-        // If parallel loading fails, try loading individually
-        console.warn(
-          "Parallel loading failed, trying individual requests:",
-          parallelError,
-        );
-
-        try {
-          const customersData = await customerApi.getAll().catch(() => []);
-          const productsData = await productApi.getAll().catch(() => []);
-          const ordersData = await orderApi.getAll().catch(() => []);
-          const categoriesData = await categoryApi.getAll().catch(() => []);
-
-          setCustomers(customersData);
-          setProducts(productsData as Product[]);
-          setOrders(ordersData);
-          setCategories(categoriesData);
-        } catch (individualError) {
-          throw individualError;
-        }
-      }
-
+      const [customersData, productsData, ordersData, categoriesData] =
+        await Promise.all([
+          customerApi.getAll(),
+          productApi.getAll(),
+          orderApi.getAll(),
+          categoryApi.getAll(),
+        ]);
+      setCustomers(customersData);
+      setProducts(productsData as Product[]);
+      setOrders(ordersData);
+      setCategories(categoriesData);
       console.log("Data loaded successfully");
     } catch (error) {
-      console.error(`Failed to load data (attempt ${retryCount + 1}):`, error);
-
-      if (retryCount < maxRetries) {
-        console.log(`Retrying in ${delay}ms...`);
-        setTimeout(() => loadData(retryCount + 1), delay);
-        return;
-      } else {
-        console.error("Max retries reached. Using empty data.");
-        // Set empty arrays to allow UI to function
-        setCustomers([]);
-        setProducts([]);
-        setOrders([]);
-        setCategories([]);
-      }
+      console.error("Failed to load data:", error);
+      // On failure, set data to empty arrays to prevent app crash
+      setCustomers([]);
+      setProducts([]);
+      setOrders([]);
+      setCategories([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Delay to allow server to start up in development
-    // Longer delay in development to avoid fetch failures on server restart
-    const isDevelopment = process.env.NODE_ENV === "development";
-    const delay = isDevelopment ? 1000 : 100;
-
-    const timer = setTimeout(() => {
-      loadData();
-    }, delay);
-
-    return () => clearTimeout(timer);
+    loadData();
   }, []);
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -480,25 +434,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
     await loadData();
   };
 
-  // Don't render children until the provider is properly mounted
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2F9d5f63fd358a4946ace1b6ce56f63e7e?format=webp&width=800"
-              alt="أزهار ستور - azharstore"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="animate-spin rounded-full border-2 border-muted border-t-primary w-6 h-6" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <DataContext.Provider
       value={{
@@ -529,7 +464,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
         uploadImage,
       }}
     >
-      {children}
+      {loading ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2F9d5f63fd358a4946ace1b6ce56f63e7e?format=webp&width=800"
+                alt="أزهار ستور - azharstore"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="animate-spin rounded-full border-2 border-muted border-t-primary w-6 h-6" />
+            <p className="text-sm text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </DataContext.Provider>
   );
 }

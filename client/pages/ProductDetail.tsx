@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { getProducts } from "../services/api";
+import { useSettings } from "@/contexts/SettingsContext";
 import { formatPrice } from "@/lib/formatters";
 import { Button } from "../components/ui/button";
 import { LoadingScreen } from "../components/ui/loading";
@@ -60,6 +61,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { t, language, setLanguage } = useLanguage();
   const { getTotalItems, setIsCartOpen, isCartOpen } = useCart();
+  const { settings } = useSettings();
 
   // Instagram link handler
   const openInstagram = () => {
@@ -301,7 +303,8 @@ export default function ProductDetail() {
                 className="text-3xl font-bold text-primary mb-4 ltr-text"
                 dir="ltr"
               >
-                {formatPrice(product.price, language)}
+                {settings &&
+                  formatPrice(product.price, settings.currencySymbol, language)}
               </div>
 
               {product.total_stock > 0 ? (

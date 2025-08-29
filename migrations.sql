@@ -28,6 +28,14 @@ $$ language 'plpgsql';
 -- Step 3: Define and create tables
 -- =================================================================
 
+-- =================================================================
+-- !! WARNING: DESTRUCTIVE OPERATION !!
+-- The following DROP TABLE commands will permanently delete all data
+-- in the specified tables. This is intended for development and
+-- ensuring a clean slate, but should NOT be run on a production
+-- database with valuable data.
+-- =================================================================
+
 -- Drop existing tables in reverse order of dependency to ensure a clean slate
 DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS products CASCADE;

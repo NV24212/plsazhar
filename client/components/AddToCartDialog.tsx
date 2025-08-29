@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
+import { useSettings } from "@/contexts/SettingsContext";
 import { formatPrice } from "@/lib/formatters";
 import {
   Dialog,
@@ -48,6 +49,7 @@ export default function AddToCartDialog({
 }: AddToCartDialogProps) {
   const { t, language } = useLanguage();
   const { addItem } = useCart();
+  const { settings } = useSettings();
   const [selectedVariantId, setSelectedVariantId] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
 
@@ -125,7 +127,8 @@ export default function AddToCartDialog({
 
             {/* Price */}
             <div className="text-lg font-bold text-primary ltr-text" dir="ltr">
-              {formatPrice(product.price, language)}
+              {settings &&
+                formatPrice(product.price, settings.currencySymbol, language)}
             </div>
 
             {/* Variant Selection */}
@@ -211,7 +214,12 @@ export default function AddToCartDialog({
                 <div className="flex justify-between items-center font-semibold">
                   <span>{t("orders.subtotal")}:</span>
                   <span className="ltr-text" dir="ltr">
-                    {formatPrice(product.price * quantity, language)}
+                    {settings &&
+                      formatPrice(
+                        product.price * quantity,
+                        settings.currencySymbol,
+                        language,
+                      )}
                   </span>
                 </div>
               </div>

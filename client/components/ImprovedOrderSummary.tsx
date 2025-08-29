@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Package, ShoppingCart, Truck, MapPin } from "lucide-react";
+import { useSettings } from "@/contexts/SettingsContext";
 
 interface ImprovedOrderSummaryProps {
   deliveryType: "delivery" | "pickup";
@@ -22,14 +23,28 @@ export default function ImprovedOrderSummary({
 }: ImprovedOrderSummaryProps) {
   const { t, language } = useLanguage();
   const { items, getTotalPrice } = useCart();
+  const { settings } = useSettings();
   const totalPrice = getTotalPrice();
 
-  // Get delivery settings from localStorage
-  const savedSettings = JSON.parse(
-    localStorage.getItem("storeSettings") || "{}",
-  );
-  const deliveryFeeSetting = Number(savedSettings?.deliveryFee ?? 1.5);
-  const freeDeliveryMinimum = Number(savedSettings?.freeDeliveryMinimum ?? 20);
+  // If settings are not loaded, render a placeholder or null
+  if (!settings) {
+    return (
+      <Card className="sticky top-4 shadow-lg border-0">
+        <CardHeader className="pb-4 border-b bg-gradient-to-r from-primary/5 to-primary/10">
+          <CardTitle className="flex items-center gap-3 text-xl">
+            <ShoppingCart className="w-6 h-6 text-primary" />
+            {t("checkout.orderSummary")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6 text-center">
+          <p>{t("common.loading")}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const { deliveryFee: deliveryFeeSetting = 1.5, freeDeliveryMinimum = 20 } =
+    settings;
 
   // Calculate delivery fee with free delivery threshold
   const deliveryFee =
@@ -83,14 +98,24 @@ export default function ImprovedOrderSummary({
                         {t("store.quantity")}: {item.quantity}
                       </span>
                       <span className="ltr-text">
-                        {formatPrice(item.price, language)}{" "}
+                        {settings &&
+                          formatPrice(
+                            item.price,
+                            settings.currencySymbol,
+                            language,
+                          )}{" "}
                         {language === "ar" ? "للقطعة" : "each"}
                       </span>
                     </div>
                   </div>
                   <div className="text-end">
                     <div className="text-lg font-bold text-primary ltr-text">
-                      {formatPrice(item.price * item.quantity, language)}
+                      {settings &&
+                        formatPrice(
+                          item.price * item.quantity,
+                          settings.currencySymbol,
+                          language,
+                        )}
                     </div>
                   </div>
                 </div>
@@ -143,7 +168,8 @@ export default function ImprovedOrderSummary({
               {t("checkout.subtotal")}:
             </span>
             <span className="ltr-text font-semibold text-gray-900">
-              {formatPrice(totalPrice, language)}
+              {settings &&
+                formatPrice(totalPrice, settings.currencySymbol, language)}
             </span>
           </div>
 
@@ -156,7 +182,8 @@ export default function ImprovedOrderSummary({
                 ? language === "ar"
                   ? "مجان"
                   : "Free"
-                : formatPrice(deliveryFee, language)}
+                : settings &&
+                  formatPrice(deliveryFee, settings.currencySymbol, language)}
             </span>
           </div>
 
@@ -173,8 +200,8 @@ export default function ImprovedOrderSummary({
                 totalPrice < freeDeliveryMinimum ? (
                 <p className="text-sm text-gray-500 auto-text">
                   {language === "ar"
-                    ? `أضف ${formatPrice(freeDeliveryMinimum - totalPrice, language)} للحصول على توصيل مجاني`
-                    : `Add ${formatPrice(freeDeliveryMinimum - totalPrice, language)} more for free delivery`}
+                    ? `أضف ${settings && formatPrice(freeDeliveryMinimum - totalPrice, settings.currencySymbol, language)} للحصول على توصيل مجاني`
+                    : `Add ${settings && formatPrice(freeDeliveryMinimum - totalPrice, settings.currencySymbol, language)} more for free delivery`}
                 </p>
               ) : null}
             </div>
@@ -187,7 +214,8 @@ export default function ImprovedOrderSummary({
               {t("checkout.total")}:
             </span>
             <span className="ltr-text text-2xl font-bold text-primary">
-              {formatPrice(finalTotal, language)}
+              {settings &&
+                formatPrice(finalTotal, settings.currencySymbol, language)}
             </span>
           </div>
         </div>
@@ -207,7 +235,9 @@ export default function ImprovedOrderSummary({
           ) : (
             <>
               <ShoppingCart className="w-5 h-5 mr-2" />
-              {t("checkout.placeOrder")} • {formatPrice(finalTotal, language)}
+              {t("checkout.placeOrder")} •{" "}
+              {settings &&
+                formatPrice(finalTotal, settings.currencySymbol, language)}
             </>
           )}
         </Button>
