@@ -8,7 +8,8 @@
 -- =================================================================
 
 -- Step 1: Enable necessary extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Step 1: Add any necessary extensions here in the future
+-- CREATE EXTENSION IF NOT EXISTS "some_extension";
 
 -- =================================================================
 -- Step 2: Define and create core functions
@@ -29,7 +30,7 @@ $$ language 'plpgsql';
 
 -- Categories for products
 CREATE TABLE IF NOT EXISTS categories (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     name_ar TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 -- Customers table
 CREATE TABLE IF NOT EXISTS customers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
     address TEXT NOT NULL,
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS customers (
 
 -- Products table, depends on categories
 CREATE TABLE IF NOT EXISTS products (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     name_ar TEXT,
     description TEXT,
@@ -59,7 +60,7 @@ CREATE TABLE IF NOT EXISTS products (
     price DECIMAL(10,2) NOT NULL DEFAULT 0,
     images JSONB DEFAULT '[]'::jsonb,
     variants JSONB DEFAULT '[]'::jsonb,
-    category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
+    category_id TEXT REFERENCES categories(id) ON DELETE SET NULL,
     total_stock INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -67,8 +68,8 @@ CREATE TABLE IF NOT EXISTS products (
 
 -- Orders table, depends on customers and products (via items JSON)
 CREATE TABLE IF NOT EXISTS orders (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    customer_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
     items JSONB NOT NULL DEFAULT '[]'::jsonb,
     total DECIMAL(10,2) NOT NULL DEFAULT 0,
     status TEXT NOT NULL DEFAULT 'processing' CHECK (status IN ('processing', 'ready', 'delivered', 'picked-up')),
@@ -184,12 +185,8 @@ $$;
 -- =================================================================
 DO $$
 BEGIN
-    -- Insert default categories
-    INSERT INTO categories (name, name_ar) VALUES
-    ('Electronics', 'الأجهزة الإلكترونية'),
-    ('Accessories', 'الإكسسوارات'),
-    ('Home & Office', 'المنزل والمكتب')
-    ON CONFLICT (name) DO NOTHING;
+    -- Note: Default categories are now initialized by the application
+    -- in `server/lib/supabase.ts` if the table is empty.
 
     -- Insert a default admin user
     INSERT INTO admin_users (email, password_hash) VALUES
@@ -266,6 +263,17 @@ CREATE TABLE IF NOT EXISTS app_settings (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Idempotently add the updated_at column if it's missing from an existing table
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'app_settings' AND column_name = 'updated_at'
+    ) THEN
+        ALTER TABLE app_settings ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+    END IF;
+END $$;
 
 COMMENT ON TABLE app_settings IS 'Stores application-wide settings as key-value pairs. The ''key'' is a unique identifier for the setting (e.g., ''storeConfig''), and the ''value'' is a JSONB object containing the setting data.';
 
