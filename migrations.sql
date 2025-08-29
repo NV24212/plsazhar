@@ -28,6 +28,12 @@ $$ language 'plpgsql';
 -- Step 3: Define and create tables
 -- =================================================================
 
+-- Drop existing tables in reverse order of dependency to ensure a clean slate
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS customers CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+
 -- Categories for products
 CREATE TABLE IF NOT EXISTS categories (
     id TEXT PRIMARY KEY,
