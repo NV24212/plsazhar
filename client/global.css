@@ -108,12 +108,12 @@
   }
 
   html {
-    @apply font-sans;
+    font-family: "Funnel Display", sans-serif;
     font-optical-sizing: auto;
   }
 
   html[lang="ar"] {
-    @apply font-arabic;
+    font-family: "Noto Kufi Arabic", sans-serif;
     font-optical-sizing: auto;
   }
 }
