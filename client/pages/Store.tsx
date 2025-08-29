@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { useData } from "../contexts/DataContext";
-import { getProducts } from "../services/api";
 import { formatPrice } from "@/lib/formatters";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -47,9 +46,7 @@ export default function Store() {
   const navigate = useNavigate();
   const { t, language, setLanguage, translateCategory } = useLanguage();
   const { getTotalItems, setIsCartOpen, isCartOpen } = useCart();
-  const { categories, getCategoryById } = useData();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { products, categories, loading, getCategoryById } = useData();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isAddToCartOpen, setIsAddToCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,27 +61,6 @@ export default function Store() {
       "noopener,noreferrer",
     );
   };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getProducts();
-        // Normalize category field for filtering
-        const normalized = data.map((p: any) => ({
-          ...p,
-          category_id: p.category_id || "",
-        }));
-        setProducts(normalized);
-        setFilteredProducts(normalized);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   // Filter products based on search query and category
   useEffect(() => {
