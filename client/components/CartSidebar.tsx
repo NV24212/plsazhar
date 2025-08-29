@@ -331,7 +331,8 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
           )}
         </DialogContent>
       </Dialog>
-
+      {/* The CheckoutDialog must be outside the conditional rendering of the cart content */}
+      {/* so that it doesn't get unmounted when the cart is cleared. */}
       <CheckoutDialog
         open={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
