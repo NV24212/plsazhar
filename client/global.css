@@ -106,6 +106,16 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  html {
+    @apply font-sans;
+    font-optical-sizing: auto;
+  }
+
+  html[lang="ar"] {
+    @apply font-arabic;
+    font-optical-sizing: auto;
+  }
 }
 
 @layer utilities {
@@ -133,17 +143,6 @@
 
   [dir="ltr"] .text-end {
     text-align: right;
-  }
-
-  /* Font families */
-  html {
-    @apply font-sans;
-    font-optical-sizing: auto;
-  }
-
-  html[lang="ar"] {
-    @apply font-arabic;
-    font-optical-sizing: auto;
   }
 
   /* RTL support */
