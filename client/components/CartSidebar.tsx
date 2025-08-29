@@ -90,7 +90,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
             </div>
           ) : (
             <>
-              <ScrollArea className="flex-1 px-4">
+              <ScrollArea className="flex-1 px-4 min-h-0">
                 <div className="space-y-3 py-4">
                   {items.map((item) => (
                     <div
