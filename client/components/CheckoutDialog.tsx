@@ -39,17 +39,17 @@ const SuccessView = ({ orderMessages, onClose }) => {
       exit={{ opacity: 0 }}
       className="flex flex-col h-full"
     >
-      <DialogHeader className="p-6 pb-4 border-b bg-gradient-to-br from-green-50 to-emerald-50">
+      <DialogHeader className="p-6 pb-4 border-b bg-primary/10">
         <div className="flex items-center justify-center mb-4">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center shadow-lg">
-            <CheckCircle className="h-10 w-10 text-green-600" />
+          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-lg">
+            <CheckCircle className="h-10 w-10 text-primary" />
           </div>
         </div>
         <div>
-          <DialogTitle className="text-center text-2xl font-bold text-green-800 auto-text leading-tight">
+          <DialogTitle className="text-center text-2xl font-bold text-primary auto-text leading-tight">
             {orderMessages.headline}
           </DialogTitle>
-          <p className="text-center text-green-700 auto-text text-sm mt-2 leading-relaxed">
+          <p className="text-center text-primary/80 auto-text text-sm mt-2 leading-relaxed">
             {orderMessages.subtext}
           </p>
         </div>
@@ -57,8 +57,8 @@ const SuccessView = ({ orderMessages, onClose }) => {
       <ScrollArea className="flex-1 p-6">
         <div id="checkout-success-bottom" className="flex items-center justify-center min-h-full py-8">
           <div className="text-center max-w-md mx-auto">
-            <div className="bg-green-50 p-8 rounded-lg border border-green-200">
-              <p className="text-gray-800 auto-text text-lg leading-relaxed">
+            <div className="bg-secondary p-8 rounded-lg border">
+              <p className="text-foreground auto-text text-lg leading-relaxed">
                 {orderMessages.successMessage}
               </p>
             </div>
@@ -112,7 +112,7 @@ const CheckoutForm = ({
       exit={{ opacity: 0 }}
       className="flex flex-col h-full"
     >
-      <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b flex-shrink-0 bg-white">
+      <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b flex-shrink-0 bg-background">
         <DialogTitle className="text-xl sm:text-2xl font-bold text-center auto-text leading-tight">
           {t("checkout.title")}
         </DialogTitle>
@@ -122,7 +122,7 @@ const CheckoutForm = ({
               <div key={stepNum} className="flex items-center">
                 <div
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-medium transition-all duration-200 ${
-                    step >= stepNum ? "bg-primary text-white shadow-lg" : "bg-gray-200 text-gray-600"
+                    step >= stepNum ? "bg-primary text-primary-foreground shadow-lg" : "bg-secondary text-secondary-foreground"
                   }`}
                 >
                   {stepNum}
@@ -130,7 +130,7 @@ const CheckoutForm = ({
                 {stepNum < 3 && (
                   <div
                     className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 rounded-full transition-all duration-200 ${
-                      step > stepNum ? "bg-primary" : "bg-gray-200"
+                      step > stepNum ? "bg-primary" : "bg-secondary"
                     }`}
                   />
                 )}
@@ -184,7 +184,7 @@ const CheckoutForm = ({
           </AnimatePresence>
         </div>
       </ScrollArea>
-      <div className="border-t p-4 sm:p-6 bg-white flex-shrink-0">
+      <div className="border-t p-4 sm:p-6 bg-background flex-shrink-0">
         <div className="flex items-center gap-3 sm:gap-4">
           {step > 1 && (
             <Button
