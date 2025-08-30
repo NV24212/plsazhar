@@ -254,79 +254,82 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
-
-              <DialogFooter className="flex-col space-y-0 p-0 border-t border-gray-100">
-                {/* Summary Section */}
-                <div className="w-full bg-gray-50 p-6">
-                  <div className="bg-white rounded-2xl shadow-sm border p-5">
-                    <div
-                      className={cn(
-                        "flex justify-between items-center mb-3",
-                        isRTL ? "flex-row-reverse" : "",
-                      )}
-                    >
-                      <span className="auto-text text-gray-600 font-medium text-lg">
-                        {t("store.cartTotal")}:
-                      </span>
-                      <span
-                        className="text-2xl font-bold text-primary ltr-text"
-                        dir="ltr"
+                <DialogFooter className="flex-col space-y-0 p-0 border-t border-gray-100 mt-4">
+                  {/* Summary Section */}
+                  <div className="w-full bg-gray-50 p-6">
+                    <div className="bg-white rounded-2xl shadow-sm border p-5">
+                      <div
+                        className={cn(
+                          "flex justify-between items-center mb-3",
+                          isRTL ? "flex-row-reverse" : "",
+                        )}
                       >
-                        {formatPrice(totalPrice, language)}
-                      </span>
-                    </div>
-                    <div className="text-center">
-                      <div className="inline-flex items-center justify-center bg-gray-100 rounded-full px-3 py-1">
-                        <span className="text-sm text-gray-600 font-medium">
-                          <span className="ltr-text font-bold">
-                            {items.length}
-                          </span>{" "}
-                          {language === "ar"
-                            ? items.length === 1
-                              ? t("common.itemAr")
-                              : t("common.itemsAr")
-                            : items.length === 1
-                              ? t("common.item")
-                              : t("common.items")}
+                        <span className="auto-text text-gray-600 font-medium text-lg">
+                          {t("store.cartTotal")}:
                         </span>
+                        <span
+                          className="text-2xl font-bold text-primary ltr-text"
+                          dir="ltr"
+                        >
+                          {formatPrice(totalPrice, language)}
+                        </span>
+                      </div>
+                      <div className="text-center">
+                        <div className="inline-flex items-center justify-center bg-gray-100 rounded-full px-3 py-1">
+                          <span className="text-sm text-gray-600 font-medium">
+                            <span className="ltr-text font-bold">
+                              {items.length}
+                            </span>{" "}
+                            {language === "ar"
+                              ? items.length === 1
+                                ? t("common.itemAr")
+                                : t("common.itemsAr")
+                              : items.length === 1
+                                ? t("common.item")
+                                : t("common.items")}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="w-full p-6 space-y-4 bg-white">
-                  <Button
-                    onClick={handleCheckout}
-                    className="w-full h-14 touch-manipulation bg-primary hover:bg-primary/90 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                    disabled={items.length === 0}
-                  >
-                    <Truck className={cn("h-5 w-5", isRTL ? "ml-3" : "mr-3")} />
-                    <span className="auto-text">{t("store.checkout")}</span>
-                  </Button>
-
-                  <div className="flex gap-3">
+                  {/* Action Buttons */}
+                  <div className="w-full p-6 space-y-4 bg-white">
                     <Button
-                      variant="outline"
-                      onClick={onClose}
-                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-gray-50 transition-colors duration-200"
-                    >
-                      <span className="auto-text">
-                        {t("store.continueShopping")}
-                      </span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={clearCart}
-                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
+                      onClick={handleCheckout}
+                      className="w-full h-14 touch-manipulation bg-primary hover:bg-primary/90 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                       disabled={items.length === 0}
                     >
-                      <span className="auto-text">{t("store.clearCart")}</span>
+                      <Truck
+                        className={cn("h-5 w-5", isRTL ? "ml-3" : "mr-3")}
+                      />
+                      <span className="auto-text">{t("store.checkout")}</span>
                     </Button>
+
+                    <div className="flex gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={onClose}
+                        className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-gray-50 transition-colors duration-200"
+                      >
+                        <span className="auto-text">
+                          {t("store.continueShopping")}
+                        </span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={clearCart}
+                        className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
+                        disabled={items.length === 0}
+                      >
+                        <span className="auto-text">
+                          {t("store.clearCart")}
+                        </span>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </DialogFooter>
+                </DialogFooter>
+              </ScrollArea>
             </>
           )}
         </DialogContent>
