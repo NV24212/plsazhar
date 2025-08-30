@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCart } from "../contexts/CartContext";
 import { formatPrice } from "@/lib/formatters";
@@ -16,6 +17,7 @@ import { Separator } from "./ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag, Package, Truck } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
+import CheckoutDialog from "./CheckoutDialog";
 
 interface CartSidebarProps {
   open: boolean;
@@ -24,14 +26,16 @@ interface CartSidebarProps {
 
 export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   const { t, language, isRTL } = useLanguage();
-  const {
-    items,
-    updateQuantity,
-    removeItem,
-    getTotalPrice,
-    clearCart,
-    setIsCheckoutOpen,
-  } = useCart();
+  const { items, updateQuantity, removeItem, getTotalPrice, clearCart } =
+    useCart();
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isCheckoutOpen) {
+      setIsCheckoutOpen(false);
+    }
+  }, [location]);
 
   const handleCheckout = () => {
     setIsCheckoutOpen(true);
@@ -54,7 +58,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] grid grid-rows-[auto_1fr_auto] p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto">
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] grid grid-rows-[auto_1fr_auto] p-0 rounded-[10px] border shadow-lg bg-background mx-auto">
           <DialogHeader className="px-4 py-4 border-b">
             <DialogTitle className="flex items-center gap-2 text-lg font-semibold">
               <ShoppingBag className="h-5 w-5 text-primary" />
@@ -70,14 +74,14 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
           {items.length === 0 ? (
             <div className="flex items-center justify-center py-16 px-6">
               <div className="text-center space-y-6">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-                  <ShoppingBag className="h-12 w-12 text-gray-400" />
+                <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center mx-auto">
+                  <ShoppingBag className="h-12 w-12 text-muted-foreground" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-xl font-semibold text-gray-700 auto-text">
+                  <h3 className="text-xl font-semibold text-foreground auto-text">
                     {t("store.cartEmpty")}
                   </h3>
-                  <p className="text-gray-500 auto-text text-sm">
+                  <p className="text-muted-foreground auto-text text-sm">
                     {language === "ar"
                       ? t("store.startShoppingAr")
                       : t("store.startShopping")}
@@ -99,10 +103,10 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                   {items.map((item) => (
                     <div
                       key={`${item.productId}-${item.variantId}`}
-                      className="group relative bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
+                      className="group relative bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
                     >
                       {/* Product Header Section */}
-                      <div className="p-4 border-b border-gray-100">
+                      <div className="p-4 border-b">
                         <div
                           className={cn(
                             "flex gap-4 items-start",
@@ -111,7 +115,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                         >
                           {/* Product Image */}
                           {item.productImage && (
-                            <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0 shadow-sm">
+                            <div className="w-16 h-16 rounded-xl overflow-hidden bg-secondary shrink-0 shadow-sm">
                               <img
                                 src={item.productImage}
                                 alt={item.productName}
@@ -129,11 +133,11 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                               )}
                             >
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-bold text-lg text-gray-900 leading-tight auto-text mb-1">
+                                <h4 className="font-bold text-lg text-foreground leading-tight auto-text mb-1">
                                   {item.productName}
                                 </h4>
                                 {item.variantName && (
-                                  <p className="text-sm text-gray-600 font-medium auto-text">
+                                  <p className="text-sm text-muted-foreground font-medium auto-text">
                                     {item.variantName}
                                   </p>
                                 )}
@@ -146,7 +150,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                                 onClick={() =>
                                   removeItem(item.productId, item.variantId)
                                 }
-                                className="shrink-0 h-9 w-9 p-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 sm:opacity-100 transition-all duration-200"
+                                className="shrink-0 h-9 w-9 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl opacity-0 group-hover:opacity-100 sm:opacity-100 transition-all duration-200"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -158,14 +162,14 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                       {/* Product Details Section */}
                       <div className="p-4 space-y-4">
                         {/* Unit Price */}
-                        <div className="bg-gray-50 rounded-xl p-3">
+                        <div className="bg-secondary rounded-xl p-3">
                           <div
                             className={cn(
                               "flex items-center justify-between",
                               isRTL ? "flex-row-reverse" : "",
                             )}
                           >
-                            <span className="text-sm font-medium text-gray-700 auto-text">
+                            <span className="text-sm font-medium text-foreground auto-text">
                               {t("store.unitPrice")}:
                             </span>
                             <span
@@ -178,18 +182,18 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                         </div>
 
                         {/* Quantity Controls */}
-                        <div className="bg-gray-50 rounded-xl p-3">
+                        <div className="bg-secondary rounded-xl p-3">
                           <div
                             className={cn(
                               "flex items-center justify-between",
                               isRTL ? "flex-row-reverse" : "",
                             )}
                           >
-                            <span className="text-sm font-medium text-gray-700 auto-text">
+                            <span className="text-sm font-medium text-foreground auto-text">
                               {t("store.quantity")}:
                             </span>
 
-                            <div className="flex items-center gap-2 bg-white rounded-xl border border-gray-200 p-1">
+                            <div className="flex items-center gap-2 bg-background rounded-xl border p-1">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -230,7 +234,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                         </div>
 
                         {/* Item Total */}
-                        <div className="bg-primary/5 rounded-xl p-3 border border-primary/20">
+                        <div className="bg-primary/10 rounded-xl p-3 border border-primary/20">
                           <div
                             className={cn(
                               "flex justify-between items-center",
@@ -260,17 +264,17 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                 </div>
               </ScrollArea>
 
-              <DialogFooter className="flex-col space-y-0 p-0 border-t border-gray-100">
+              <DialogFooter className="flex-col space-y-0 p-0 border-t">
                 {/* Summary Section */}
-                <div className="w-full bg-gray-50 p-6">
-                  <div className="bg-white rounded-2xl shadow-sm border p-5">
+                <div className="w-full bg-secondary p-6">
+                  <div className="bg-background rounded-2xl shadow-sm border p-5">
                     <div
                       className={cn(
                         "flex justify-between items-center mb-3",
                         isRTL ? "flex-row-reverse" : "",
                       )}
                     >
-                      <span className="auto-text text-gray-600 font-medium text-lg">
+                      <span className="auto-text text-muted-foreground font-medium text-lg">
                         {t("store.cartTotal")}:
                       </span>
                       <span
@@ -281,8 +285,8 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                       </span>
                     </div>
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center bg-gray-100 rounded-full px-3 py-1">
-                        <span className="text-sm text-gray-600 font-medium">
+                      <div className="inline-flex items-center justify-center bg-secondary rounded-full px-3 py-1">
+                        <span className="text-sm text-muted-foreground font-medium">
                           <span className="ltr-text font-bold">
                             {items.length}
                           </span>{" "}
@@ -300,7 +304,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="w-full p-6 space-y-4 bg-white">
+                <div className="w-full p-6 space-y-4 bg-background">
                   <Button
                     onClick={handleCheckout}
                     className="w-full h-14 touch-manipulation bg-primary hover:bg-primary/90 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
@@ -335,6 +339,10 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
           )}
         </DialogContent>
       </Dialog>
+      <CheckoutDialog
+        open={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
     </>
   );
 }
