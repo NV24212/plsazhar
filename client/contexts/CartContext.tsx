@@ -30,6 +30,8 @@ interface CartContextType {
   getTotalPrice: () => number;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
+  isCheckoutOpen: boolean;
+  setIsCheckoutOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -45,6 +47,7 @@ export function useCart() {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Migrate existing cart items with "default" variantId to "no-variant"
   useEffect(() => {
@@ -127,6 +130,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         getTotalPrice,
         isCartOpen,
         setIsCartOpen,
+        isCheckoutOpen,
+        setIsCheckoutOpen,
       }}
     >
       {children}

@@ -14,7 +14,6 @@ import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag, Package, Truck } from "lucide-react";
-import CheckoutDialog from "./CheckoutDialog";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -25,9 +24,14 @@ interface CartSidebarProps {
 
 export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   const { t, language, isRTL } = useLanguage();
-  const { items, updateQuantity, removeItem, getTotalPrice, clearCart } =
-    useCart();
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    getTotalPrice,
+    clearCart,
+    setIsCheckoutOpen,
+  } = useCart();
 
   const handleCheckout = () => {
     setIsCheckoutOpen(true);
@@ -331,12 +335,6 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
           )}
         </DialogContent>
       </Dialog>
-      {/* The CheckoutDialog must be outside the conditional rendering of the cart content */}
-      {/* so that it doesn't get unmounted when the cart is cleared. */}
-      <CheckoutDialog
-        open={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-      />
     </>
   );
 }
