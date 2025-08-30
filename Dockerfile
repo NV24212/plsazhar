@@ -29,8 +29,9 @@ COPY . .
 # Build application
 RUN npm run build:full
 
-# Prune dev dependencies
-RUN npm prune --production
+# Reinstall production dependencies
+RUN rm -rf node_modules
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Final stage for app image
 FROM node:${NODE_VERSION}-slim
