@@ -102,12 +102,24 @@ function PageTracker() {
 
 const queryClient = new QueryClient();
 
+import CheckoutDialog from "@/components/CheckoutDialog";
+import { useCart } from "@/contexts/CartContext";
+
 function AppContent() {
   const { isAuthenticated } = useAuth();
+  const { isCheckoutOpen, setIsCheckoutOpen } = useCart();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isCheckoutOpen) {
+      setIsCheckoutOpen(false);
+    }
+  }, [location]);
 
   return (
     <>
       <NetworkStatus />
+      <CheckoutDialog open={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} />
       <Routes>
         {/* Store routes - no authentication required (now default) */}
         <Route path="/" element={<Store />} />
