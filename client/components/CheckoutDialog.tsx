@@ -40,28 +40,19 @@ const SuccessView = ({ orderMessages, onClose }) => {
       className="flex flex-col h-full"
     >
       <DialogHeader className="p-6 pb-4 border-b bg-gradient-to-br from-green-50 to-emerald-50">
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
-          className="flex items-center justify-center mb-4"
-        >
+        <div className="flex items-center justify-center mb-4">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center shadow-lg">
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
-        </motion.div>
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+        </div>
+        <div>
           <DialogTitle className="text-center text-2xl font-bold text-green-800 auto-text leading-tight">
             {orderMessages.headline}
           </DialogTitle>
           <p className="text-center text-green-700 auto-text text-sm mt-2 leading-relaxed">
             {orderMessages.subtext}
           </p>
-        </motion.div>
+        </div>
       </DialogHeader>
       <ScrollArea className="flex-1 p-6">
         <div id="checkout-success-bottom" className="flex items-center justify-center min-h-full py-8">
@@ -154,9 +145,9 @@ const CheckoutForm = ({
             {step === 1 && (
               <motion.div
                 key="step1"
-                initial={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">
@@ -167,9 +158,9 @@ const CheckoutForm = ({
             {step === 2 && (
               <motion.div
                 key="step2"
-                initial={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">
@@ -180,9 +171,9 @@ const CheckoutForm = ({
             {step === 3 && (
               <motion.div
                 key="step3"
-                initial={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">

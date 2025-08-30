@@ -27,12 +27,6 @@ export default {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        dashboard: {
-          primary: "#742370",
-          secondary: "#401951",
-          "primary-light": "#8b4d89",
-          "secondary-light": "#5a2972",
-        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",

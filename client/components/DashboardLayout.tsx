@@ -64,8 +64,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Mobile sidebar overlay */}
+    <div className="flex h-screen bg-[rgba(25,25,25,0.8)] text-white">
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
@@ -73,55 +72,37 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar - use key to force re-render on language change */}
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
-          // For RTL: position on right, for LTR: position on left
+          "fixed inset-y-0 z-50 w-[280px] bg-[rgba(40,40,40,0.95)] shadow-xl transition-transform duration-300 ease-in-out border-r border-[rgba(255,255,255,0.1)] backdrop-blur-md",
           isRTL ? "right-0" : "left-0",
-          // Transform logic based on direction and state (works on all screen sizes)
-          sidebarOpen
-            ? "translate-x-0"
-            : isRTL
-              ? "translate-x-full"
-              : "-translate-x-full",
+          sidebarOpen ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
         )}
-        style={{
-          // Force positioning with style as backup
-          [isRTL ? "right" : "left"]: "0",
-        }}
+        style={{ [isRTL ? "right" : "left"]: "0" }}
         data-sidebar-open={sidebarOpen}
       >
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 [dir=rtl]:flex-row-reverse">
-          <div className="flex items-center gap-3 [dir=rtl]:flex-row-reverse">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-[rgba(255,255,255,0.1)]">
+          <div className="flex items-center gap-3">
             <img
-              src={
-                language === "ar"
-                  ? "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2F16a76df3c393470e995ec2718d67ab09?format=webp&width=800"
-                  : "https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2Feb0b70b9250f4bfca41dbc5a78c2ce45?format=webp&width=800"
-              }
-              alt="أزهار ستور - azharstore"
+              src="https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2Feb0b70b9250f4bfca41dbc5a78c2ce45?format=webp&width=800"
+              alt="Logo"
               className="h-8 w-8 object-contain"
             />
-            <h1 className="text-lg font-bold text-dashboard-primary [dir=rtl]:text-right [dir=ltr]:text-left">
+            <h1 className="text-lg font-bold text-white">
               {t("nav.adminPanel")}
             </h1>
           </div>
           <button
             onClick={handleCloseSidebar}
-            onTouchEnd={(e) => handleCloseSidebar(e as any)}
-            className="lg:hidden text-gray-400 hover:text-gray-600 touch-manipulation z-10 p-2 -m-2 relative"
-            type="button"
-            aria-label={t("common.close")}
-            style={{ pointerEvents: "auto" }}
+            className="lg:hidden text-gray-400 hover:text-white"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <nav className="mt-8 px-4">
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -130,15 +111,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     to={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={cn(
-                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors [dir=rtl]:flex-row-reverse [dir=rtl]:text-right [dir=ltr]:text-left",
+                      "flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors border-l-4",
                       isActive
-                        ? "bg-dashboard-primary text-white"
-                        : "text-gray-700 hover:bg-gray-100",
+                        ? "bg-[rgba(115,35,112,0.2)] text-white border-primary"
+                        : "text-gray-300 hover:bg-[rgba(115,35,112,0.1)] hover:text-white border-transparent",
                     )}
                   >
-                    <item.icon
-                      className={cn("w-5 h-5", isRTL ? "ml-3" : "mr-3")}
-                    />
+                    <item.icon className="w-5 h-5 mr-3" />
                     {item.name}
                   </Link>
                 </li>
@@ -147,48 +126,36 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 space-y-2">
-          <Button
-            onClick={toggleLanguage}
-            variant="outline"
-            className="w-full justify-start [dir=rtl]:justify-end [dir=rtl]:flex-row-reverse"
-          >
-            <Languages className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[rgba(255,255,255,0.1)] space-y-2">
+          <Button onClick={toggleLanguage} variant="secondary" className="w-full justify-start">
+            <Languages className="w-4 h-4 mr-2" />
             {t("language.switch")}
           </Button>
-          <Button
-            onClick={logout}
-            variant="outline"
-            className="w-full justify-start [dir=rtl]:justify-end [dir=rtl]:flex-row-reverse"
-          >
-            <LogOut className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} />
+          <Button onClick={logout} variant="secondary" className="w-full justify-start">
+            <LogOut className="w-4 h-4 mr-2" />
             {t("nav.logout")}
           </Button>
         </div>
       </div>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="flex items-center justify-between h-16 px-4 [dir=rtl]:flex-row-reverse">
+        <header className="bg-transparent">
+          <div className="flex items-center justify-between h-16 px-6">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-white"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-lg font-semibold text-gray-900 [dir=rtl]:text-right [dir=ltr]:text-left">
+            <h1 className="text-lg font-semibold text-white">
               {t("dashboard.title")}
             </h1>
-            <div className="w-6" /> {/* Spacer */}
+            <div className="w-6" />
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-8">{children}</main>
 
-        {/* Footer */}
         <Footer />
       </div>
     </div>

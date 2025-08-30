@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import AdminConfirmDialog from '@/components/AdminConfirmDialog';
-import AdminAlertDialog from '@/components/AdminAlertDialog';
+import { Modal } from '@/components/ui/Modal';
 
 interface DialogContextType {
   showConfirm: (options: ConfirmOptions) => Promise<boolean>;
@@ -81,24 +80,39 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     <DialogContext.Provider value={{ showConfirm, showAlert }}>
       {children}
       
-      <AdminConfirmDialog
+      <Modal
         isOpen={confirmDialog.isOpen}
         onClose={handleConfirmClose}
-        onConfirm={handleConfirmConfirm}
         title={confirmDialog.options.title}
-        message={confirmDialog.options.message}
+        description={confirmDialog.options.message}
         type={confirmDialog.options.type}
-        confirmText={confirmDialog.options.confirmText}
-        cancelText={confirmDialog.options.cancelText}
+        actions={[
+          {
+            label: confirmDialog.options.cancelText || 'Cancel',
+            onClick: handleConfirmClose,
+            variant: 'outline',
+          },
+          {
+            label: confirmDialog.options.confirmText || 'Confirm',
+            onClick: handleConfirmConfirm,
+            variant: confirmDialog.options.type === 'danger' ? 'destructive' : 'default',
+          },
+        ]}
       />
 
-      <AdminAlertDialog
+      <Modal
         isOpen={alertDialog.isOpen}
         onClose={handleAlertClose}
         title={alertDialog.options.title}
-        message={alertDialog.options.message}
+        description={alertDialog.options.message}
         type={alertDialog.options.type}
-        buttonText={alertDialog.options.buttonText}
+        actions={[
+          {
+            label: alertDialog.options.buttonText || 'OK',
+            onClick: handleAlertClose,
+            variant: 'default',
+          },
+        ]}
       />
     </DialogContext.Provider>
   );
