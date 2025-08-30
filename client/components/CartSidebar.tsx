@@ -50,7 +50,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto">
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] grid grid-rows-[auto_1fr_auto] p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto">
           <DialogHeader className="px-4 py-4 border-b">
             <DialogTitle className="flex items-center gap-2 text-lg font-semibold">
               <ShoppingBag className="h-5 w-5 text-primary" />
@@ -64,7 +64,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
           </DialogHeader>
 
           {items.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center py-16 px-6">
+            <div className="flex items-center justify-center py-16 px-6">
               <div className="text-center space-y-6">
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                   <ShoppingBag className="h-12 w-12 text-gray-400" />
@@ -90,7 +90,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
             </div>
           ) : (
             <>
-              <ScrollArea className="flex-1 px-4 min-h-0">
+              <ScrollArea className="px-4 min-h-0">
                 <div className="space-y-3 py-4">
                   {items.map((item) => (
                     <div
@@ -254,82 +254,79 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                     </div>
                   ))}
                 </div>
-                <DialogFooter className="flex-col space-y-0 p-0 border-t border-gray-100 mt-4">
-                  {/* Summary Section */}
-                  <div className="w-full bg-gray-50 p-6">
-                    <div className="bg-white rounded-2xl shadow-sm border p-5">
-                      <div
-                        className={cn(
-                          "flex justify-between items-center mb-3",
-                          isRTL ? "flex-row-reverse" : "",
-                        )}
+              </ScrollArea>
+
+              <DialogFooter className="flex-col space-y-0 p-0 border-t border-gray-100">
+                {/* Summary Section */}
+                <div className="w-full bg-gray-50 p-6">
+                  <div className="bg-white rounded-2xl shadow-sm border p-5">
+                    <div
+                      className={cn(
+                        "flex justify-between items-center mb-3",
+                        isRTL ? "flex-row-reverse" : "",
+                      )}
+                    >
+                      <span className="auto-text text-gray-600 font-medium text-lg">
+                        {t("store.cartTotal")}:
+                      </span>
+                      <span
+                        className="text-2xl font-bold text-primary ltr-text"
+                        dir="ltr"
                       >
-                        <span className="auto-text text-gray-600 font-medium text-lg">
-                          {t("store.cartTotal")}:
+                        {formatPrice(totalPrice, language)}
+                      </span>
+                    </div>
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center bg-gray-100 rounded-full px-3 py-1">
+                        <span className="text-sm text-gray-600 font-medium">
+                          <span className="ltr-text font-bold">
+                            {items.length}
+                          </span>{" "}
+                          {language === "ar"
+                            ? items.length === 1
+                              ? t("common.itemAr")
+                              : t("common.itemsAr")
+                            : items.length === 1
+                              ? t("common.item")
+                              : t("common.items")}
                         </span>
-                        <span
-                          className="text-2xl font-bold text-primary ltr-text"
-                          dir="ltr"
-                        >
-                          {formatPrice(totalPrice, language)}
-                        </span>
-                      </div>
-                      <div className="text-center">
-                        <div className="inline-flex items-center justify-center bg-gray-100 rounded-full px-3 py-1">
-                          <span className="text-sm text-gray-600 font-medium">
-                            <span className="ltr-text font-bold">
-                              {items.length}
-                            </span>{" "}
-                            {language === "ar"
-                              ? items.length === 1
-                                ? t("common.itemAr")
-                                : t("common.itemsAr")
-                              : items.length === 1
-                                ? t("common.item")
-                                : t("common.items")}
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Action Buttons */}
-                  <div className="w-full p-6 space-y-4 bg-white">
+                {/* Action Buttons */}
+                <div className="w-full p-6 space-y-4 bg-white">
+                  <Button
+                    onClick={handleCheckout}
+                    className="w-full h-14 touch-manipulation bg-primary hover:bg-primary/90 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    disabled={items.length === 0}
+                  >
+                    <Truck className={cn("h-5 w-5", isRTL ? "ml-3" : "mr-3")} />
+                    <span className="auto-text">{t("store.checkout")}</span>
+                  </Button>
+
+                  <div className="flex gap-3">
                     <Button
-                      onClick={handleCheckout}
-                      className="w-full h-14 touch-manipulation bg-primary hover:bg-primary/90 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                      variant="outline"
+                      onClick={onClose}
+                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <span className="auto-text">
+                        {t("store.continueShopping")}
+                      </span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={clearCart}
+                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
                       disabled={items.length === 0}
                     >
-                      <Truck
-                        className={cn("h-5 w-5", isRTL ? "ml-3" : "mr-3")}
-                      />
-                      <span className="auto-text">{t("store.checkout")}</span>
+                      <span className="auto-text">{t("store.clearCart")}</span>
                     </Button>
-
-                    <div className="flex gap-3">
-                      <Button
-                        variant="outline"
-                        onClick={onClose}
-                        className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-gray-50 transition-colors duration-200"
-                      >
-                        <span className="auto-text">
-                          {t("store.continueShopping")}
-                        </span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={clearCart}
-                        className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
-                        disabled={items.length === 0}
-                      >
-                        <span className="auto-text">
-                          {t("store.clearCart")}
-                        </span>
-                      </Button>
-                    </div>
                   </div>
-                </DialogFooter>
-              </ScrollArea>
+                </div>
+              </DialogFooter>
             </>
           )}
         </DialogContent>
