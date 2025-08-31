@@ -306,7 +306,6 @@ export default function Orders() {
             <DialogTrigger asChild>
               <Button
                 onClick={() => openDialog()}
-                className="bg-dashboard-primary hover:bg-dashboard-primary-light"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 {t("orders.addNew")}
@@ -585,10 +584,10 @@ export default function Orders() {
                     />
                   </div>
 
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-center p-4 bg-secondary rounded-lg">
                     <span className="font-medium">Total:</span>
                     <span
-                      className="text-xl font-bold text-dashboard-primary ltr-text"
+                      className="text-xl font-bold text-primary ltr-text"
                       dir="ltr"
                     >
                       {formatPrice(calculateTotal(), language)}
@@ -601,7 +600,6 @@ export default function Orders() {
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-dashboard-primary hover:bg-dashboard-primary-light"
                   >
                     {editingOrder ? t("orders.save") : t("orders.addOrder")}
                   </Button>
@@ -619,7 +617,7 @@ export default function Orders() {
       <Card>
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
             <Input
               placeholder={t("orders.search")}
               value={searchTerm}
@@ -637,16 +635,16 @@ export default function Orders() {
           return (
             <Card
               key={order.id}
-              className="hover:shadow-lg transition-shadow border-l-4 border-dashboard-primary"
+              className="hover:shadow-lg transition-shadow border-l-4 border-primary"
             >
               <CardHeader className="pb-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4 [dir=rtl]:sm:flex-row-reverse">
                   <div className="flex items-start gap-3 flex-1 [dir=rtl]:flex-row-reverse">
-                    <div className="w-12 h-12 sm:w-10 sm:h-10 bg-dashboard-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <ShoppingCart className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+                    <div className="w-12 h-12 sm:w-10 sm:h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <ShoppingCart className="w-6 h-6 sm:w-5 sm:h-5 text-primary" />
                     </div>
                     <div className="min-w-0 flex-1 space-y-1">
-                      <CardTitle className="text-lg sm:text-xl font-bold text-gray-900">
+                      <CardTitle className="text-lg sm:text-xl font-bold text-foreground">
                         {t("orders.orderId")} #{getOrderNumber(order.id)}
                       </CardTitle>
                       <CardDescription className="flex items-center gap-2 text-sm sm:text-base [dir=rtl]:flex-row-reverse">
@@ -657,7 +655,7 @@ export default function Orders() {
                   </div>
                   <div className="flex flex-col sm:items-end gap-3 sm:gap-2 mt-2 sm:mt-0">
                     <div
-                      className="text-2xl sm:text-xl font-bold text-dashboard-primary ltr-text"
+                      className="text-2xl sm:text-xl font-bold text-primary ltr-text"
                       dir="ltr"
                     >
                       {formatPrice(order.total, language)}
@@ -694,7 +692,7 @@ export default function Orders() {
               <CardContent className="pt-0">
                 <div className="space-y-4 sm:space-y-3">
                   <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                    <h4 className="font-semibold mb-3 flex items-center gap-2 text-foreground">
                       <Package className="w-4 h-4" />
                       {t("nav.products")} ({order.items.length})
                     </h4>
@@ -708,39 +706,39 @@ export default function Orders() {
                         return (
                           <div
                             key={`preview-${order.id}-${item.productId}-${item.variantId || "no-variant"}-${index}`}
-                            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 p-3 sm:p-2 bg-gray-50 rounded-lg"
+                            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 p-3 sm:p-2 bg-secondary rounded-lg"
                           >
                             <div className="flex items-center gap-3 flex-1">
                               {product?.images?.[0] && (
                                 <img
                                   src={product.images[0]}
                                   alt={product.name}
-                                  className="w-12 h-12 sm:w-10 sm:h-10 rounded-lg object-cover border border-gray-200"
+                                  className="w-12 h-12 sm:w-10 sm:h-10 rounded-lg object-cover border"
                                 />
                               )}
                               <div className="flex-1">
                                 <div
-                                  className="font-medium text-gray-900 auto-text"
+                                  className="font-medium text-foreground auto-text"
                                   dir="auto"
                                 >
                                   {product?.name || t("products.title")}
                                 </div>
                                 {variant && (
-                                  <div className="text-sm text-gray-500">
+                                  <div className="text-sm text-muted-foreground">
                                     {variant.name}
                                   </div>
                                 )}
                               </div>
                             </div>
                             <div
-                              className="text-sm sm:text-right text-gray-600 font-medium ltr-text"
+                              className="text-sm sm:text-right text-muted-foreground font-medium ltr-text"
                               dir="ltr"
                             >
                               <div>
                                 {item.quantity}x{" "}
                                 {formatPrice(item.price, language)}
                               </div>
-                              <div className="font-bold text-dashboard-primary">
+                              <div className="font-bold text-primary">
                                 {formatPrice(
                                   item.quantity * item.price,
                                   language,
@@ -751,20 +749,20 @@ export default function Orders() {
                         );
                       })}
                       {order.items.length > 2 && (
-                        <div className="text-sm text-gray-600 text-center py-2 bg-gray-100 rounded">
+                        <div className="text-sm text-muted-foreground text-center py-2 bg-secondary rounded">
                           +{order.items.length - 2} {t("orders.items")}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 text-sm text-gray-600 pt-2 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 text-sm text-muted-foreground pt-2 border-t">
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
                       {new Date(order.createdAt).toLocaleDateString()}
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                      <div className="capitalize font-medium text-dashboard-primary">
+                      <div className="capitalize font-medium text-primary">
                         {order.deliveryType === "delivery"
                           ? t("orders.delivery")
                           : t("orders.pickup")}
@@ -798,7 +796,7 @@ export default function Orders() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-1 sm:flex-none h-10 font-medium"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 flex-1 sm:flex-none h-10 font-medium"
                       onClick={() => handleDelete(order.id)}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -813,21 +811,21 @@ export default function Orders() {
 
       {/* View Order Details Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="w-[90vw] sm:max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border-0 shadow-2xl bg-gray-50">
-          <DialogHeader className="pb-6 border-b border-gray-100">
-            <DialogTitle className="text-2xl font-bold text-gray-900">
+        <DialogContent className="w-[90vw] sm:max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border-0 shadow-2xl bg-background">
+          <DialogHeader className="pb-6 border-b">
+            <DialogTitle className="text-2xl font-bold text-foreground">
               {t("orders.orderDetailsTitle")} #
               {viewingOrder ? getOrderNumber(viewingOrder.id) : ""}
             </DialogTitle>
-            <DialogDescription className="text-base text-gray-600 mt-2">
+            <DialogDescription className="text-base text-muted-foreground mt-2">
               {t("orders.orderDetailsDesc")}
             </DialogDescription>
           </DialogHeader>
           {viewingOrder && (
             <div className="space-y-8 py-6">
               {/* Customer Information */}
-              <div className="bg-white p-6 rounded-2xl border-2 border-blue-200 shadow-lg">
-                <h3 className="font-bold text-blue-900 mb-5 flex items-center gap-3 text-lg">
+              <div className="bg-card p-6 rounded-2xl border">
+                <h3 className="font-bold text-foreground mb-5 flex items-center gap-3 text-lg">
                   <User className="w-6 h-6" />
                   {t("orders.customerInfo")}
                 </h3>
@@ -835,37 +833,37 @@ export default function Orders() {
                   const customer = getCustomerById(viewingOrder.customerId);
                   return customer ? (
                     <div className="space-y-3">
-                      <div className="bg-blue-50 p-5 rounded-xl border-2 border-blue-300 shadow-sm">
+                      <div className="bg-secondary p-5 rounded-xl border">
                         <div className="flex items-center gap-3 mb-2 [dir=rtl]:flex-row-reverse">
-                          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
+                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                            <span className="text-primary font-bold text-sm">
                               👤
                             </span>
                           </div>
-                          <span className="font-bold text-blue-800 text-lg auto-text">
+                          <span className="font-bold text-foreground text-lg auto-text">
                             {t("orders.customerName")}
                           </span>
                         </div>
                         <div className="ml-11 [dir=rtl]:mr-11 [dir=rtl]:ml-0">
-                          <span className="text-blue-900 text-xl font-bold auto-text">
+                          <span className="text-foreground text-xl font-bold auto-text">
                             {customer.name}
                           </span>
                         </div>
                       </div>
 
-                      <div className="bg-green-50 p-5 rounded-xl border-2 border-green-300 shadow-sm">
+                      <div className="bg-secondary p-5 rounded-xl border">
                         <div className="flex items-center gap-3 mb-2 [dir=rtl]:flex-row-reverse">
-                          <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                            <Phone className="w-4 h-4 text-white" />
+                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                            <Phone className="w-4 h-4 text-primary" />
                           </div>
-                          <span className="font-bold text-green-800 text-lg auto-text">
+                          <span className="font-bold text-foreground text-lg auto-text">
                             {t("orders.customerPhone")}
                           </span>
                         </div>
                         <div className="ml-11 [dir=rtl]:mr-11 [dir=rtl]:ml-0">
                           <a
                             href={`tel:${customer.phone}`}
-                            className="text-green-900 text-xl font-bold ltr-text hover:underline"
+                            className="text-primary text-xl font-bold ltr-text hover:underline"
                             dir="ltr"
                           >
                             {customer.phone}
@@ -873,17 +871,17 @@ export default function Orders() {
                         </div>
                       </div>
 
-                      <div className="bg-orange-50 p-5 rounded-xl border-2 border-orange-300 shadow-sm">
+                      <div className="bg-secondary p-5 rounded-xl border">
                         <div className="flex items-start gap-3 [dir=rtl]:flex-row-reverse">
-                          <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mt-1">
-                            <MapPin className="w-4 h-4 text-white" />
+                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mt-1">
+                            <MapPin className="w-4 h-4 text-primary" />
                           </div>
                           <div className="flex-1">
-                            <span className="font-bold text-orange-800 text-lg block mb-3 auto-text">
+                            <span className="font-bold text-foreground text-lg block mb-3 auto-text">
                               {t("orders.deliveryAddress")}
                             </span>
                             <div className="ml-0">
-                              <p className="text-orange-900 text-lg font-semibold leading-relaxed auto-text bg-white p-3 rounded-lg border border-orange-200">
+                              <p className="text-foreground text-lg font-semibold leading-relaxed auto-text bg-background p-3 rounded-lg border">
                                 {customer.address}
                               </p>
                             </div>
@@ -892,7 +890,7 @@ export default function Orders() {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-red-600 font-medium text-base">
+                    <p className="text-destructive font-medium text-base">
                       {t("orders.customerNotFound")}
                     </p>
                   );
@@ -900,8 +898,8 @@ export default function Orders() {
               </div>
 
               {/* Order Items */}
-              <div className="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-lg">
-                <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-3 text-lg">
+              <div className="bg-card p-6 rounded-2xl border">
+                <h3 className="font-bold text-foreground mb-5 flex items-center gap-3 text-lg">
                   <Package className="w-6 h-6" />
                   {t("orders.orderItems")}
                 </h3>
@@ -915,7 +913,7 @@ export default function Orders() {
                     return (
                       <div
                         key={`view-${viewingOrder.id}-${item.productId}-${item.variantId || "no-variant"}-${index}`}
-                        className="bg-white p-5 border rounded-xl hover:shadow-md transition-all duration-200 border-gray-200"
+                        className="bg-background p-5 border rounded-xl hover:shadow-md transition-all duration-200"
                       >
                         <div className="flex justify-between items-start gap-6 [dir=rtl]:flex-row-reverse">
                           <div className="flex items-start gap-4 flex-1 [dir=rtl]:flex-row-reverse">
@@ -923,7 +921,7 @@ export default function Orders() {
                               <img
                                 src={product.images[0]}
                                 alt={product.name}
-                                className="w-20 h-20 rounded-xl object-cover border-2 border-gray-100"
+                                className="w-20 h-20 rounded-xl object-cover border"
                               />
                             )}
                             <div className="flex-1 space-y-2">
@@ -935,23 +933,23 @@ export default function Orders() {
                                     "_blank",
                                   );
                                 }}
-                                className="font-bold text-dashboard-primary hover:text-dashboard-primary-light hover:underline transition-colors text-start text-lg leading-snug auto-text"
+                                className="font-bold text-primary hover:text-primary/80 hover:underline transition-colors text-start text-lg leading-snug auto-text"
                                 dir="auto"
                               >
                                 {product?.name || t("orders.unknownProduct")}
                               </button>
                               {variant && (
-                                <div className="bg-gray-100 px-3 py-1 rounded-lg inline-block">
-                                  <span className="text-sm font-medium text-gray-700 auto-text">
+                                <div className="bg-secondary px-3 py-1 rounded-lg inline-block">
+                                  <span className="text-sm font-medium text-muted-foreground auto-text">
                                     {t("store.variant")}: {variant.name}
                                   </span>
                                 </div>
                               )}
                               {product && (
-                                <div className="text-base text-gray-600 font-medium auto-text">
+                                <div className="text-base text-muted-foreground font-medium auto-text">
                                   {t("products.price")}:{" "}
                                   <span
-                                    className="text-dashboard-primary font-bold ltr-text"
+                                    className="text-primary font-bold ltr-text"
                                     dir="ltr"
                                   >
                                     {formatPrice(product.price, language)}
@@ -962,14 +960,14 @@ export default function Orders() {
                           </div>
                           <div className="text-end space-y-2 min-w-[120px] [dir=rtl]:text-start">
                             <div
-                              className="text-base text-gray-600 font-medium ltr-text"
+                              className="text-base text-muted-foreground font-medium ltr-text"
                               dir="ltr"
                             >
                               <span className="font-bold">{item.quantity}</span>{" "}
                               × {formatPrice(item.price, language)}
                             </div>
                             <div
-                              className="font-bold text-xl text-dashboard-primary ltr-text"
+                              className="font-bold text-xl text-primary ltr-text"
                               dir="ltr"
                             >
                               {formatPrice(
@@ -986,14 +984,14 @@ export default function Orders() {
               </div>
 
               {/* Order Summary */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-200 shadow-lg">
-                <h3 className="font-bold text-green-900 mb-5 text-lg auto-text">
+              <div className="bg-primary/10 p-6 rounded-2xl border">
+                <h3 className="font-bold text-foreground mb-5 text-lg auto-text">
                   {t("orders.orderSummary")}
                 </h3>
                 <div className="space-y-4">
-                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                  <div className="bg-background p-4 rounded-lg border">
                     <div className="flex justify-between items-center [dir=rtl]:flex-row-reverse">
-                      <span className="font-bold text-gray-700 text-base auto-text">
+                      <span className="font-bold text-foreground text-base auto-text">
                         {t("orders.status")}:
                       </span>
                       <Badge
@@ -1003,34 +1001,34 @@ export default function Orders() {
                       </Badge>
                     </div>
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                  <div className="bg-background p-4 rounded-lg border">
                     <div className="flex justify-between items-center [dir=rtl]:flex-row-reverse">
-                      <span className="font-bold text-gray-700 text-base auto-text">
+                      <span className="font-bold text-foreground text-base auto-text">
                         {t("orders.deliveryType")}:
                       </span>
-                      <span className="capitalize font-bold text-dashboard-primary text-base auto-text">
+                      <span className="capitalize font-bold text-primary text-base auto-text">
                         {viewingOrder.deliveryType === "delivery"
                           ? t("orders.delivery")
                           : t("orders.pickup")}
                       </span>
                     </div>
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                  <div className="bg-background p-4 rounded-lg border">
                     <div className="flex justify-between items-center [dir=rtl]:flex-row-reverse">
-                      <span className="font-bold text-gray-700 text-base auto-text">
+                      <span className="font-bold text-foreground text-base auto-text">
                         {t("orders.created")}:
                       </span>
-                      <span className="font-medium text-gray-900 text-base">
+                      <span className="font-medium text-foreground text-base">
                         {new Date(viewingOrder.createdAt).toLocaleString()}
                       </span>
                     </div>
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-green-200">
+                  <div className="bg-background p-4 rounded-lg border">
                     <div className="flex justify-between items-center [dir=rtl]:flex-row-reverse">
-                      <span className="font-bold text-gray-700 text-base auto-text">
+                      <span className="font-bold text-foreground text-base auto-text">
                         {t("orders.lastUpdated")}:
                       </span>
-                      <span className="font-medium text-gray-900 text-base">
+                      <span className="font-medium text-foreground text-base">
                         {new Date(viewingOrder.updatedAt).toLocaleString()}
                       </span>
                     </div>
@@ -1045,13 +1043,13 @@ export default function Orders() {
                       </p>
                     </div>
                   )}
-                  <div className="bg-dashboard-primary p-5 rounded-lg border-2 border-dashboard-primary">
+                  <div className="bg-primary p-5 rounded-lg border-2 border-primary">
                     <div className="flex justify-between items-center [dir=rtl]:flex-row-reverse">
-                      <span className="text-xl font-bold text-white auto-text">
+                      <span className="text-xl font-bold text-primary-foreground auto-text">
                         {t("orders.total")}:
                       </span>
                       <span
-                        className="text-3xl font-bold text-white ltr-text"
+                        className="text-3xl font-bold text-primary-foreground ltr-text"
                         dir="ltr"
                       >
                         {formatPrice(viewingOrder.total, language)}
@@ -1062,11 +1060,11 @@ export default function Orders() {
               </div>
             </div>
           )}
-          <DialogFooter className="pt-6 border-t border-gray-100 gap-4">
+          <DialogFooter className="pt-6 border-t gap-4">
             <Button
               variant="outline"
               onClick={closeViewDialog}
-              className="h-12 px-8 text-base font-medium rounded-xl border-2 hover:bg-gray-50"
+              className="h-12 px-8 text-base font-medium rounded-xl"
             >
               {t("orders.close")}
             </Button>
@@ -1075,7 +1073,7 @@ export default function Orders() {
                 closeViewDialog();
                 if (viewingOrder) openDialog(viewingOrder);
               }}
-              className="h-12 px-8 text-base font-bold rounded-xl bg-dashboard-primary hover:bg-dashboard-primary-dark"
+              className="h-12 px-8 text-base font-bold rounded-xl"
             >
               {t("orders.editOrder")}
             </Button>
@@ -1086,15 +1084,15 @@ export default function Orders() {
       {filteredOrders.length === 0 && (
         <Card>
           <CardContent className="text-center py-12">
-            <ShoppingCart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <ShoppingCart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {t("empty.noOrdersFound")}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {searchTerm ? t("empty.adjustSearch") : t("empty.addFirstOrder")}
             </p>
             <Button
-              className="mt-4 bg-dashboard-primary hover:bg-dashboard-primary-light"
+              className="mt-4"
               onClick={() => openDialog()}
             >
               <Plus className="w-4 h-4 mr-2" />
