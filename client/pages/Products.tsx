@@ -222,7 +222,7 @@ export default function Products() {
               {t("products.addNew")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg sm:rounded-md">
+          <DialogContent className="w-[95vw] max-h-[90vh] overflow-y-auto rounded-lg sm:rounded-md">
             <DialogHeader>
               <DialogTitle>
                 {editingProduct
@@ -577,7 +577,6 @@ export default function Products() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-dashboard-primary hover:bg-dashboard-primary-light"
                 >
                   {editingProduct ? t("common.save") : t("products.addProduct")}
                 </Button>
