@@ -217,7 +217,6 @@ export default function Products() {
           <DialogTrigger asChild>
             <Button
               onClick={() => openDialog()}
-              className="bg-dashboard-primary hover:bg-dashboard-primary-light"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("products.addNew")}

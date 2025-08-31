@@ -151,7 +151,23 @@ const CheckoutForm = ({
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">
-                  {/* ... Step 1 content ... */}
+                  <CardHeader>
+                    <CardTitle>{t("checkout.customerInfo")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">{t("checkout.name")}</Label>
+                      <Input id="name" value={customerInfo.name} onChange={(e) => handleInputChange("name", e.target.value)} required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">{t("checkout.phone")}</Label>
+                      <Input id="phone" value={customerInfo.phone} onChange={(e) => handleInputChange("phone", e.target.value)} required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="town">{t("checkout.town")}</Label>
+                      <Input id="town" value={customerInfo.town} onChange={(e) => handleInputChange("town", e.target.value)} required />
+                    </div>
+                  </CardContent>
                 </Card>
               </motion.div>
             )}
@@ -164,7 +180,21 @@ const CheckoutForm = ({
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">
-                  {/* ... Step 2 content ... */}
+                  <CardHeader>
+                    <CardTitle>{t("checkout.deliveryOptions")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="delivery" id="delivery" />
+                        <Label htmlFor="delivery">{t("checkout.delivery")}</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="pickup" id="pickup" />
+                        <Label htmlFor="pickup">{t("checkout.pickup")}</Label>
+                      </div>
+                    </RadioGroup>
+                  </CardContent>
                 </Card>
               </motion.div>
             )}
@@ -177,7 +207,24 @@ const CheckoutForm = ({
                 transition={{ duration: 0.3 }}
               >
                 <Card className="border-2 shadow-sm">
-                  {/* ... Step 3 content ... */}
+                  <CardHeader>
+                    <CardTitle>{t("checkout.orderSummary")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul>
+                      {items.map(item => (
+                        <li key={`${item.productId}-${item.variantId}`} className="flex justify-between">
+                          <span>{item.productName} x {item.quantity}</span>
+                          <span>{formatPrice(item.price * item.quantity, language)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Separator className="my-4" />
+                    <div className="flex justify-between font-bold">
+                      <span>{t("checkout.total")}</span>
+                      <span>{formatPrice(totalPrice, language)}</span>
+                    </div>
+                  </CardContent>
                 </Card>
               </motion.div>
             )}

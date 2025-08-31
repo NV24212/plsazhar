@@ -109,7 +109,7 @@ export default function AddToCartDialog({
           <div className="space-y-4 pb-4">
             {/* Product Image */}
             {product.images.length > 0 && (
-              <div className="aspect-square sm:aspect-video overflow-hidden rounded-lg bg-gray-100">
+              <div className="aspect-square sm:aspect-video overflow-hidden rounded-lg bg-secondary">
                 <img
                   src={product.images[0]}
                   alt={product.name}
