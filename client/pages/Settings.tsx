@@ -571,216 +571,119 @@ export default function Settings() {
 
         {/* Tab Content */}
         <div className="w-full md:w-3/4 space-y-6">
-        {/* Basic Settings */}
-        {activeTab === "basic" && (
-          <div className="max-w-2xl mx-auto">
-            {/* Store Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Store className="w-5 h-5" />
-                  {t("settings.storeInformation")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label htmlFor="storeName" className="auto-text">
-                    {t("settings.storeName")}
-                  </Label>
-                  <Input
-                    id="storeName"
-                    value={formState.storeName}
-                    onChange={(e) =>
-                      handleInputChange("storeName", e.target.value)
-                    }
-                    placeholder={t("settings.storeName")}
-                    className="auto-text"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="storeDescription" className="auto-text">
-                    {t("settings.storeDescription")}
-                  </Label>
-                  <Textarea
-                    id="storeDescription"
-                    value={formState.storeDescription}
-                    onChange={(e) =>
-                      handleInputChange("storeDescription", e.target.value)
-                    }
-                    placeholder={t("settings.storeDescription")}
-                    className="auto-text"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+          {/* Basic Settings */}
+          {activeTab === "basic" && (
+            <div className="max-w-2xl mx-auto">
+              {/* Store Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Store className="w-5 h-5" />
+                    {t("settings.storeInformation")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
                   <div>
-                    <Label htmlFor="currency" className="auto-text">
-                      {t("settings.currency")}
-                    </Label>
-                    <Select
-                      value={formState.currency}
-                      onValueChange={(value) =>
-                        handleInputChange("currency", value)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="BHD">
-                          {t("settings.bahrainiDinar")}
-                        </SelectItem>
-                        <SelectItem value="USD">
-                          {t("settings.usDollar")}
-                        </SelectItem>
-                        <SelectItem value="EUR">
-                          {t("settings.euro")}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="currencySymbol" className="auto-text">
-                      {t("settings.currencySymbol")}
+                    <Label htmlFor="storeName" className="auto-text">
+                      {t("settings.storeName")}
                     </Label>
                     <Input
-                      id="currencySymbol"
-                      value={formState.currencySymbol}
+                      id="storeName"
+                      value={formState.storeName}
                       onChange={(e) =>
-                        handleInputChange("currencySymbol", e.target.value)
+                        handleInputChange("storeName", e.target.value)
                       }
-                      placeholder="BD"
-                      className="ltr-text"
+                      placeholder={t("settings.storeName")}
+                      className="auto-text"
                     />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Delivery Settings */}
-        {activeTab === "delivery" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Delivery Pricing */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5" />
-                  {t("settings.deliveryPricing")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="freeDeliveryMinimum" className="auto-text">
-                    {t("settings.freeDeliveryMinimum")}
-                  </Label>
-                  <Input
-                    id="freeDeliveryMinimum"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formState.freeDeliveryMinimum || 0}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "freeDeliveryMinimum",
-                        parseFloat(e.target.value) || 0,
-                      )
-                    }
-                    onFocus={(e) => {
-                      if (e.target.value === "0") {
-                        e.target.value = "";
+                  <div>
+                    <Label htmlFor="storeDescription" className="auto-text">
+                      {t("settings.storeDescription")}
+                    </Label>
+                    <Textarea
+                      id="storeDescription"
+                      value={formState.storeDescription}
+                      onChange={(e) =>
+                        handleInputChange("storeDescription", e.target.value)
                       }
-                      // Scroll into view on mobile
-                      setTimeout(() => {
-                        e.target.scrollIntoView({
-                          behavior: "smooth",
-                          block: "center",
-                        });
-                      }, 100);
-                    }}
-                    className="ltr-text"
-                    placeholder="20"
-                  />
-                  <p className="text-sm text-muted-foreground auto-text mt-1">
-                    {t("settings.freeDeliveryMinimumHint")}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Delivery Area Pricing */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  {language === "ar"
-                    ? "أسعار التوصيل حسب المنطقة"
-                    : "Delivery Area Pricing"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h4 className="font-medium auto-text">
-                    {language === "ar" ? "المنطقة الأولى" : "Area 1"}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      placeholder={t("settings.storeDescription")}
+                      className="auto-text"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label
-                        htmlFor="deliveryAreaSitraNameEn"
-                        className="auto-text"
-                      >
-                        {language === "ar"
-                          ? "الاسم بالإنجليزية"
-                          : "Name (English)"}
+                      <Label htmlFor="currency" className="auto-text">
+                        {t("settings.currency")}
                       </Label>
-                      <Input
-                        id="deliveryAreaSitraNameEn"
-                        value={formState.deliveryAreaSitraNameEn || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaSitraNameEn",
-                            e.target.value,
-                          )
+                      <Select
+                        value={formState.currency}
+                        onValueChange={(value) =>
+                          handleInputChange("currency", value)
                         }
-                        placeholder="Sitra"
-                        className="auto-text"
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="BHD">
+                            {t("settings.bahrainiDinar")}
+                          </SelectItem>
+                          <SelectItem value="USD">
+                            {t("settings.usDollar")}
+                          </SelectItem>
+                          <SelectItem value="EUR">
+                            {t("settings.euro")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
-                      <Label
-                        htmlFor="deliveryAreaSitraNameAr"
-                        className="auto-text"
-                      >
-                        {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
+                      <Label htmlFor="currencySymbol" className="auto-text">
+                        {t("settings.currencySymbol")}
                       </Label>
                       <Input
-                        id="deliveryAreaSitraNameAr"
-                        value={formState.deliveryAreaSitraNameAr || ""}
+                        id="currencySymbol"
+                        value={formState.currencySymbol}
                         onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaSitraNameAr",
-                            e.target.value,
-                          )
+                          handleInputChange("currencySymbol", e.target.value)
                         }
-                        placeholder="سترة"
-                        className="auto-text"
+                        placeholder="BD"
+                        className="ltr-text"
                       />
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Delivery Settings */}
+          {activeTab === "delivery" && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Delivery Pricing */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="w-5 h-5" />
+                    {t("settings.deliveryPricing")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div>
-                    <Label htmlFor="deliveryAreaSitra" className="auto-text">
-                      {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
+                    <Label htmlFor="freeDeliveryMinimum" className="auto-text">
+                      {t("settings.freeDeliveryMinimum")}
                     </Label>
                     <Input
-                      id="deliveryAreaSitra"
+                      id="freeDeliveryMinimum"
                       type="number"
                       step="0.1"
                       min="0"
-                      value={formState.deliveryAreaSitra || 0}
+                      value={formState.freeDeliveryMinimum || 0}
                       onChange={(e) =>
                         handleInputChange(
-                          "deliveryAreaSitra",
+                          "freeDeliveryMinimum",
                           parseFloat(e.target.value) || 0,
                         )
                       }
@@ -797,423 +700,521 @@ export default function Settings() {
                         }, 100);
                       }}
                       className="ltr-text"
-                      placeholder="1.0"
+                      placeholder="20"
                     />
-                  </div>
-                </div>
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h4 className="font-medium auto-text">
-                    {language === "ar" ? "المنطقة الثانية" : "Area 2"}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="deliveryAreaMuharraqlNameEn"
-                        className="auto-text"
-                      >
-                        {language === "ar"
-                          ? "الاسم بالإنجليزية"
-                          : "Name (English)"}
-                      </Label>
-                      <Input
-                        id="deliveryAreaMuharraqlNameEn"
-                        value={formState.deliveryAreaMuharraqlNameEn || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaMuharraqlNameEn",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Muharraq, Askar, Jao"
-                        className="auto-text"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="deliveryAreaMuharraqNameAr"
-                        className="auto-text"
-                      >
-                        {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
-                      </Label>
-                      <Input
-                        id="deliveryAreaMuharraqNameAr"
-                        value={formState.deliveryAreaMuharraqNameAr || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaMuharraqNameAr",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="المحرق، عسكر، جو"
-                        className="auto-text"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="deliveryAreaMuharraq" className="auto-text">
-                      {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
-                    </Label>
-                    <Input
-                      id="deliveryAreaMuharraq"
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      value={formState.deliveryAreaMuharraq || 0}
-                      onChange={(e) =>
-                        handleInputChange(
-                          "deliveryAreaMuharraq",
-                          parseFloat(e.target.value) || 0,
-                        )
-                      }
-                      onFocus={(e) => {
-                        if (e.target.value === "0") {
-                          e.target.value = "";
-                        }
-                        // Scroll into view on mobile
-                        setTimeout(() => {
-                          e.target.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center",
-                          });
-                        }, 100);
-                      }}
-                      className="ltr-text"
-                      placeholder="1.5"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-4 p-4 border rounded-lg">
-                  <h4 className="font-medium auto-text">
-                    {language === "ar" ? "المنطقة الثالثة" : "Area 3"}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="deliveryAreaOtherNameEn"
-                        className="auto-text"
-                      >
-                        {language === "ar"
-                          ? "الاسم بالإنجليزية"
-                          : "Name (English)"}
-                      </Label>
-                      <Input
-                        id="deliveryAreaOtherNameEn"
-                        value={formState.deliveryAreaOtherNameEn || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaOtherNameEn",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Other Cities"
-                        className="auto-text"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="deliveryAreaOtherNameAr"
-                        className="auto-text"
-                      >
-                        {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
-                      </Label>
-                      <Input
-                        id="deliveryAreaOtherNameAr"
-                        value={formState.deliveryAreaOtherNameAr || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "deliveryAreaOtherNameAr",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="م��ن أخرى"
-                        className="auto-text"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="deliveryAreaOther" className="auto-text">
-                      {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
-                    </Label>
-                    <Input
-                      id="deliveryAreaOther"
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      value={formState.deliveryAreaOther || 0}
-                      onChange={(e) =>
-                        handleInputChange(
-                          "deliveryAreaOther",
-                          parseFloat(e.target.value) || 0,
-                        )
-                      }
-                      onFocus={(e) => {
-                        if (e.target.value === "0") {
-                          e.target.value = "";
-                        }
-                        // Scroll into view on mobile
-                        setTimeout(() => {
-                          e.target.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center",
-                          });
-                        }, 100);
-                      }}
-                      className="ltr-text"
-                      placeholder="2.0"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Pickup Messages */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="w-5 h-5" />
-                  {t("settings.pickupMessages")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="pickupMessageEn" className="auto-text">
-                    {t("settings.pickupMessageEn")}
-                  </Label>
-                  <Textarea
-                    id="pickupMessageEn"
-                    value={formState.pickupMessageEn || ""}
-                    onChange={(e) =>
-                      handleInputChange("pickupMessageEn", e.target.value)
-                    }
-                    className="auto-text"
-                    rows={4}
-                    placeholder="Enter pickup instructions in English..."
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="pickupMessageAr" className="auto-text">
-                    {t("settings.pickupMessageAr")}
-                  </Label>
-                  <Textarea
-                    id="pickupMessageAr"
-                    value={formState.pickupMessageAr || ""}
-                    onChange={(e) =>
-                      handleInputChange("pickupMessageAr", e.target.value)
-                    }
-                    className="auto-text"
-                    rows={4}
-                    placeholder="أدخل ت��ليمات الاستلام بالعربية..."
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Delivery Messages */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="w-5 h-5" />
-                  {t("settings.deliveryMessages")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="deliveryMessageEn" className="auto-text">
-                    {t("settings.deliveryMessageEn")}
-                  </Label>
-                  <Textarea
-                    id="deliveryMessageEn"
-                    value={formState.deliveryMessageEn || ""}
-                    onChange={(e) =>
-                      handleInputChange("deliveryMessageEn", e.target.value)
-                    }
-                    className="auto-text"
-                    rows={4}
-                    placeholder="Enter delivery instructions in English..."
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="deliveryMessageAr" className="auto-text">
-                    {t("settings.deliveryMessageAr")}
-                  </Label>
-                  <Textarea
-                    id="deliveryMessageAr"
-                    value={formState.deliveryMessageAr || ""}
-                    onChange={(e) =>
-                      handleInputChange("deliveryMessageAr", e.target.value)
-                    }
-                    className="auto-text"
-                    rows={4}
-                    placeholder="أدخل تعليمات التوصيل بالعربية..."
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Admin Settings */}
-        {activeTab === "admin" && (
-          <div className="max-w-xl mx-auto space-y-6">
-            {/* Admin Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  {t("settings.adminInformation")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="adminEmail" className="auto-text">
-                    {t("settings.adminEmail")}
-                  </Label>
-                  <Input
-                    id="adminEmail"
-                    type="email"
-                    value={formState.adminEmail}
-                    onChange={(e) =>
-                      handleInputChange("adminEmail", e.target.value)
-                    }
-                    placeholder="admin@example.com"
-                    className="ltr-text"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Password Change */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5" />
-                  {t("settings.changePassword")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="currentPassword" className="auto-text">
-                    {t("settings.currentPassword")}
-                  </Label>
-                  <Input
-                    id="currentPassword"
-                    type="password"
-                    value={formState.currentPassword || ""}
-                    onChange={(e) =>
-                      handleInputChange("currentPassword", e.target.value)
-                    }
-                    placeholder="••���•••••"
-                    className="ltr-text"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="newPassword" className="auto-text">
-                    {t("settings.newPassword")}
-                  </Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    value={formState.newPassword || ""}
-                    onChange={(e) =>
-                      handleInputChange("newPassword", e.target.value)
-                    }
-                    placeholder="••••••••"
-                    className="ltr-text"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="confirmPassword" className="auto-text">
-                    {t("settings.confirmPassword")}
-                  </Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={formState.confirmPassword || ""}
-                    onChange={(e) =>
-                      handleInputChange("confirmPassword", e.target.value)
-                    }
-                    placeholder="••••••••"
-                    className="ltr-text"
-                  />
-                </div>
-                {formState.newPassword &&
-                  formState.confirmPassword &&
-                  formState.newPassword !== formState.confirmPassword && (
-                    <p className="text-sm text-red-600 auto-text">
-                      {t("settings.passwordsDoNotMatch")}
+                    <p className="text-sm text-muted-foreground auto-text mt-1">
+                      {t("settings.freeDeliveryMinimumHint")}
                     </p>
-                  )}
-                <Button
-                  onClick={handlePasswordChange}
-                  disabled={
-                    !formState.currentPassword ||
-                    !formState.newPassword ||
-                    !formState.confirmPassword ||
-                    formState.newPassword !== formState.confirmPassword ||
-                    isChangingPassword
-                  }
-                  className="w-full"
-                >
-                  {isChangingPassword
-                    ? t("common.loading")
-                    : t("settings.changePassword")}
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                  </div>
+                </CardContent>
+              </Card>
 
-        {/* System Settings */}
-        {activeTab === "system" && (
-          <div className="space-y-6">
-            {/* API Diagnostics */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Monitor className="w-5 h-5" />
-                  API Diagnostics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <Info className="w-5 h-5 text-gray-600 mt-0.5" />
+              {/* Delivery Area Pricing */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5" />
+                    {language === "ar"
+                      ? "أسعار التوصيل حسب المنطقة"
+                      : "Delivery Area Pricing"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-medium auto-text">
+                      {language === "ar" ? "المنطقة الأولى" : "Area 1"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaSitraNameEn"
+                          className="auto-text"
+                        >
+                          {language === "ar"
+                            ? "الاسم بالإنجليزية"
+                            : "Name (English)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaSitraNameEn"
+                          value={formState.deliveryAreaSitraNameEn || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaSitraNameEn",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Sitra"
+                          className="auto-text"
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaSitraNameAr"
+                          className="auto-text"
+                        >
+                          {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaSitraNameAr"
+                          value={formState.deliveryAreaSitraNameAr || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaSitraNameAr",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="سترة"
+                          className="auto-text"
+                        />
+                      </div>
+                    </div>
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-1">
-                        Network Connectivity Test
-                      </h4>
-                      <p className="text-sm text-gray-700">
-                        Test all API endpoints to diagnose network connectivity
-                        issues. Results will be logged to the browser console.
+                      <Label htmlFor="deliveryAreaSitra" className="auto-text">
+                        {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
+                      </Label>
+                      <Input
+                        id="deliveryAreaSitra"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formState.deliveryAreaSitra || 0}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "deliveryAreaSitra",
+                            parseFloat(e.target.value) || 0,
+                          )
+                        }
+                        onFocus={(e) => {
+                          if (e.target.value === "0") {
+                            e.target.value = "";
+                          }
+                          // Scroll into view on mobile
+                          setTimeout(() => {
+                            e.target.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+                          }, 100);
+                        }}
+                        className="ltr-text"
+                        placeholder="1.0"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-medium auto-text">
+                      {language === "ar" ? "المنطقة الثانية" : "Area 2"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaMuharraqlNameEn"
+                          className="auto-text"
+                        >
+                          {language === "ar"
+                            ? "الاسم بالإنجليزية"
+                            : "Name (English)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaMuharraqlNameEn"
+                          value={formState.deliveryAreaMuharraqlNameEn || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaMuharraqlNameEn",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Muharraq, Askar, Jao"
+                          className="auto-text"
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaMuharraqNameAr"
+                          className="auto-text"
+                        >
+                          {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaMuharraqNameAr"
+                          value={formState.deliveryAreaMuharraqNameAr || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaMuharraqNameAr",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="المحرق، عسكر، جو"
+                          className="auto-text"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryAreaMuharraq" className="auto-text">
+                        {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
+                      </Label>
+                      <Input
+                        id="deliveryAreaMuharraq"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formState.deliveryAreaMuharraq || 0}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "deliveryAreaMuharraq",
+                            parseFloat(e.target.value) || 0,
+                          )
+                        }
+                        onFocus={(e) => {
+                          if (e.target.value === "0") {
+                            e.target.value = "";
+                          }
+                          // Scroll into view on mobile
+                          setTimeout(() => {
+                            e.target.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+                          }, 100);
+                        }}
+                        className="ltr-text"
+                        placeholder="1.5"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-medium auto-text">
+                      {language === "ar" ? "المنطقة الثالثة" : "Area 3"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaOtherNameEn"
+                          className="auto-text"
+                        >
+                          {language === "ar"
+                            ? "الاسم بالإنجليزية"
+                            : "Name (English)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaOtherNameEn"
+                          value={formState.deliveryAreaOtherNameEn || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaOtherNameEn",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Other Cities"
+                          className="auto-text"
+                        />
+                      </div>
+                      <div>
+                        <Label
+                          htmlFor="deliveryAreaOtherNameAr"
+                          className="auto-text"
+                        >
+                          {language === "ar" ? "الاسم بالعربية" : "Name (Arabic)"}
+                        </Label>
+                        <Input
+                          id="deliveryAreaOtherNameAr"
+                          value={formState.deliveryAreaOtherNameAr || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "deliveryAreaOtherNameAr",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="م��ن أخرى"
+                          className="auto-text"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryAreaOther" className="auto-text">
+                        {language === "ar" ? "رسوم التوصيل" : "Delivery Fee"}
+                      </Label>
+                      <Input
+                        id="deliveryAreaOther"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formState.deliveryAreaOther || 0}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "deliveryAreaOther",
+                            parseFloat(e.target.value) || 0,
+                          )
+                        }
+                        onFocus={(e) => {
+                          if (e.target.value === "0") {
+                            e.target.value = "";
+                          }
+                          // Scroll into view on mobile
+                          setTimeout(() => {
+                            e.target.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+                          }, 100);
+                        }}
+                        className="ltr-text"
+                        placeholder="2.0"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Pickup Messages */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Package className="w-5 h-5" />
+                    {t("settings.pickupMessages")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="pickupMessageEn" className="auto-text">
+                      {t("settings.pickupMessageEn")}
+                    </Label>
+                    <Textarea
+                      id="pickupMessageEn"
+                      value={formState.pickupMessageEn || ""}
+                      onChange={(e) =>
+                        handleInputChange("pickupMessageEn", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={4}
+                      placeholder="Enter pickup instructions in English..."
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="pickupMessageAr" className="auto-text">
+                      {t("settings.pickupMessageAr")}
+                    </Label>
+                    <Textarea
+                      id="pickupMessageAr"
+                      value={formState.pickupMessageAr || ""}
+                      onChange={(e) =>
+                        handleInputChange("pickupMessageAr", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={4}
+                      placeholder="أدخل ت��ليمات الاستلام بالعربية..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Delivery Messages */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Truck className="w-5 h-5" />
+                    {t("settings.deliveryMessages")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="deliveryMessageEn" className="auto-text">
+                      {t("settings.deliveryMessageEn")}
+                    </Label>
+                    <Textarea
+                      id="deliveryMessageEn"
+                      value={formState.deliveryMessageEn || ""}
+                      onChange={(e) =>
+                        handleInputChange("deliveryMessageEn", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={4}
+                      placeholder="Enter delivery instructions in English..."
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="deliveryMessageAr" className="auto-text">
+                      {t("settings.deliveryMessageAr")}
+                    </Label>
+                    <Textarea
+                      id="deliveryMessageAr"
+                      value={formState.deliveryMessageAr || ""}
+                      onChange={(e) =>
+                        handleInputChange("deliveryMessageAr", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={4}
+                      placeholder="أدخل تعليمات التوصيل بالعربية..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Admin Settings */}
+          {activeTab === "admin" && (
+            <div className="max-w-xl mx-auto space-y-6">
+              {/* Admin Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="w-5 h-5" />
+                    {t("settings.adminInformation")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="adminEmail" className="auto-text">
+                      {t("settings.adminEmail")}
+                    </Label>
+                    <Input
+                      id="adminEmail"
+                      type="email"
+                      value={formState.adminEmail}
+                      onChange={(e) =>
+                        handleInputChange("adminEmail", e.target.value)
+                      }
+                      placeholder="admin@example.com"
+                      className="ltr-text"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Password Change */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5" />
+                    {t("settings.changePassword")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="currentPassword" className="auto-text">
+                      {t("settings.currentPassword")}
+                    </Label>
+                    <Input
+                      id="currentPassword"
+                      type="password"
+                      value={formState.currentPassword || ""}
+                      onChange={(e) =>
+                        handleInputChange("currentPassword", e.target.value)
+                      }
+                      placeholder="••���•••••"
+                      className="ltr-text"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="newPassword" className="auto-text">
+                      {t("settings.newPassword")}
+                    </Label>
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      value={formState.newPassword || ""}
+                      onChange={(e) =>
+                        handleInputChange("newPassword", e.target.value)
+                      }
+                      placeholder="••••••••"
+                      className="ltr-text"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirmPassword" className="auto-text">
+                      {t("settings.confirmPassword")}
+                    </Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={formState.confirmPassword || ""}
+                      onChange={(e) =>
+                        handleInputChange("confirmPassword", e.target.value)
+                      }
+                      placeholder="••••••••"
+                      className="ltr-text"
+                    />
+                  </div>
+                  {formState.newPassword &&
+                    formState.confirmPassword &&
+                    formState.newPassword !== formState.confirmPassword && (
+                      <p className="text-sm text-red-600 auto-text">
+                        {t("settings.passwordsDoNotMatch")}
+                      </p>
+                    )}
+                  <Button
+                    onClick={handlePasswordChange}
+                    disabled={
+                      !formState.currentPassword ||
+                      !formState.newPassword ||
+                      !formState.confirmPassword ||
+                      formState.newPassword !== formState.confirmPassword ||
+                      isChangingPassword
+                    }
+                    className="w-full"
+                  >
+                    {isChangingPassword
+                      ? t("common.loading")
+                      : t("settings.changePassword")}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* System Settings */}
+          {activeTab === "system" && (
+            <div className="space-y-6">
+              {/* API Diagnostics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Monitor className="w-5 h-5" />
+                    API Diagnostics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-gray-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium text-gray-900 mb-1">
+                          Network Connectivity Test
+                        </h4>
+                        <p className="text-sm text-gray-700">
+                          Test all API endpoints to diagnose network connectivity
+                          issues. Results will be logged to the browser console.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium">Run API Health Check</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Test connectivity to all backend services
                       </p>
                     </div>
+                    <Button
+                      onClick={runDiagnostics}
+                      disabled={isDiagnosing}
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
+                      <Monitor className="w-4 h-4" />
+                      {isDiagnosing ? "Testing..." : "Run Diagnostics"}
+                    </Button>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">Run API Health Check</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Test connectivity to all backend services
-                    </p>
-                  </div>
-                  <Button
-                    onClick={runDiagnostics}
-                    disabled={isDiagnosing}
-                    variant="outline"
-                    className="flex items-center gap-2"
-                  >
-                    <Monitor className="w-4 h-4" />
-                    {isDiagnosing ? "Testing..." : "Run Diagnostics"}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* System Settings Component */}
-            <SystemSettings />
-          </div>
-        )}
+              {/* System Settings Component */}
+              <SystemSettings />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
