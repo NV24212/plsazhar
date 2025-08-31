@@ -162,7 +162,6 @@ export default function Customers() {
           <DialogTrigger asChild>
             <Button
               onClick={() => openDialog()}
-              className="bg-dashboard-primary hover:bg-dashboard-primary-light"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("customers.addNew")}
@@ -214,7 +213,7 @@ export default function Customers() {
                   <Label>{t("customers.customerAddress")}</Label>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-1">
-                      <Label htmlFor="home" className="text-sm text-gray-600">
+                      <Label htmlFor="home" className="text-sm text-muted-foreground">
                         {t("customers.customerHome")}
                       </Label>
                       <Input
@@ -231,7 +230,7 @@ export default function Customers() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor="road" className="text-sm text-gray-600">
+                      <Label htmlFor="road" className="text-sm text-muted-foreground">
                         {t("customers.customerRoad")}
                       </Label>
                       <Input
@@ -248,7 +247,7 @@ export default function Customers() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor="block" className="text-sm text-gray-600">
+                      <Label htmlFor="block" className="text-sm text-muted-foreground">
                         {t("customers.customerBlock")}
                       </Label>
                       <Input
@@ -265,7 +264,7 @@ export default function Customers() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor="town" className="text-sm text-gray-600">
+                      <Label htmlFor="town" className="text-sm text-muted-foreground">
                         {t("customers.customerTown")}
                       </Label>
                       <Input
@@ -306,7 +305,7 @@ export default function Customers() {
       <Card>
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
             <Input
               placeholder={t("customers.search")}
               value={searchTerm}
@@ -324,8 +323,8 @@ export default function Customers() {
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <div className="w-10 h-10 bg-dashboard-primary rounded-full flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Users className="w-5 h-5 text-primary" />
                   </div>
                   {customer.name}
                 </CardTitle>
@@ -336,17 +335,17 @@ export default function Customers() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Phone className="w-4 h-4" />
                   <span>{customer.phone}</span>
                 </div>
-                <div className="flex items-start gap-2 text-sm text-gray-600">
+                <div className="flex items-start gap-2 text-sm text-muted-foreground">
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   <span className="line-clamp-2">{customer.address}</span>
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-muted-foreground">
                 {t("common.added")}:{" "}
                 {new Date(customer.createdAt).toLocaleDateString()}
               </div>
@@ -364,7 +363,7 @@ export default function Customers() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
                   onClick={() => handleDelete(customer.id)}
                 >
                   <Trash2 className="w-4 h-4" />
@@ -378,17 +377,17 @@ export default function Customers() {
       {filteredCustomers.length === 0 && (
         <Card>
           <CardContent className="text-center py-12">
-            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {t("empty.noCustomersFound")}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {searchTerm
                 ? t("empty.adjustSearch")
                 : t("empty.addFirstCustomer")}
             </p>
             <Button
-              className="mt-4 bg-dashboard-primary hover:bg-dashboard-primary-light"
+              className="mt-4"
               onClick={() => openDialog()}
             >
               <Plus className="w-4 h-4 mr-2" />

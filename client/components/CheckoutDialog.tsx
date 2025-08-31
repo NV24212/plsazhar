@@ -458,8 +458,8 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
               handleBack={handleBack}
               handleNext={handleNext}
               handlePlaceOrder={handlePlaceOrder}
-              isStep1Valid={isStep1Valid()}
-              isFormValid={isFormValid()}
+              isStep1Valid={isStep1Valid}
+              isFormValid={isFormValid}
               isSubmitting={isSubmitting}
               customerInfo={customerInfo}
               handleInputChange={handleInputChange}

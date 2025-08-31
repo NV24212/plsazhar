@@ -155,7 +155,6 @@ export default function Categories() {
           <DialogTrigger asChild>
             <Button
               onClick={() => openDialog()}
-              className="bg-dashboard-primary hover:bg-dashboard-primary-light"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("common.add")} {t("nav.categories")}
@@ -195,7 +194,6 @@ export default function Categories() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-dashboard-primary hover:bg-dashboard-primary-light"
                 >
                   {editingCategory ? t("products.save") : t("common.save")}
                 </Button>
@@ -209,7 +207,7 @@ export default function Categories() {
       <Card>
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 [dir=rtl]:left-auto [dir=rtl]:right-3" />
             <Input
               placeholder={t("common.search")}
               value={searchTerm}
@@ -233,8 +231,8 @@ export default function Categories() {
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-dashboard-primary/10 rounded-lg flex items-center justify-center">
-                      <FolderOpen className="w-6 h-6 text-dashboard-primary" />
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <FolderOpen className="w-6 h-6 text-primary" />
                     </div>
                     <div>
                       <CardTitle className="text-lg">
@@ -266,7 +264,7 @@ export default function Categories() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
                       onClick={() => handleDeleteCategory(category.id)}
                       disabled={productCount > 0}
                     >
@@ -283,14 +281,14 @@ export default function Categories() {
       {filteredCategories.length === 0 && (
         <Card>
           <CardContent className="text-center py-12">
-            <FolderOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <FolderOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {searchTerm ? t("common.noData") : t("empty.addFirstProduct")}
             </h3>
-            <p className="text-gray-600">{t("empty.adjustSearch")}</p>
+            <p className="text-muted-foreground">{t("empty.adjustSearch")}</p>
             {!searchTerm && (
               <Button
-                className="mt-4 bg-dashboard-primary hover:bg-dashboard-primary-light"
+                className="mt-4"
                 onClick={() => openDialog()}
               >
                 <Plus className="w-4 h-4 mr-2" />

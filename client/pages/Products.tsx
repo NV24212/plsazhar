@@ -589,13 +589,13 @@ export default function Products() {
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
           type="text"
           placeholder={t("products.search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 w-full sm:w-72 bg-white"
+          className="pl-10 w-full sm:w-72 bg-background"
         />
       </div>
 
@@ -610,7 +610,7 @@ export default function Products() {
               className="overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
             >
               <CardHeader className="p-0 relative">
-                <div className="aspect-square w-full bg-gray-100">
+                <div className="aspect-square w-full bg-secondary">
                   {product.images && product.images.length > 0 ? (
                     <img
                       src={product.images[0]}
@@ -619,7 +619,7 @@ export default function Products() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Package className="w-16 h-16 text-gray-300" />
+                      <Package className="w-16 h-16 text-muted-foreground" />
                     </div>
                   )}
                 </div>
@@ -627,7 +627,7 @@ export default function Products() {
                   <Button
                     size="icon"
                     variant="outline"
-                    className="w-8 h-8 bg-white/80 backdrop-blur-sm hover:bg-white"
+                    className="w-8 h-8 bg-background/80 backdrop-blur-sm hover:bg-background"
                     onClick={() => openDialog(product)}
                   >
                     <Edit className="w-4 h-4" />
@@ -635,7 +635,7 @@ export default function Products() {
                   <Button
                     size="icon"
                     variant="outline"
-                    className="w-8 h-8 bg-white/80 backdrop-blur-sm hover:bg-white text-red-600 hover:text-red-700"
+                    className="w-8 h-8 bg-background/80 backdrop-blur-sm hover:bg-background text-destructive hover:text-destructive"
                     onClick={() => handleDeleteProduct(product.id)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -649,15 +649,15 @@ export default function Products() {
                       {translateCategory(category.name)}
                     </Badge>
                   )}
-                  <h3 className="text-lg font-semibold text-gray-800 truncate">
+                  <h3 className="text-lg font-semibold text-foreground truncate">
                     {product.name}
                   </h3>
-                  <p className="text-sm text-gray-500 h-10 overflow-hidden">
+                  <p className="text-sm text-muted-foreground h-10 overflow-hidden">
                     {product.description}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                  <span className="text-xl font-bold text-dashboard-primary">
+                  <span className="text-xl font-bold text-primary">
                     {product.price.toFixed(2)} BD
                   </span>
                   <Badge className={`${stockStatus.color} px-2 py-1`}>
@@ -671,8 +671,8 @@ export default function Products() {
       </div>
 
       {filteredProducts.length === 0 && (
-        <div className="text-center py-16 text-gray-500">
-          <Package className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+        <div className="text-center py-16 text-muted-foreground">
+          <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
           <h3 className="text-xl font-semibold">
             {t("empty.noProductsFound")}
           </h3>
