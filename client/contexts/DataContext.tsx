@@ -6,7 +6,6 @@ import {
   ReactNode,
 } from "react";
 import { customerApi, productApi, orderApi, categoryApi } from "@/services/api";
-import { analyticsService } from "@/services/analytics";
 
 // Helper function to add logs
 async function addLog(
@@ -264,8 +263,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const newCustomer = await customerApi.create(customerData);
       setCustomers((prev) => [...prev, newCustomer]);
 
-      // Track customer creation analytics
-      analyticsService.trackCustomerCreated(newCustomer.id);
 
       // Log customer creation
       addLog(
@@ -363,8 +360,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const newOrder = await orderApi.create(orderData);
       setOrders((prev) => [...prev, newOrder]);
 
-      // Track order placement analytics
-      analyticsService.trackOrderPlaced(newOrder.id, newOrder.total);
 
       // Log order creation
       addLog("info", "order", `New order created: #${newOrder.id}`, {

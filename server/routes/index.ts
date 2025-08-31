@@ -35,7 +35,6 @@ import {
   deleteImage,
   getStorageInfo,
 } from "./upload";
-import { trackEvent, getAnalytics, getRealTimeData } from "./analytics";
 import {
   getLogs,
   addLog,
@@ -106,12 +105,6 @@ settingsRouter.get("/", getSettings);
 settingsRouter.post("/", updateSettings);
 apiRouter.use("/settings", settingsRouter);
 
-// Analytics
-const analyticsRouter = Router();
-analyticsRouter.post("/track", trackEvent);
-analyticsRouter.get("/", getAnalytics);
-analyticsRouter.get("/realtime", getRealTimeData);
-apiRouter.use("/analytics", analyticsRouter);
 
 // Logs
 const logsRouter = Router();

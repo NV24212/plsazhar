@@ -38,6 +38,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
   }, [location]);
 
   const handleCheckout = () => {
+    onClose(); // Close the cart sidebar
     setIsCheckoutOpen(true);
   };
 
@@ -265,44 +266,6 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
               </ScrollArea>
 
               <DialogFooter className="flex-col space-y-0 p-0 border-t">
-                {/* Summary Section */}
-                <div className="w-full bg-secondary p-6">
-                  <div className="bg-background rounded-2xl shadow-sm border p-5">
-                    <div
-                      className={cn(
-                        "flex justify-between items-center mb-3",
-                        isRTL ? "flex-row-reverse" : "",
-                      )}
-                    >
-                      <span className="auto-text text-muted-foreground font-medium text-lg">
-                        {t("store.cartTotal")}:
-                      </span>
-                      <span
-                        className="text-2xl font-bold text-primary ltr-text"
-                        dir="ltr"
-                      >
-                        {formatPrice(totalPrice, language)}
-                      </span>
-                    </div>
-                    <div className="text-center">
-                      <div className="inline-flex items-center justify-center bg-secondary rounded-full px-3 py-1">
-                        <span className="text-sm text-muted-foreground font-medium">
-                          <span className="ltr-text font-bold">
-                            {items.length}
-                          </span>{" "}
-                          {language === "ar"
-                            ? items.length === 1
-                              ? t("common.itemAr")
-                              : t("common.itemsAr")
-                            : items.length === 1
-                              ? t("common.item")
-                              : t("common.items")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Action Buttons */}
                 <div className="w-full p-6 space-y-4 bg-background">
                   <Button
@@ -318,7 +281,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                     <Button
                       variant="outline"
                       onClick={onClose}
-                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-gray-50 transition-colors duration-200"
+                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-border hover:bg-secondary transition-colors duration-200"
                     >
                       <span className="auto-text">
                         {t("store.continueShopping")}
@@ -327,7 +290,7 @@ export default function CartSidebar({ open, onClose }: CartSidebarProps) {
                     <Button
                       variant="outline"
                       onClick={clearCart}
-                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
+                      className="flex-1 h-12 touch-manipulation text-sm font-medium rounded-xl border-border hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 transition-colors duration-200"
                       disabled={items.length === 0}
                     >
                       <span className="auto-text">{t("store.clearCart")}</span>
