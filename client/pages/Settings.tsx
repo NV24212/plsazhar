@@ -558,7 +558,7 @@ export default function Settings() {
                   key={tab.id}
                   variant={activeTab === tab.id ? "default" : "ghost"}
                   onClick={() => setActiveTab(tab.id)}
-                  className="w-full justify-start gap-2 text-base px-4 py-3"
+                  className="w-full justify-start gap-2 text-base px-4 py-3 [dir=rtl]:flex-row-reverse"
                 >
                   <Icon className="w-5 h-5" />
                   <span className="auto-text">{tab.label}</span>
