@@ -100,7 +100,7 @@ export default function AddToCartDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="w-[95vw] sm:max-w-md max-h-[95vh] flex flex-col">
+      <DialogContent className="w-[95vw] sm:max-w-md max-h-[95vh] flex flex-col bg-white border border-gray-200">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle>{product.name}</DialogTitle>
         </DialogHeader>
@@ -207,7 +207,7 @@ export default function AddToCartDialog({
 
             {/* Total Price */}
             {isValidSelection && (
-              <div className="border-t pt-4">
+              <div className="border-t pt-4 bg-gray-50 p-4 rounded-lg">
                 <div className="flex justify-between items-center font-semibold">
                   <span>{t("orders.subtotal")}:</span>
                   <span className="ltr-text" dir="ltr">
@@ -219,7 +219,7 @@ export default function AddToCartDialog({
           </div>
         </div>
 
-        <DialogFooter className="flex flex-col sm:flex-row gap-3 pt-4 border-t flex-shrink-0">
+        <DialogFooter className="flex flex-col sm:flex-row gap-3 pt-4 border-t flex-shrink-0 bg-white">
           <Button variant="outline" onClick={onClose} className="flex-1 h-12">
             {t("common.cancel")}
           </Button>

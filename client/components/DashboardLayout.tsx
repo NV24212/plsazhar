@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen bg-white text-black">
+    <div className="flex h-screen bg-gray-50 text-gray-900">
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
@@ -73,14 +73,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed inset-y-0 z-50 w-64 bg-gray-50 shadow-xl transition-transform duration-300 ease-in-out border-r border-gray-200",
+          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out border-r border-gray-200",
           isRTL ? "right-0" : "left-0",
           sidebarOpen ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
         )}
         style={{ [isRTL ? "right" : "left"]: "0" }}
         data-sidebar-open={sidebarOpen}
       >
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
           <div className="flex items-center gap-3">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F22d5611cd8c847859f0fef8105890b91%2Feb0b70b9250f4bfca41dbc5a78c2ce45?format=webp&width=800"
@@ -93,7 +93,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           <button
             onClick={handleCloseSidebar}
-            className="lg:hidden text-gray-500 hover:text-black"
+            className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
           >
             <X className="w-6 h-6" />
           </button>
@@ -111,11 +111,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     className={cn(
                       "flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors",
                       isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-gray-700 hover:bg-gray-100",
+                        ? "bg-primary text-white shadow-sm"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900",
                     )}
                   >
-                    <item.icon className="w-5 h-5 mr-3" />
+                    <item.icon className={cn("w-5 h-5 mr-3", isActive ? "text-white" : "text-gray-500")} />
                     {item.name}
                   </Link>
                 </li>
@@ -124,12 +124,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 space-y-2">
-          <Button onClick={toggleLanguage} variant="outline" className="w-full justify-start">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white space-y-2">
+          <Button onClick={toggleLanguage} variant="outline" className="w-full justify-start border-gray-200 hover:bg-gray-50">
             <Languages className="w-4 h-4 mr-2" />
             {t("language.switch")}
           </Button>
-          <Button onClick={logout} variant="outline" className="w-full justify-start">
+          <Button onClick={logout} variant="outline" className="w-full justify-start border-gray-200 hover:bg-gray-50 text-red-600 hover:text-red-700">
             <LogOut className="w-4 h-4 mr-2" />
             {t("nav.logout")}
           </Button>
@@ -137,15 +137,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white shadow-sm border-b">
+        <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-6">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="text-gray-500 hover:text-black"
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-lg font-semibold text-black">
+            <h1 className="text-lg font-semibold text-gray-900">
               {t("dashboard.title")}
             </h1>
             <div className="w-6" />

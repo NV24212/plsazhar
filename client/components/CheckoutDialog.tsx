@@ -112,7 +112,7 @@ const CheckoutForm = ({
       exit={{ opacity: 0 }}
       className="flex flex-col h-full"
     >
-      <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b flex-shrink-0 bg-background">
+      <DialogHeader className="px-4 sm:px-6 py-4 sm:py-6 border-b border-gray-200 flex-shrink-0 bg-white">
         <DialogTitle className="text-xl sm:text-2xl font-bold text-center auto-text leading-tight">
           {t("checkout.title")}
         </DialogTitle>
@@ -122,7 +122,7 @@ const CheckoutForm = ({
               <div key={stepNum} className="flex items-center">
                 <div
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-medium transition-all duration-200 ${
-                    step >= stepNum ? "bg-primary text-primary-foreground shadow-lg" : "bg-secondary text-secondary-foreground"
+                    step >= stepNum ? "bg-primary text-white shadow-lg" : "bg-gray-100 text-gray-600"
                   }`}
                 >
                   {stepNum}
@@ -130,7 +130,7 @@ const CheckoutForm = ({
                 {stepNum < 3 && (
                   <div
                     className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 rounded-full transition-all duration-200 ${
-                      step > stepNum ? "bg-primary" : "bg-secondary"
+                      step > stepNum ? "bg-primary" : "bg-gray-200"
                     }`}
                   />
                 )}
@@ -150,7 +150,7 @@ const CheckoutForm = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="border-2 shadow-sm">
+                <Card className="border border-gray-200 shadow-sm bg-white">
                   <CardHeader>
                     <CardTitle>{t("checkout.customerInfo")}</CardTitle>
                   </CardHeader>
@@ -179,17 +179,17 @@ const CheckoutForm = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="border-2 shadow-sm">
+                <Card className="border border-gray-200 shadow-sm bg-white">
                   <CardHeader>
                     <CardTitle>{t("checkout.deliveryOptions")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                         <RadioGroupItem value="delivery" id="delivery" />
                         <Label htmlFor="delivery">{t("checkout.delivery")}</Label>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                         <RadioGroupItem value="pickup" id="pickup" />
                         <Label htmlFor="pickup">{t("checkout.pickup")}</Label>
                       </div>
@@ -206,23 +206,26 @@ const CheckoutForm = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="border-2 shadow-sm">
+                <Card className="border border-gray-200 shadow-sm bg-white">
                   <CardHeader>
                     <CardTitle>{t("checkout.orderSummary")}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul>
+                    <div className="space-y-3">
                       {items.map(item => (
-                        <li key={`${item.productId}-${item.variantId}`} className="flex justify-between">
-                          <span>{item.productName} x {item.quantity}</span>
-                          <span>{formatPrice(item.price * item.quantity, language)}</span>
-                        </li>
+                        <div key={`${item.productId}-${item.variantId}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                          <div>
+                            <span className="font-medium">{item.productName}</span>
+                            <span className="text-sm text-muted-foreground ml-2">x {item.quantity}</span>
+                          </div>
+                          <span className="font-bold text-primary">{formatPrice(item.price * item.quantity, language)}</span>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                     <Separator className="my-4" />
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-bold text-lg p-3 bg-blue-50 rounded-lg">
                       <span>{t("checkout.total")}</span>
-                      <span>{formatPrice(totalPrice, language)}</span>
+                      <span className="text-primary">{formatPrice(totalPrice, language)}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -231,7 +234,7 @@ const CheckoutForm = ({
           </AnimatePresence>
         </div>
       </ScrollArea>
-      <div className="border-t p-4 sm:p-6 bg-background flex-shrink-0">
+      <div className="border-t border-gray-200 p-4 sm:p-6 bg-white flex-shrink-0">
         <div className="flex items-center gap-3 sm:gap-4">
           {step > 1 && (
             <Button
@@ -495,7 +498,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={orderSuccess ? onClose : handleClose}>
-      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-[10px] border shadow-lg bg-slate-50 mx-auto dialog-content-scroll">
+      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
         <AnimatePresence mode="wait">
           {orderSuccess ? (
             <SuccessView orderMessages={orderMessages} onClose={onClose} />

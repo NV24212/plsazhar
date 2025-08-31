@@ -40,14 +40,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dashboard-primary/10 to-dashboard-secondary/10 relative">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 relative">
       {/* Language Switcher - Top Right/Left for RTL */}
       <div className="absolute top-6 right-6 [dir=rtl]:right-auto [dir=rtl]:left-6">
         <Button
           onClick={toggleLanguage}
           variant="outline"
           size="lg"
-          className="bg-white/80 backdrop-blur-sm border-dashboard-primary/20 hover:bg-white hover:border-dashboard-primary shadow-lg"
+          className="bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-primary shadow-lg"
         >
           <Languages className="w-5 h-5 mr-2" />
           <span className="font-medium">
@@ -57,7 +57,7 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-lg px-6">
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-xl border border-gray-200 bg-white">
           <CardHeader className="text-center space-y-6 pt-8 pb-6">
             {/* Larger Logo */}
             <div className="mx-auto mb-6">
@@ -99,7 +99,7 @@ export default function LoginPage() {
                     placeholder={t("login.password")}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pr-12 h-12 text-lg border-gray-300 focus:border-dashboard-primary focus:ring-dashboard-primary"
+                    className="pr-12 h-12 text-lg border-gray-300 focus:border-primary focus:ring-primary"
                     required
                   />
                   <button
@@ -128,7 +128,7 @@ export default function LoginPage() {
               {/* Sign In Button */}
               <Button
                 type="submit"
-                className="w-full h-12 bg-dashboard-primary hover:bg-dashboard-secondary transition-all duration-200 text-lg font-semibold shadow-lg hover:shadow-xl"
+                className="w-full h-12 bg-primary hover:bg-primary/90 transition-all duration-200 text-lg font-semibold shadow-lg hover:shadow-xl"
               >
                 <Lock className="w-5 h-5 mr-2" />
                 {t("login.signIn")}

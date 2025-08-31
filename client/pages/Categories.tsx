@@ -155,12 +155,13 @@ export default function Categories() {
           <DialogTrigger asChild>
             <Button
               onClick={() => openDialog()}
+              className="bg-primary hover:bg-primary/90 text-white shadow-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("common.add")} {t("nav.categories")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-md max-h-[95vh] overflow-y-auto rounded-lg sm:rounded-md">
+          <DialogContent className="w-[95vw] sm:max-w-md max-h-[95vh] overflow-y-auto rounded-lg sm:rounded-md bg-white border border-gray-200">
             <DialogHeader>
               <DialogTitle>
                 {editingCategory ? t("products.edit") : t("common.add")}{" "}

@@ -217,12 +217,13 @@ export default function Products() {
           <DialogTrigger asChild>
             <Button
               onClick={() => openDialog()}
+              className="bg-primary hover:bg-primary/90 text-white shadow-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("products.addNew")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg sm:rounded-md">
+          <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg sm:rounded-md bg-white border border-gray-200">
             <DialogHeader>
               <DialogTitle>
                 {editingProduct
@@ -237,7 +238,7 @@ export default function Products() {
             </DialogHeader>
             <form onSubmit={handleSubmit}>
               <Tabs defaultValue="details" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-3 bg-gray-100">
                   <TabsTrigger value="details">
                     {t("products.productName")}
                   </TabsTrigger>
