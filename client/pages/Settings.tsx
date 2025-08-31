@@ -495,8 +495,18 @@ export default function Settings() {
 
   if (loading || !formState) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+      <div className="space-y-6">
+        <div className="h-10 bg-gray-200 rounded w-1/4"></div>
+        <div className="flex gap-4">
+          <div className="w-1/4 space-y-2">
+            <div className="h-8 bg-gray-200 rounded"></div>
+            <div className="h-8 bg-gray-200 rounded"></div>
+            <div className="h-8 bg-gray-200 rounded"></div>
+          </div>
+          <div className="w-3/4">
+            <div className="h-64 bg-gray-200 rounded"></div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -538,30 +548,29 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex flex-wrap gap-2 border-b pb-2">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          return (
-            <Button
-              key={tab.id}
-              variant={activeTab === tab.id ? "default" : "ghost"}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 text-sm px-4 py-2 rounded-lg transition-all duration-200 ${
-                activeTab === tab.id
-                  ? "bg-primary text-white shadow-md"
-                  : "hover:bg-gray-100 text-gray-600"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="auto-text">{tab.label}</span>
-            </Button>
-          );
-        })}
-      </div>
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Vertical Tab Navigation */}
+        <div className="w-full md:w-1/4">
+          <div className="flex flex-col gap-2">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <Button
+                  key={tab.id}
+                  variant={activeTab === tab.id ? "default" : "ghost"}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="w-full justify-start gap-2 text-base px-4 py-3"
+                >
+                  <Icon className="w-5 h-5" />
+                  <span className="auto-text">{tab.label}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
 
-      {/* Tab Content */}
-      <div className="space-y-6">
+        {/* Tab Content */}
+        <div className="w-full md:w-3/4 space-y-6">
         {/* Basic Settings */}
         {activeTab === "basic" && (
           <div className="max-w-2xl mx-auto">

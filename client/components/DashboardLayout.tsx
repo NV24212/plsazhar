@@ -34,8 +34,6 @@ const getNavigation = (t: (key: string) => string) => [
   },
   { name: t("nav.orders"), href: "/admin/orders", icon: ShoppingCart },
   { name: t("nav.customers"), href: "/admin/customers", icon: Users },
-  { name: t("nav.revenue"), href: "/admin/revenue", icon: TrendingUp },
-  { name: t("nav.analytics"), href: "/admin/analytics", icon: BarChart3 },
   { name: t("nav.settings"), href: "/admin/settings", icon: Settings },
 ];
 

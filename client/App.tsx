@@ -79,13 +79,10 @@ import Products from "@/pages/Products";
 import Orders from "@/pages/Orders";
 import Customers from "@/pages/Customers";
 import Categories from "@/pages/Categories";
-import Revenue from "@/pages/Revenue";
-import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
 import Store from "@/pages/Store";
 import ProductDetail from "@/pages/ProductDetail";
 import NotFound from "@/pages/NotFound";
-import { analyticsService } from "@/services/analytics";
 import NetworkStatus from "@/components/NetworkStatus";
 
 // Component to track page views
@@ -94,7 +91,7 @@ function PageTracker() {
 
   useEffect(() => {
     // Track page view when location changes
-    analyticsService.trackPageView(location.pathname);
+    // analyticsService.trackPageView(location.pathname);
   }, [location]);
 
   return null;
@@ -125,8 +122,6 @@ function AppContent() {
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/customers" element={<Customers />} />
-                  <Route path="/revenue" element={<Revenue />} />
-                  <Route path="/analytics" element={<Analytics />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

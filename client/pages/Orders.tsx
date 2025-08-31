@@ -298,12 +298,9 @@ export default function Orders() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 [dir=rtl]:sm:flex-row-reverse">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {t("orders.title")}
-          </h1>
-          <p className="text-gray-600 mt-2">{t("orders.subtitle")}</p>
-        </div>
+        <h1 className="text-3xl font-bold text-foreground">
+          {t("orders.title")}
+        </h1>
         <div className="flex items-center gap-2">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
