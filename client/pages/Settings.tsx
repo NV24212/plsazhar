@@ -486,7 +486,6 @@ export default function Settings() {
   };
 
   const tabs = [
-    { id: "basic", label: t("settings.basicSettings"), icon: Store },
     { id: "delivery", label: t("settings.deliverySettings"), icon: Truck },
     { id: "admin", label: t("settings.adminSettings"), icon: Shield },
   ];
@@ -954,7 +953,7 @@ export default function Settings() {
                       }
                       className="auto-text"
                       rows={4}
-                      placeholder="أدخل تعليمات التوصيل بالعربية..."
+                      placeholder="أدخل تعليمات التوصيل بالع��بية..."
                     />
                   </div>
                 </CardContent>
