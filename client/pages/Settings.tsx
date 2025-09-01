@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Store,
   CreditCard,
   Truck,
   Package,
