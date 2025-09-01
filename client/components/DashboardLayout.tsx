@@ -73,11 +73,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out border-r border-gray-200",
-          isRTL ? "right-0" : "left-0",
-          sidebarOpen ? "translate-x-0" : isRTL ? "translate-x-full" : "-translate-x-full",
+          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out border-r border-gray-200 right-0",
+          sidebarOpen ? "translate-x-0" : "translate-x-full",
         )}
-        style={{ [isRTL ? "right" : "left"]: "0" }}
         data-sidebar-open={sidebarOpen}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">

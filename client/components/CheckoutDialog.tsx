@@ -156,16 +156,30 @@ const CheckoutForm = ({
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">{t("checkout.name")}</Label>
+                      <Label htmlFor="name">{t("checkout.customerName")}</Label>
                       <Input id="name" value={customerInfo.name} onChange={(e) => handleInputChange("name", e.target.value)} required />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">{t("checkout.phone")}</Label>
+                      <Label htmlFor="phone">{t("checkout.customerPhone")}</Label>
                       <Input id="phone" value={customerInfo.phone} onChange={(e) => handleInputChange("phone", e.target.value)} required />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="town">{t("checkout.town")}</Label>
-                      <Input id="town" value={customerInfo.town} onChange={(e) => handleInputChange("town", e.target.value)} required />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label htmlFor="home" className="text-sm text-muted-foreground">{t("checkout.customerHome")}</Label>
+                        <Input id="home" value={customerInfo.home} onChange={(e) => handleInputChange("home", e.target.value)} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="road" className="text-sm text-muted-foreground">{t("checkout.customerRoad")}</Label>
+                        <Input id="road" value={customerInfo.road} onChange={(e) => handleInputChange("road", e.target.value)} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="block" className="text-sm text-muted-foreground">{t("checkout.customerBlock")}</Label>
+                        <Input id="block" value={customerInfo.block} onChange={(e) => handleInputChange("block", e.target.value)} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="town" className="text-sm text-muted-foreground">{t("checkout.customerTown")}</Label>
+                        <Input id="town" value={customerInfo.town} onChange={(e) => handleInputChange("town", e.target.value)} required />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -212,7 +226,7 @@ const CheckoutForm = ({
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {items.map(item => (
+                      {items.map((item) => (
                         <div key={`${item.productId}-${item.variantId}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                           <div>
                             <span className="font-medium">{item.productName}</span>
@@ -223,9 +237,42 @@ const CheckoutForm = ({
                       ))}
                     </div>
                     <Separator className="my-4" />
-                    <div className="flex justify-between font-bold text-lg p-3 bg-blue-50 rounded-lg">
-                      <span>{t("checkout.total")}</span>
-                      <span className="text-primary">{formatPrice(totalPrice, language)}</span>
+                    <div className="space-y-2">
+                      {(() => {
+                        const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+                        const fee = deliveryType !== "delivery"
+                          ? 0
+                          : subtotal >= freeDeliveryMinimum
+                            ? 0
+                            : (deliveryArea === "sitra" ? deliveryAreaSitra : deliveryArea === "muharraq" ? deliveryAreaMuharraq : deliveryAreaOther);
+                        return (
+                          <>
+                            <div className="flex justify-between text-sm">
+                              <span>{t("checkout.subtotal")}</span>
+                              <span className="font-medium">{formatPrice(subtotal, language)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span>
+                                {t("checkout.deliveryFee")} {deliveryType === "delivery" ? `(${getDeliveryAreaName(deliveryArea)})` : ""}
+                              </span>
+                              <span className="font-medium">{fee === 0 ? t("checkout.free") : formatPrice(fee, language)}</span>
+                            </div>
+                            {deliveryType === "delivery" && (customerInfo.home || customerInfo.road || customerInfo.block || customerInfo.town) && (
+                              <div className="text-xs text-muted-foreground bg-gray-50 rounded p-2">
+                                <span>{t("checkout.customerAddress")}: </span>
+                                <span className="auto-text">
+                                  {[customerInfo.home && `House ${customerInfo.home}`, customerInfo.road && `Road ${customerInfo.road}`, customerInfo.block && `Block ${customerInfo.block}`, customerInfo.town].filter(Boolean).join(", ")}
+                                </span>
+                              </div>
+                            )}
+                            <Separator className="my-3" />
+                            <div className="flex justify-between font-bold text-lg p-3 bg-blue-50 rounded-lg">
+                              <span>{t("checkout.total")}</span>
+                              <span className="text-primary">{formatPrice(subtotal + fee, language)}</span>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   </CardContent>
                 </Card>
