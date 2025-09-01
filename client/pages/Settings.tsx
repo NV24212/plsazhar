@@ -242,7 +242,7 @@ export default function Settings() {
   const [formState, setFormState] = useState<StoreSettings | null>(null);
 
   const [hasChanges, setHasChanges] = useState(false);
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("delivery");
   const [isSaving, setIsSaving] = useState(false);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
