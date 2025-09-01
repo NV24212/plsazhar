@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Store,
   CreditCard,
   Truck,
   Package,
@@ -242,7 +241,7 @@ export default function Settings() {
   const [formState, setFormState] = useState<StoreSettings | null>(null);
 
   const [hasChanges, setHasChanges] = useState(false);
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("delivery");
   const [isSaving, setIsSaving] = useState(false);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -487,7 +486,6 @@ export default function Settings() {
   };
 
   const tabs = [
-    { id: "basic", label: t("settings.basicSettings"), icon: Store },
     { id: "delivery", label: t("settings.deliverySettings"), icon: Truck },
     { id: "admin", label: t("settings.adminSettings"), icon: Shield },
   ];
@@ -570,94 +568,6 @@ export default function Settings() {
 
         {/* Tab Content */}
         <div className="w-full md:w-3/4 space-y-6">
-          {/* Basic Settings */}
-          {activeTab === "basic" && (
-            <div className="max-w-2xl mx-auto">
-              {/* Store Information */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Store className="w-5 h-5" />
-                    {t("settings.storeInformation")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div>
-                    <Label htmlFor="storeName" className="auto-text">
-                      {t("settings.storeName")}
-                    </Label>
-                    <Input
-                      id="storeName"
-                      value={formState.storeName}
-                      onChange={(e) =>
-                        handleInputChange("storeName", e.target.value)
-                      }
-                      placeholder={t("settings.storeName")}
-                      className="auto-text"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="storeDescription" className="auto-text">
-                      {t("settings.storeDescription")}
-                    </Label>
-                    <Textarea
-                      id="storeDescription"
-                      value={formState.storeDescription}
-                      onChange={(e) =>
-                        handleInputChange("storeDescription", e.target.value)
-                      }
-                      placeholder={t("settings.storeDescription")}
-                      className="auto-text"
-                      rows={3}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="currency" className="auto-text">
-                        {t("settings.currency")}
-                      </Label>
-                      <Select
-                        value={formState.currency}
-                        onValueChange={(value) =>
-                          handleInputChange("currency", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="BHD">
-                            {t("settings.bahrainiDinar")}
-                          </SelectItem>
-                          <SelectItem value="USD">
-                            {t("settings.usDollar")}
-                          </SelectItem>
-                          <SelectItem value="EUR">
-                            {t("settings.euro")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="currencySymbol" className="auto-text">
-                        {t("settings.currencySymbol")}
-                      </Label>
-                      <Input
-                        id="currencySymbol"
-                        value={formState.currencySymbol}
-                        onChange={(e) =>
-                          handleInputChange("currencySymbol", e.target.value)
-                        }
-                        placeholder="BD"
-                        className="ltr-text"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
           {/* Delivery Settings */}
           {activeTab === "delivery" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1043,7 +953,7 @@ export default function Settings() {
                       }
                       className="auto-text"
                       rows={4}
-                      placeholder="أدخل تعليمات التوصيل بالعربية..."
+                      placeholder="أدخل تعليمات التوصيل بالع��بية..."
                     />
                   </div>
                 </CardContent>

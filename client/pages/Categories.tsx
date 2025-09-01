@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Plus, Search, Edit, Trash2, FolderOpen } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Categories() {
   const { categories, products, addCategory, updateCategory, deleteCategory } =
@@ -125,11 +126,7 @@ export default function Categories() {
     if (confirmed) {
       try {
         await deleteCategory(id);
-        showAlert({
-          title: t("message.success"),
-          message: t("categories.deleteSuccess"),
-          type: "success",
-        });
+        toast.success(t("categories.deleteSuccess"));
       } catch (error) {
         showAlert({
           title: t("message.error"),

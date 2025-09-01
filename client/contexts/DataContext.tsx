@@ -204,16 +204,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Delay to allow server to start up in development
-    // Longer delay in development to avoid fetch failures on server restart
-    const isDevelopment = process.env.NODE_ENV === "development";
-    const delay = isDevelopment ? 1000 : 100;
-
-    const timer = setTimeout(() => {
-      loadData();
-    }, delay);
-
-    return () => clearTimeout(timer);
+    loadData();
   }, []);
 
   const uploadImage = async (file: File): Promise<string> => {

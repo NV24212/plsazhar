@@ -45,6 +45,7 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Orders() {
   const {
@@ -230,11 +231,7 @@ export default function Orders() {
     if (confirmed) {
       try {
         await deleteOrder(id);
-        showAlert({
-          title: t("message.success"),
-          message: t("message.orderDeleted"),
-          type: "success",
-        });
+        toast.success(t("message.orderDeleted"));
       } catch (error) {
         showAlert({
           title: t("message.error"),

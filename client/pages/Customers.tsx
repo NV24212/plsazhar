@@ -24,6 +24,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Search, Edit, Trash2, Users, Phone, MapPin } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Customers() {
   const { customers, addCustomer, updateCustomer, deleteCustomer } = useData();
@@ -137,11 +138,7 @@ export default function Customers() {
     if (confirmed) {
       try {
         await deleteCustomer(id);
-        showAlert({
-          title: t("message.success"),
-          message: t("message.customerDeleted"),
-          type: "success",
-        });
+        toast.success(t("message.customerDeleted"));
       } catch (error) {
         showAlert({
           title: t("message.error"),

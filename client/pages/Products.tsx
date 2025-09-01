@@ -31,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageUpload from "@/components/ImageUpload";
 import { Plus, Search, Edit, Trash2, Package, X } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Products() {
   const {
@@ -181,11 +182,7 @@ export default function Products() {
     if (confirmed) {
       try {
         await deleteProduct(id);
-        showAlert({
-          title: t("message.success"),
-          message: t("message.productDeleted"),
-          type: "success",
-        });
+        toast.success(t("message.productDeleted"));
       } catch (error) {
         showAlert({
           title: t("message.error"),

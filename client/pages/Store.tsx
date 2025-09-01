@@ -317,15 +317,6 @@ export default function Store() {
                         >
                           {formatPrice(product.price, language)}
                         </span>
-                        {(product.total_stock || 0) > 0 && (
-                          <span className="text-xs text-muted-foreground auto-text">
-                            •{" "}
-                            <span className="ltr-text">
-                              {product.total_stock || 0}
-                            </span>{" "}
-                            {t("products.stock")}
-                          </span>
-                        )}
                       </div>
                     </div>
 
