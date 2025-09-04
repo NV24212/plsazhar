@@ -803,7 +803,7 @@ const translations = {
     "store.removeFromCart": "إزالة من السلة",
     "store.updateQuantity": "تحديث الكمية",
     "store.clearCart": "إفراغ السلة",
-    "store.startShoppingAr": "ابدأ التسوق لإضافة منتجات إلى سلتك",
+    "store.startShopping": "ابدأ التسوق لإضافة منتجات إلى سلتك",
     "store.unitPrice": "سعر الوحدة",
 
     // Checkout
@@ -833,9 +833,17 @@ const translations = {
     "checkout.noCreditCard": "لا حاجة لبطاقة ائتمان - الدفع عند التسليم فقط!",
     "checkout.paymentMethod": "طريقة الدفع",
     "checkout.cashOnDelivery": "الدفع عند التسليم",
+    "checkout.free": "مجاني",
+    "checkout.deliveryDescription": "سنقوم بالتوصيل إلى عنوانك",
+    "checkout.pickupDescription": "الاستلام من متجرنا",
     "checkout.orderItems": "عناصر الطلب",
     "checkout.whatsNext": "ما هي الخطوات التالية؟",
     "checkout.needHelp": "تحتاج مساعدة؟",
+    "checkout.backupRestore": "النسخ الاحتياطي والاستعادة",
+    "checkout.export": "تصدير",
+    "checkout.import": "استيراد",
+    "checkout.settingsImported": "تم استيراد الإعدادات بنجاح. لا تنس الحفظ!",
+    "checkout.importError": "فشل استيراد الإعدادات. يرجى التحقق من تنسيق الملف.",
 
     "checkout.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "checkout.contactPhone": "سيتم التواصل معك عبر الهاتف للتأكيد",

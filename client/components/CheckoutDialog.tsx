@@ -92,7 +92,10 @@ const CheckoutForm = ({
   setDeliveryType,
   deliveryArea,
   setDeliveryArea,
-  getDeliveryAreaName,
+  deliveryAreaName,
+  sitraAreaName,
+  muharraqAreaName,
+  otherAreaName,
   deliveryAreaSitra,
   deliveryAreaMuharraq,
   deliveryAreaOther,
@@ -199,15 +202,40 @@ const CheckoutForm = ({
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                        <RadioGroupItem value="delivery" id="delivery" />
-                        <Label htmlFor="delivery">{t("checkout.delivery")}</Label>
+                      <div className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="delivery" id="delivery" />
+                          <Label htmlFor="delivery">{t("checkout.delivery")}</Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground ml-6">{t("checkout.deliveryDescription")}</p>
                       </div>
-                      <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                        <RadioGroupItem value="pickup" id="pickup" />
-                        <Label htmlFor="pickup">{t("checkout.pickup")}</Label>
+                      <div className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="pickup" id="pickup" />
+                          <Label htmlFor="pickup">{t("checkout.pickup")}</Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground ml-6">{t("checkout.pickupDescription")}</p>
                       </div>
                     </RadioGroup>
+                    {deliveryType === "delivery" && (
+                      <div className="mt-4">
+                        <h3 className="text-lg font-medium mb-2">{t("settings.deliveryAreas")}</h3>
+                        <RadioGroup value={deliveryArea} onValueChange={(value) => setDeliveryArea(value as any)}>
+                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                            <RadioGroupItem value="sitra" id="sitra" />
+                            <Label htmlFor="sitra">{sitraAreaName}</Label>
+                          </div>
+                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                            <RadioGroupItem value="muharraq" id="muharraq" />
+                            <Label htmlFor="muharraq">{muharraqAreaName}</Label>
+                          </div>
+                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                            <RadioGroupItem value="other" id="other" />
+                            <Label htmlFor="other">{otherAreaName}</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -253,7 +281,7 @@ const CheckoutForm = ({
                             </div>
                             <div className="flex justify-between text-sm">
                               <span>
-                                {t("checkout.deliveryFee")} {deliveryType === "delivery" ? `(${getDeliveryAreaName(deliveryArea)})` : ""}
+                                {t("checkout.deliveryFee")} {deliveryType === "delivery" ? `(${deliveryAreaName})` : ""}
                               </span>
                               <span className="font-medium">{fee === 0 ? t("checkout.free") : formatPrice(fee, language)}</span>
                             </div>
@@ -545,7 +573,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={orderSuccess ? onClose : handleClose}>
-      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
+      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-2xl border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
         <AnimatePresence mode="wait">
           {orderSuccess ? (
             <SuccessView orderMessages={orderMessages} onClose={onClose} />
@@ -564,7 +592,10 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
               setDeliveryType={setDeliveryType}
               deliveryArea={deliveryArea}
               setDeliveryArea={setDeliveryArea}
-              getDeliveryAreaName={getDeliveryAreaName}
+              deliveryAreaName={getDeliveryAreaName(deliveryArea)}
+              sitraAreaName={getDeliveryAreaName("sitra")}
+              muharraqAreaName={getDeliveryAreaName("muharraq")}
+              otherAreaName={getDeliveryAreaName("other")}
               deliveryAreaSitra={deliveryAreaSitra}
               deliveryAreaMuharraq={deliveryAreaMuharraq}
               deliveryAreaOther={deliveryAreaOther}
