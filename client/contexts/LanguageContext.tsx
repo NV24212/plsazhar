@@ -13,7 +13,7 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   isRTL: boolean;
   t: (key: string) => string;
-  translateCategory: (categoryName: string) => string;
+  translateCategory: (category: any) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -596,7 +596,7 @@ const translations = {
 
     // Products
     "products.title": "المنتجات",
-    "products.subtitle": "إدارة مخزون المنتجات",
+    "products.subtitle": "إدا��ة مخزون المنتجات",
     "products.addNew": "إضافة منتج جديد",
     "products.search": "البحث في المنتجات...",
     "products.name": "الاسم",
@@ -761,7 +761,7 @@ const translations = {
     "empty.createOrder": "إنشاء طلب",
 
     // Messages
-    "message.deleteConfirm": "هل أنت متأكد من حذف هذا العنصر؟",
+    "message.deleteConfirm": "هل أ��ت متأكد من حذف هذا العنصر؟",
     "message.productAdded": "تم إضافة المنتج بنجاح",
     "message.productUpdated": "تم تحديث المنتج بنجاح",
     "message.productDeleted": "تم حذف المنتج بنجاح",
@@ -832,7 +832,7 @@ const translations = {
     "checkout.backToStore": "العودة للمتجر",
     "checkout.noCreditCard": "لا حاجة لبطاقة ائتمان - الدفع عند التسليم فقط!",
     "checkout.paymentMethod": "طريقة الدفع",
-    "checkout.cashOnDelivery": "الدفع عند التسليم",
+    "checkout.cashOnDelivery": "الدفع ��ند التسليم",
     "checkout.free": "مجاني",
     "checkout.deliveryDescription": "سنقوم بالتوصيل إلى عنوانك",
     "checkout.pickupDescription": "الاستلام من متجرنا",
@@ -915,7 +915,7 @@ const translations = {
     "analytics.tryAgain": "إعادة المحاولة",
     "analytics.noPageData": "لا توجد بيانات صفحات متاحة",
     "analytics.noDeviceData": "لا توجد بيانات أجهزة متاحة",
-    "analytics.noErrorsGood": "لا توجد أخطاء - الموقع يعمل بشكل جيد!",
+    "analytics.noErrorsGood": "لا توجد أخطاء - الموقع يعمل ب��كل جيد!",
     "analytics.desktop": "الكمبيوتر المكتبي",
     "analytics.mobile": "الهاتف المحمول",
     "analytics.tablet": "الجهاز اللوحي",
@@ -965,9 +965,9 @@ const translations = {
     "settings.save": "حفظ الإعدادات",
     "settings.reset": "إعادة تعيين",
     "settings.saveSuccess": "تم حفظ الإعدادات بنجاح!",
-    "settings.saveError": "فشل في حفظ الإعدادات. يرجى المناولة مرة أخرى.",
+    "settings.saveError": "فشل في حف�� الإعدادات. يرجى المناولة مرة أخرى.",
     "settings.resetConfirm":
-      "هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافتراضية؟",
+      "هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافت��اضية؟",
     "settings.unsavedChanges": "لديك تغييرات غير محفوظة. لا تنس الفظ!",
     "settings.advancedSettings": "الإعدادات المتقدمة",
     "settings.performanceMode": "وضع الأداء",
@@ -1116,7 +1116,7 @@ const translations = {
     "orderSuccess.headlineAr": "تم تأكيد الطلب!",
     "orderSuccess.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "orderSuccess.prepareOrderAr": "سنقوم بتجهيز طبك خلال 2-4 ساعات",
-    "orderSuccess.contactPhone": "سيتم التواصل معك عبر الهاتف للتأكيد",
+    "orderSuccess.contactPhone": "سيتم التواصل ��عك عبر الهاتف للتأكيد",
     "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأكيد",
     "orderSuccess.deliveryTime": "التوصيل خلال 1-3 أيام عمل",
     "orderSuccess.deliveryTimeAr": "التوصيل خلال 1-3 أيام عمل",
