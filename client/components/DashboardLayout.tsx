@@ -39,14 +39,33 @@ const getNavigation = (t: (key: string) => string) => [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = React.useRef<HTMLDivElement | null>(null);
+  const toggleRef = React.useRef<HTMLButtonElement | null>(null);
   const { logout } = useAuth();
   const { language, setLanguage, isRTL, t } = useLanguage();
   const location = useLocation();
 
-  // Force sidebar to close when language changes to prevent RTL/LTR positioning issues
+  // Force sidebar to close when language or route changes
   React.useEffect(() => {
     setSidebarOpen(false);
-  }, [isRTL]);
+  }, [isRTL, location.pathname]);
+
+  // Close on outside click (mobile overlay-less areas)
+  React.useEffect(() => {
+    if (!sidebarOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(target) &&
+        (!toggleRef.current || !toggleRef.current.contains(target))
+      ) {
+        setSidebarOpen(false);
+      }
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [sidebarOpen]);
 
   const navigation = getNavigation(t);
 
