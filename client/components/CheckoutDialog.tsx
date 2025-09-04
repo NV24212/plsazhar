@@ -38,7 +38,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ zIndex: 9999 }}>
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -593,15 +593,15 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const totalPrice = getTotalPrice();
 
   useEffect(() => {
-    if (open) {
+    if (open && !showSuccessPopup) {
       setStep(1);
       setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
       setDeliveryType("delivery");
       setDeliveryArea("sitra");
       setIsSubmitting(false);
-      setShowSuccessPopup(false);
+      setOrderSuccess(false);
     }
-  }, [open]);
+  }, [open, showSuccessPopup]);
 
   useEffect(() => {
     if (autoScrollToSummary && step === 3) {
@@ -698,9 +698,12 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         setOrderNumber(order.id.slice(-6));
       }
       clearCart();
-      // Close main dialog and show popup
+      setOrderSuccess(true);
+      // Close main dialog first, then show popup after a brief delay
       onClose();
-      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(true);
+      }, 100);
     } catch (error) {
       console.error("Error placing order:", error);
       showAlert({
@@ -729,14 +732,17 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const handleSuccessPopupClose = () => {
     setShowSuccessPopup(false);
-    setStep(1);
-    setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
-    setDeliveryType("delivery");
-    setDeliveryArea("sitra");
-    setOrderSuccess(false);
-    setOrderNumber("");
-    setOrderItems([]);
-    setOrderTotalPrice(0);
+    // Reset all form state
+    setTimeout(() => {
+      setStep(1);
+      setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
+      setDeliveryType("delivery");
+      setDeliveryArea("sitra");
+      setOrderSuccess(false);
+      setOrderNumber("");
+      setOrderItems([]);
+      setOrderTotalPrice(0);
+    }, 200);
   };
 
   return (
