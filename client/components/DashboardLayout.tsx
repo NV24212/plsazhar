@@ -87,6 +87,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <div
         key={`sidebar-${language}`}
+        ref={sidebarRef}
         className={cn(
           "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           "border-gray-200",
