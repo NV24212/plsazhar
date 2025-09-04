@@ -50,22 +50,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     setSidebarOpen(false);
   }, [isRTL, location.pathname]);
 
-  // Close on outside click (mobile overlay-less areas)
-  React.useEffect(() => {
-    if (!sidebarOpen) return;
-    const onDocClick = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(target) &&
-        (!toggleRef.current || !toggleRef.current.contains(target))
-      ) {
-        setSidebarOpen(false);
-      }
-    };
-    document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
-  }, [sidebarOpen]);
 
   const navigation = getNavigation(t);
 
@@ -92,6 +76,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           "border-gray-200",
           isRTL ? "right-0 border-l" : "left-0 border-r",
+          sidebarOpen ? "pointer-events-auto" : "pointer-events-none",
           {
             "translate-x-0": sidebarOpen,
             "translate-x-full": isRTL && !sidebarOpen,
@@ -177,10 +162,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        <main
-          className="flex-1 overflow-auto p-6 bg-gray-50"
-          onClick={() => sidebarOpen && setSidebarOpen(false)}
-        >
+        <main className="flex-1 overflow-auto p-6 bg-gray-50">
           {children}
         </main>
 
