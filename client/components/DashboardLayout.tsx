@@ -56,13 +56,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div
-      className={`flex h-screen bg-gray-50 text-gray-900 ${
-        isRTL ? "rtl" : "ltr"
-      }`}
+      className={`flex h-screen bg-gray-50 text-gray-900 ${isRTL ? "rtl" : "ltr"}`}
     >
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -71,7 +69,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
+          "fixed lg:static inset-y-0 z-50 w-64 bg-white shadow-xl lg:shadow-none transition-transform duration-300 ease-in-out",
           "border-gray-200",
           isRTL ? "right-0 border-l" : "left-0 border-r",
           {
@@ -79,6 +77,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             "translate-x-full": isRTL && !sidebarOpen,
             "-translate-x-full": !isRTL && !sidebarOpen,
           },
+          "lg:translate-x-0",
         )}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
