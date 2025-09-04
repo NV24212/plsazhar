@@ -5,25 +5,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 touch-manipulation active:scale-95 transform-gpu",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-lg active:shadow-sm btn-animate",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-lg active:shadow-sm btn-animate",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-accent-foreground/20 shadow-sm hover:shadow-md active:shadow-sm btn-animate",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md active:shadow-sm btn-animate",
+        ghost: "hover:bg-accent hover:text-accent-foreground transition-colors duration-150",
+        link: "text-primary underline-offset-4 hover:underline transition-colors duration-150",
+        gradient: "gradient-primary text-primary-foreground shadow-md hover:shadow-lg active:shadow-sm btn-animate",
       },
       size: {
-        default: "h-12 px-6 py-3",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-14 rounded-lg px-8",
-        icon: "h-10 w-10",
+        default: "h-12 px-6 py-3 text-sm font-semibold",
+        sm: "h-9 rounded-lg px-4 text-xs font-medium",
+        lg: "h-14 rounded-xl px-8 text-base font-semibold",
+        xl: "h-16 rounded-xl px-10 text-lg font-bold",
+        icon: "h-10 w-10 rounded-lg",
+        "icon-sm": "h-8 w-8 rounded-md",
+        "icon-lg": "h-12 w-12 rounded-xl",
       },
     },
     defaultVariants: {
