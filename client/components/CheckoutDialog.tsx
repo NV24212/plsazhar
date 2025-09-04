@@ -516,6 +516,14 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const handlePlaceOrder = async () => {
     if (!isFormValid()) return;
+
+    // Confirmation popup with customizable text via Settings
+    const confirmationMessage = language === "ar"
+      ? (savedSettings?.preOrderConfirmationMessageAr || "هل أنت متأكد من إرسال الطلب؟")
+      : (savedSettings?.preOrderConfirmationMessageEn || "Are you sure you want to place the order?");
+    const confirmed = window.confirm(confirmationMessage);
+    if (!confirmed) return;
+
     setIsSubmitting(true);
     try {
       const addressParts = [
