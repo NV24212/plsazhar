@@ -32,7 +32,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // Order Success Popup Component
 const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   
   if (!isOpen) return null;
 
@@ -50,7 +50,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-6 w-6 text-green-600" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900">{t("checkout.orderReceived") || "Order received, thank you!"}</h2>
+            <h2 className="text-xl font-bold text-gray-900 auto-text">{language === "ar" ? "تم استلام الطلب، شكراً لك!" : "Order received, thank you!"}</h2>
           </div>
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
             <X className="h-4 w-4" />
@@ -77,17 +77,17 @@ const SuccessView = ({ orderMessages, onClose }) => {
       exit={{ opacity: 0 }}
       className="flex flex-col h-full"
     >
-      <DialogHeader className="p-6 pb-4 border-b bg-pink-50">
+      <DialogHeader className="p-6 pb-4 border-b bg-primary/10">
         <div className="flex items-center justify-center mb-4">
-          <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center shadow-lg">
-            <CheckCircle className="h-10 w-10 text-pink-600" />
+          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-lg">
+            <CheckCircle className="h-10 w-10 text-primary" />
           </div>
         </div>
         <div>
-          <DialogTitle className="text-center text-2xl font-bold text-pink-600 auto-text leading-tight">
+          <DialogTitle className="text-center text-2xl font-bold text-primary auto-text leading-tight">
             {orderMessages.headline}
           </DialogTitle>
-          <p className="text-center text-pink-500 auto-text text-sm mt-2 leading-relaxed">
+          <p className="text-center text-primary/80 auto-text text-sm mt-2 leading-relaxed">
             {orderMessages.subtext}
           </p>
         </div>
@@ -106,7 +106,7 @@ const SuccessView = ({ orderMessages, onClose }) => {
       <div className="border-t p-4 bg-white">
         <Button
           onClick={onClose}
-          className="w-full bg-pink-500 hover:bg-pink-600 touch-manipulation h-12 text-base font-semibold"
+          className="w-full bg-primary hover:bg-primary/90 touch-manipulation h-12 text-base font-semibold"
         >
           <span className="auto-text">{t("checkout.backToStore")}</span>
         </Button>
@@ -163,7 +163,7 @@ const CheckoutForm = ({
               <div key={stepNum} className="flex items-center">
                 <div
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-medium transition-all duration-200 ${
-                    step >= stepNum ? "bg-pink-500 text-white shadow-lg" : "bg-gray-100 text-gray-600"
+                    step >= stepNum ? "bg-primary text-white shadow-lg" : "bg-gray-100 text-gray-600"
                   }`}
                 >
                   {stepNum}
@@ -171,7 +171,7 @@ const CheckoutForm = ({
                 {stepNum < 3 && (
                   <div
                     className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 rounded-full transition-all duration-200 ${
-                      step > stepNum ? "bg-pink-500" : "bg-gray-200"
+                      step > stepNum ? "bg-primary" : "bg-gray-200"
                     }`}
                   />
                 )}
@@ -244,7 +244,7 @@ const CheckoutForm = ({
                         onClick={() => setDeliveryType("delivery")}
                         className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                           deliveryType === "delivery" 
-                            ? "border-pink-500 bg-pink-50 shadow-md" 
+                            ? "border-primary bg-primary/10 shadow-md" 
                             : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                       >
@@ -252,7 +252,7 @@ const CheckoutForm = ({
                           <div className="flex items-center space-x-3">
                             <RadioGroupItem value="delivery" id="delivery" className="pointer-events-none" />
                             <div className="flex items-center space-x-3">
-                              <Truck className="w-5 h-5 text-pink-600" />
+                              <Truck className="w-5 h-5 text-primary" />
                               <Label htmlFor="delivery" className="font-semibold text-lg cursor-pointer">
                                 {t("checkout.delivery")}
                               </Label>
@@ -260,7 +260,7 @@ const CheckoutForm = ({
                           </div>
                           <Badge 
                             variant="outline" 
-                            className="bg-pink-50 text-pink-700 border-pink-200"
+                            className="bg-primary/10 text-primary border-primary/20"
                           >
                             {formatPriceWithSymbol(deliveryAreaSitra, language)}
                           </Badge>
@@ -270,7 +270,7 @@ const CheckoutForm = ({
                         onClick={() => setDeliveryType("pickup")}
                         className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                           deliveryType === "pickup" 
-                            ? "border-pink-500 bg-pink-50 shadow-md" 
+                            ? "border-primary bg-primary/10 shadow-md" 
                             : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                       >
@@ -301,7 +301,7 @@ const CheckoutForm = ({
                             onClick={() => setDeliveryArea("sitra")}
                             className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                               deliveryArea === "sitra" 
-                                ? "border-pink-500 bg-pink-50 shadow-md" 
+                                ? "border-primary bg-primary/10 shadow-md" 
                                 : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                           >
@@ -319,7 +319,7 @@ const CheckoutForm = ({
                             onClick={() => setDeliveryArea("muharraq")}
                             className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                               deliveryArea === "muharraq" 
-                                ? "border-pink-500 bg-pink-50 shadow-md" 
+                                ? "border-primary bg-primary/10 shadow-md" 
                                 : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                           >
@@ -337,7 +337,7 @@ const CheckoutForm = ({
                             onClick={() => setDeliveryArea("other")}
                             className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                               deliveryArea === "other" 
-                                ? "border-pink-500 bg-pink-50 shadow-md" 
+                                ? "border-primary bg-primary/10 shadow-md" 
                                 : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                           >
@@ -378,7 +378,7 @@ const CheckoutForm = ({
                             <span className="font-medium">{item.productName}</span>
                             <span className="text-sm text-muted-foreground ml-2">x {item.quantity}</span>
                           </div>
-                          <span className="font-bold text-pink-600">{formatPrice(item.price * item.quantity, language)}</span>
+                          <span className="font-bold text-primary">{formatPrice(item.price * item.quantity, language)}</span>
                         </div>
                       ))}
                     </div>
@@ -412,9 +412,9 @@ const CheckoutForm = ({
                               </div>
                             )}
                             <Separator className="my-3" />
-                            <div className="flex justify-between font-bold text-lg p-3 bg-pink-50 rounded-lg">
+                            <div className="flex justify-between font-bold text-lg p-3 bg-primary/10 rounded-lg">
                               <span>{t("checkout.total")}</span>
-                              <span className="text-pink-600">{formatPrice(subtotal + fee, language)}</span>
+                              <span className="text-primary">{formatPrice(subtotal + fee, language)}</span>
                             </div>
                           </>
                         );
@@ -445,7 +445,7 @@ const CheckoutForm = ({
               <Button
                 onClick={handleNext}
                 disabled={step === 1 && !isStep1Valid()}
-                className="flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 h-12 sm:h-14 w-full touch-manipulation"
+                className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
                 size="lg"
               >
                 <span className="auto-text">{t("common.next")}</span>
@@ -455,7 +455,7 @@ const CheckoutForm = ({
               <Button
                 onClick={handlePlaceOrder}
                 disabled={!isFormValid() || isSubmitting}
-                className="flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 h-12 sm:h-14 w-full touch-manipulation"
+                className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
                 size="lg"
               >
                 {isSubmitting ? (
@@ -643,11 +643,11 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
       : (savedSettings?.preOrderConfirmationMessageEn || "Are you sure you want to place the order?");
     
     const confirmed = await showConfirm({
-      title: t("checkout.confirmOrder") || "Confirm Order",
+      title: language === "ar" ? "تأكيد الطلب" : "Confirm Order",
       message: confirmationMessage,
       type: "warning",
-      confirmText: t("common.yes") || "Yes",
-      cancelText: t("common.no") || "Cancel",
+      confirmText: language === "ar" ? "نعم" : "Yes",
+      cancelText: language === "ar" ? "إلغاء" : "Cancel",
     });
     if (!confirmed) return;
 
@@ -685,15 +685,16 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         setOrderNumber(order.id.slice(-6));
       }
       setOrderSuccess(true);
-      setShowSuccessPopup(true);
       clearCart();
+      // Show success popup immediately after setting orderSuccess
+      setShowSuccessPopup(true);
     } catch (error) {
       console.error("Error placing order:", error);
       showAlert({
-        title: t("message.error") || "Error",
-        message: t("errors.orderFailed") || "Failed to place order. Please try again.",
+        title: language === "ar" ? "خطأ" : "Error",
+        message: language === "ar" ? "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى." : "Failed to place order. Please try again.",
         type: "error",
-        buttonText: t("common.close") || "Close",
+        buttonText: language === "ar" ? "إغلاق" : "Close",
       });
     } finally {
       setIsSubmitting(false);
