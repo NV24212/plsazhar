@@ -21,6 +21,17 @@ export const handleAdminLogin: RequestHandler = async (req, res) => {
   try {
     const { password } = loginSchema.parse(req.body);
 
+    // Simple password-only auth: use env var or default
+    const expected = process.env.ADMIN_PASSWORD || "azhar2311";
+    if (password === expected) {
+      res.json({
+        success: true,
+        message: "Login successful",
+      });
+      return;
+    }
+
+    // Fallback to existing DB-based verification if configured
     const isValid = await adminDb.verifyPassword(password);
 
     if (isValid) {
