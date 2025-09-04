@@ -198,24 +198,42 @@ export default function Orders() {
       return;
     }
 
-    try {
-      const orderData = {
-        ...formData,
-        total: calculateTotal(),
-      };
+    const savedSettingsRaw = localStorage.getItem("storeSettings");
+    const savedSettings = savedSettingsRaw ? JSON.parse(savedSettingsRaw) : {};
+    const confirmationMessage =
+      language === "ar"
+        ? savedSettings.preOrderConfirmationMessageAr ||
+          "هل أنت متأكد من أنك تريد إنشاء هذا الطلب؟"
+        : savedSettings.preOrderConfirmationMessageEn ||
+          "Are you sure you want to create this order?";
 
-      if (editingOrder) {
-        await updateOrder(editingOrder.id, orderData);
-      } else {
-        await addOrder(orderData);
+    const confirmed = await showConfirm({
+      title: editingOrder ? t("orders.editOrder") : t("orders.addOrder"),
+      message: confirmationMessage,
+      confirmText: t("common.yes"),
+      cancelText: t("common.no"),
+    });
+
+    if (confirmed) {
+      try {
+        const orderData = {
+          ...formData,
+          total: calculateTotal(),
+        };
+
+        if (editingOrder) {
+          await updateOrder(editingOrder.id, orderData);
+        } else {
+          await addOrder(orderData);
+        }
+        closeDialog();
+      } catch (error) {
+        showAlert({
+          title: "Error",
+          message: "Failed to save order. Please try again.",
+          type: "error",
+        });
       }
-      closeDialog();
-    } catch (error) {
-      showAlert({
-        title: "Error",
-        message: "Failed to save order. Please try again.",
-        type: "error",
-      });
     }
   };
 
@@ -499,7 +517,7 @@ export default function Orders() {
                       })}
                       <Button
                         type="button"
-                        variant="outline"
+                        variant="secondary"
                         onClick={addProductToOrder}
                         className="w-full"
                       >
