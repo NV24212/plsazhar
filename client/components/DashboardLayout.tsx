@@ -137,12 +137,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className={cn("flex-1 flex flex-col min-w-0", isRTL ? "lg:mr-64" : "lg:ml-64")}>
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-6">
             <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+              onClick={() => setSidebarOpen((v) => !v)}
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100 lg:hidden"
             >
               <Menu className="w-6 h-6" />
             </button>
