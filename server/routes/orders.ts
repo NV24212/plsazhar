@@ -75,12 +75,36 @@ export const createOrder: RequestHandler = async (req, res) => {
       }
     }
 
-    // Calculate expected total
+    // Calculate expected total using settings (area-based fees + free threshold)
     const itemsTotal = itemsTyped.reduce(
       (sum: number, item: OrderItem) => sum + item.price * item.quantity,
       0,
     );
-    const deliveryFee = deliveryType === "delivery" ? 1.5 : 0;
+
+    // Load settings to compute delivery fee consistently with client
+    let deliveryFee = 0;
+    try {
+      const { defaultSettings, loadSettings } = await import("../lib/app-settings.js");
+      const settings = await loadSettings().catch(() => defaultSettings);
+      if (deliveryType === "delivery") {
+        if (itemsTotal >= (settings.freeDeliveryMinimum ?? defaultSettings.freeDeliveryMinimum)) {
+          deliveryFee = 0;
+        } else {
+          const areaFee =
+            (deliveryArea === "sitra" && (settings.deliveryAreaSitra ?? defaultSettings.deliveryAreaSitra)) ||
+            (deliveryArea === "muharraq" && (settings.deliveryAreaMuharraq ?? defaultSettings.deliveryAreaMuharraq)) ||
+            (deliveryArea === "other" && (settings.deliveryAreaOther ?? defaultSettings.deliveryAreaOther));
+          if (typeof areaFee === "number") {
+            deliveryFee = areaFee;
+          } else {
+            deliveryFee = settings.deliveryFee ?? defaultSettings.deliveryFee ?? 0;
+          }
+        }
+      }
+    } catch {
+      deliveryFee = deliveryType === "delivery" ? 1.5 : 0;
+    }
+
     const expectedTotal = itemsTotal + deliveryFee;
 
     // Always use the server-calculated total as the source of truth.
