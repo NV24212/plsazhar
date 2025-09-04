@@ -395,6 +395,10 @@ export default function Settings() {
       }
 
       setHasChanges(false);
+      // Persist to localStorage for components that read from it (e.g., checkout dialog)
+      try {
+        localStorage.setItem("storeSettings", JSON.stringify(formState));
+      } catch {}
       showAlert({
         title: t("settings.saveSuccess"),
         message: t("settings.saveSuccess"),
