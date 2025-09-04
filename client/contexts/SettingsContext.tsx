@@ -24,6 +24,8 @@ interface StoreSettings {
   orderSuccessMessageAr: string;
   orderInstructionsEn: string;
   orderInstructionsAr: string;
+  preOrderConfirmationMessageEn?: string;
+  preOrderConfirmationMessageAr?: string;
 
   // Business Hours
   businessHours: {
