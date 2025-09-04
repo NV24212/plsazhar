@@ -628,7 +628,7 @@ const translations = {
     // Added keys (AR)
     "products.category": "التصنيف",
     "products.selectCategory": "اختر التصنيف",
-    "products.variantImageOptional": "صورة النوع (اختياري)",
+    "products.variantImageOptional": "صورة النو�� (اختياري)",
     "products.removeImage": "إزالة الصورة",
     "products.uploadImage": "رفع صورة",
 
@@ -926,7 +926,7 @@ const translations = {
     "common.unknownProduct": "منتج غير معروف",
     "common.product": "منتج",
     "common.default": "افتراضي",
-    "errors.orderFailed": "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى.",
+    "errors.orderFailed": "فشل في إرسال الطلب. يرجى المحاولة مر�� أخرى.",
     "dashboard.noOrdersYet": "لا توجد طلبات بعد. أنشئ أول طلب لك لرؤيته هنا!",
     "notFound.title": "404",
     "notFound.message": "عذراً! الصفحة غير موجودة",
@@ -951,7 +951,7 @@ const translations = {
     "settings.all": "الكل",
     "settings.error": "خطأ",
     "settings.warning": "تحذير",
-    "settings.info": "معلومات",
+    "settings.info": "معل��مات",
     "settings.debug": "تصحيح",
     "settings.system": "النظام",
     "settings.user": "المستخدم",
@@ -1012,7 +1012,7 @@ const translations = {
     "settings.uiBehavior": "سلوك الواجهة",
     "settings.adminSettings": "إعدادات الإدارة",
     "settings.adminInformation": "معلومات الإدارة",
-    "settings.adminPassword": "كلمة مرور الإدارة",
+    "settings.adminPassword": "كل��ة مرور الإدارة",
     "settings.adminEmail": "بريد الإدارة الإلكتروني",
     "settings.changePassword": "تغيير كلمة المرور",
     "settings.currentPassword": "كلمة المرور الحالية",
@@ -1097,7 +1097,7 @@ const translations = {
     "settings.orderInstructions": "تعليمات الطلب",
     "settings.note": "ملاحظة",
     "settings.orderMessageNote":
-      "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجرك وتقديم المعلومات ذات الصلة.",
+      "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجر�� وتقديم المعلومات ذات الصلة.",
 
     // Currency and formatting
     "common.currency": "د.ب",
@@ -1160,12 +1160,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   // Helper function to translate category names
-  const translateCategory = (categoryName: string): string => {
-    // Convert category name to translation key format
-    const key = `category.${categoryName.toLowerCase().replace(/\s+/g, "")}`;
-    const translated = t(key);
-    // If translation key doesn't exist, fall back to original name
-    return translated === key ? categoryName : translated;
+  const translateCategory = (category: any): string => {
+    // Handle null, undefined, or empty values
+    if (!category) return "";
+
+    // If it's a Category object with name and nameAr
+    if (typeof category === 'object' && category.name) {
+      return language === 'ar' && category.nameAr ? category.nameAr : category.name;
+    }
+
+    // If it's a string (legacy support)
+    if (typeof category === 'string') {
+      // Convert category name to translation key format
+      const key = `category.${category.toLowerCase().replace(/\s+/g, "")}`;
+      const translated = t(key);
+      // If translation key doesn't exist, fall back to original name
+      return translated === key ? category : translated;
+    }
+
+    return String(category);
   };
 
   const isRTL = language === "ar";
