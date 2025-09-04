@@ -2,18 +2,18 @@ import { Customer, Product, Order, Category } from "@/contexts/DataContext";
 
 const API_BASE = "/api";
 
-// Helper function for API calls with retry logic
+// Helper function for API calls with optimized retry logic
 async function apiCall<T>(
   url: string,
   options?: RequestInit,
   retryCount = 0,
 ): Promise<T> {
   const maxRetries = 2;
-  const retryDelay = 1000 * (retryCount + 1); // 1s, 2s delay
+  const retryDelay = 500 * (retryCount + 1); // Reduced: 500ms, 1s delay instead of 1s, 2s
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // Reduced timeout to 8s
 
     const response = await fetch(`${API_BASE}${url}`, {
       headers: {
@@ -86,7 +86,7 @@ async function apiCall<T>(
       error: error instanceof Error ? error.message : String(error),
     });
 
-    // Check if we should retry
+    // Check if we should retry - only retry network errors
     if (
       retryCount < maxRetries &&
       error instanceof Error &&
@@ -106,7 +106,7 @@ async function apiCall<T>(
   }
 }
 
-// Customer API
+// Customer API with instant operations
 export const customerApi = {
   getAll: () => apiCall<Customer[]>("/customers"),
   create: (customer: Omit<Customer, "id" | "createdAt">) =>
@@ -125,7 +125,7 @@ export const customerApi = {
     }),
 };
 
-// Product API
+// Product API with instant operations
 export const productApi = {
   getAll: () => apiCall<Product[]>("/products"),
   create: (product: Omit<Product, "id">) =>
@@ -144,7 +144,7 @@ export const productApi = {
     }),
 };
 
-// Order API
+// Order API with instant operations
 export const orderApi = {
   getAll: () => apiCall<Order[]>("/orders"),
   create: (order: Omit<Order, "id" | "createdAt" | "updatedAt">) =>
@@ -163,7 +163,7 @@ export const orderApi = {
     }),
 };
 
-// Category API
+// Category API with instant operations
 export const categoryApi = {
   getAll: () => apiCall<Category[]>("/categories"),
   create: (category: Omit<Category, "id" | "createdAt">) =>

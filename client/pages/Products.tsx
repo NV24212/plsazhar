@@ -1,37 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useData,
   Product,
-  ProductVariant,
   Category,
+  ProductVariant,
 } from "@/contexts/DataContext";
 import { useDialog } from "@/contexts/DialogContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ImageUpload from "@/components/ImageUpload";
-import { Plus, Search, Edit, Trash2, Package, X } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Search,
+  Package,
+  Star,
+  Eye,
+  EyeOff,
+  ImageIcon,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function Products() {
   const {
@@ -40,126 +59,116 @@ export default function Products() {
     addProduct,
     updateProduct,
     deleteProduct,
-    getCategoryById,
-    uploadImage,
+    getProductVariants,
   } = useData();
   const { showConfirm, showAlert } = useDialog();
   const { t, translateCategory } = useLanguage();
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
+  const [savingProductId, setSavingProductId] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: "",
+    nameAr: "",
     description: "",
-    price: 0,
+    descriptionAr: "",
+    price: "",
+    category: "",
     images: [] as string[],
+    isVisible: true,
+    featured: false,
     variants: [] as ProductVariant[],
-    total_stock: 1,
-    category_id: "",
   });
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.nameAr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.descriptionAr?.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const generateVariantId = () => "v" + Date.now().toString();
+      const matchesCategory =
+        selectedCategory === "all" || product.category === selectedCategory;
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      description: "",
-      price: 0,
-      images: [],
-      variants: [],
-      total_stock: 1,
-      category_id: "",
+      return matchesSearch && matchesCategory;
     });
-    setEditingProduct(null);
-  };
+  }, [products, searchTerm, selectedCategory]);
 
   const openDialog = (product?: Product) => {
     if (product) {
       setEditingProduct(product);
       setFormData({
         name: product.name,
+        nameAr: product.nameAr || "",
         description: product.description,
-        price: product.price,
-        images: [...product.images],
-        variants: [...product.variants],
-        total_stock: product.total_stock || 0,
-        category_id: product.category_id || "",
+        descriptionAr: product.descriptionAr || "",
+        price: product.price.toString(),
+        category: product.category,
+        images: product.images || [],
+        isVisible: product.isVisible ?? true,
+        featured: product.featured ?? false,
+        variants: getProductVariants(product.id),
       });
     } else {
-      resetForm();
+      setEditingProduct(null);
+      setFormData({
+        name: "",
+        nameAr: "",
+        description: "",
+        descriptionAr: "",
+        price: "",
+        category: categories[0]?.id || "",
+        images: [],
+        isVisible: true,
+        featured: false,
+        variants: [],
+      });
     }
     setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
     setIsDialogOpen(false);
-    resetForm();
-  };
-
-  const addVariant = () => {
-    setFormData((prev) => ({
-      ...prev,
-      variants: [
-        ...prev.variants,
-        { id: generateVariantId(), name: "", stock: 1, image: "" },
-      ],
-    }));
-  };
-
-  const updateVariant = (
-    index: number,
-    field: keyof ProductVariant,
-    value: string | number,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      variants: prev.variants.map((variant, i) =>
-        i === index ? { ...variant, [field]: value } : variant,
-      ),
-    }));
-  };
-
-  const removeVariant = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      variants: prev.variants.filter((_, i) => i !== index),
-    }));
-  };
-
-  const getTotalStock = () => {
-    if (formData.variants.length > 0) {
-      return formData.variants.reduce((acc, v) => acc + v.stock, 0);
-    }
-    return formData.total_stock;
+    setEditingProduct(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Instant visual feedback
+    const productId = editingProduct?.id || `temp_${Date.now()}`;
+    setSavingProductId(productId);
+
     try {
       const productData = {
-        ...formData,
-        total_stock: getTotalStock(),
-        // Convert empty category_id to null
-        category_id:
-          formData.category_id?.trim() === "" ? null : formData.category_id,
+        name: formData.name.trim(),
+        nameAr: formData.nameAr.trim(),
+        description: formData.description.trim(),
+        descriptionAr: formData.descriptionAr.trim(),
+        price: parseFloat(formData.price),
+        category: formData.category,
+        images: formData.images,
+        isVisible: formData.isVisible,
+        featured: formData.featured,
+        variants: formData.variants,
       };
-
-      console.log("Submitting product data:", productData);
 
       if (editingProduct) {
         await updateProduct(editingProduct.id, productData);
+        toast.success(t("message.productUpdated"));
       } else {
         await addProduct(productData);
+        toast.success(t("message.productAdded"));
       }
+      
       closeDialog();
     } catch (error) {
-      console.error("Product save error:", error);
       const errorMessage =
         error instanceof Error ? error.message : t("message.productSaveError");
       showAlert({
@@ -167,10 +176,15 @@ export default function Products() {
         message: errorMessage,
         type: "error",
       });
+    } finally {
+      setSavingProductId(null);
     }
   };
 
   const handleDeleteProduct = async (id: string) => {
+    // Instant visual feedback
+    setDeletingProductId(id);
+
     const confirmed = await showConfirm({
       title: t("products.delete"),
       message: t("message.deleteConfirm"),
@@ -191,17 +205,40 @@ export default function Products() {
         });
       }
     }
+    
+    setDeletingProductId(null);
   };
 
-  const getStockStatus = (stock: number) => {
-    if (stock === 0)
-      return { text: t("products.stock"), color: "bg-red-100 text-red-700" };
-    if (stock < 10)
-      return {
-        text: t("products.stock"),
-        color: "bg-yellow-100 text-yellow-700",
-      };
-    return { text: t("products.stock"), color: "bg-green-100 text-green-700" };
+  const handleAddVariant = () => {
+    setFormData((prev) => ({
+      ...prev,
+      variants: [
+        ...prev.variants,
+        {
+          id: `temp_${Date.now()}`,
+          name: "",
+          nameAr: "",
+          price: 0,
+          stock: 0,
+        },
+      ],
+    }));
+  };
+
+  const handleUpdateVariant = (index: number, field: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      variants: prev.variants.map((variant, i) =>
+        i === index ? { ...variant, [field]: value } : variant
+      ),
+    }));
+  };
+
+  const handleRemoveVariant = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      variants: prev.variants.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -210,474 +247,449 @@ export default function Products() {
         <h1 className="text-3xl font-bold text-foreground">
           {t("products.title")}
         </h1>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={() => openDialog()}
-              className="bg-primary hover:bg-primary/90 text-white shadow-sm"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {t("products.addNew")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg sm:rounded-md bg-white border border-gray-200">
-            <DialogHeader>
-              <DialogTitle>
-                {editingProduct
-                  ? t("products.editProduct")
-                  : t("products.addProduct")}
-              </DialogTitle>
-              <DialogDescription>
-                {editingProduct
-                  ? t("products.editProduct")
-                  : t("products.addProduct")}
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit}>
-              <Tabs defaultValue="details" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-gray-100">
-                  <TabsTrigger value="details">
-                    {t("products.productName")}
-                  </TabsTrigger>
-                  <TabsTrigger value="images">
-                    {t("products.productImages")}
-                  </TabsTrigger>
-                  <TabsTrigger value="variants">
-                    {t("products.variants")}
-                  </TabsTrigger>
-                </TabsList>
+        <Button
+          onClick={() => openDialog()}
+          className="bg-primary hover:bg-primary/90 text-white shadow-sm transform transition-all hover:scale-105"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          {t("products.addNew")}
+        </Button>
+      </div>
 
-                <TabsContent value="details" className="space-y-4">
-                  <div className="grid gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">{t("products.productName")}</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            name: e.target.value,
-                          }))
-                        }
-                        placeholder={t("products.productName")}
-                        required
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder={t("products.searchPlaceholder")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="sm:w-48">
+            <SelectValue placeholder={t("products.allCategories")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("products.allCategories")}</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category.id} value={category.id}>
+                {translateCategory(category)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatePresence>
+          {filteredProducts.map((product) => (
+            <motion.div
+              key={product.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className={`${deletingProductId === product.id ? 'opacity-50 pointer-events-none' : ''}`}
+            >
+              <Card className="group hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
+                <CardHeader className="p-4">
+                  <div className="aspect-square relative overflow-hidden rounded-lg bg-muted">
+                    {product.images && product.images.length > 0 ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="description">
-                        {t("products.productDescription")}
-                      </Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            description: e.target.value,
-                          }))
-                        }
-                        placeholder={t("products.productDescription")}
-                        required
-                        rows={3}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="price">
-                        {t("products.productPrice")} (BD)
-                      </Label>
-                      <Input
-                        id="price"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        value={formData.price}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === "" || value === ".") {
-                            setFormData((prev) => ({
-                              ...prev,
-                              price: value === "." ? "0." : 0,
-                            }));
-                          } else {
-                            setFormData((prev) => ({
-                              ...prev,
-                              price: parseFloat(value) || 0,
-                            }));
-                          }
-                        }}
-                        onFocus={(e) => {
-                          if (
-                            e.target.value === "0" ||
-                            e.target.value === "0.00"
-                          ) {
-                            e.target.value = "";
-                          }
-                          // Scroll into view on mobile
-                          setTimeout(() => {
-                            e.target.scrollIntoView({
-                              behavior: "smooth",
-                              block: "center",
-                            });
-                          }, 100);
-                        }}
-                        placeholder="0.00"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="category">{t("products.category")}</Label>
-                      <select
-                        id="category"
-                        value={formData.category_id}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            category_id: e.target.value,
-                          }))
-                        }
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        <option value="">{t("products.selectCategory")}</option>
-                        {categories.map((category) => (
-                          <option key={category.id} value={category.id}>
-                            {translateCategory(category.name)}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {formData.variants.length === 0 && (
-                      <div className="grid gap-2">
-                        <Label htmlFor="stock">{t("products.stock")}</Label>
-                        <Input
-                          id="stock"
-                          type="number"
-                          min="0"
-                          value={formData.total_stock}
-                          onChange={(e) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              total_stock: parseInt(e.target.value) || 0,
-                            }))
-                          }
-                          onFocus={(e) => {
-                            if (e.target.value === "0") {
-                              e.target.value = "";
-                            }
-                            // Scroll into view on mobile
-                            setTimeout(() => {
-                              e.target.scrollIntoView({
-                                behavior: "smooth",
-                                block: "center",
-                              });
-                            }, 100);
-                          }}
-                          placeholder="0"
-                          required
-                        />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-12 h-12 text-muted-foreground" />
                       </div>
                     )}
+                    {product.featured && (
+                      <Badge className="absolute top-2 left-2 bg-yellow-500 text-white">
+                        <Star className="w-3 h-3 mr-1" />
+                        {t("products.featured")}
+                      </Badge>
+                    )}
+                    {!product.isVisible && (
+                      <Badge
+                        variant="secondary"
+                        className="absolute top-2 right-2"
+                      >
+                        <EyeOff className="w-3 h-3 mr-1" />
+                        {t("products.hidden")}
+                      </Badge>
+                    )}
                   </div>
-                </TabsContent>
-
-                <TabsContent value="images" className="space-y-4">
-                  <div>
-                    <Label className="text-base font-medium">
-                      {t("products.productImages")}
-                    </Label>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {t("products.productImages")}
-                    </p>
-                    <ImageUpload
-                      images={formData.images}
-                      onImagesChange={(images) =>
-                        setFormData((prev) => ({ ...prev, images }))
-                      }
-                      maxImages={10}
-                    />
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="variants" className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <Label className="text-base font-medium">
-                          {t("products.variants")}
-                        </Label>
-                        <p className="text-sm text-gray-600">
-                          {t("products.variants")}
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-lg leading-tight truncate">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {product.description}
                         </p>
                       </div>
-                      <Button
-                        type="button"
-                        onClick={addVariant}
-                        size="sm"
-                        variant="outline"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        {t("products.addVariant")}
-                      </Button>
                     </div>
-
-                    <div className="space-y-3">
-                      {formData.variants.map((variant, index) => (
-                        <Card key={variant.id || index} className="p-4">
-                          <div className="space-y-4">
-                            <div className="flex gap-4 items-end">
-                              <div className="flex-1">
-                                <Label htmlFor={`variant-name-${index}`}>
-                                  {t("products.variantName")}
-                                </Label>
-                                <Input
-                                  id={`variant-name-${index}`}
-                                  value={variant.name}
-                                  onChange={(e) =>
-                                    updateVariant(index, "name", e.target.value)
-                                  }
-                                  placeholder={t("products.variantName")}
-                                  required
-                                />
-                              </div>
-                              <div className="w-32">
-                                <Label htmlFor={`variant-stock-${index}`}>
-                                  {t("products.variantStock")}
-                                </Label>
-                                <Input
-                                  id={`variant-stock-${index}`}
-                                  type="number"
-                                  min="0"
-                                  value={variant.stock}
-                                  onChange={(e) =>
-                                    updateVariant(
-                                      index,
-                                      "stock",
-                                      parseInt(e.target.value) || 0,
-                                    )
-                                  }
-                                  onFocus={(e) => {
-                                    if (e.target.value === "0") {
-                                      e.target.value = "";
-                                    }
-                                    // Scroll into view on mobile
-                                    setTimeout(() => {
-                                      e.target.scrollIntoView({
-                                        behavior: "smooth",
-                                        block: "center",
-                                      });
-                                    }, 100);
-                                  }}
-                                  placeholder="0"
-                                  required
-                                />
-                              </div>
-                              <Button
-                                type="button"
-                                size="icon"
-                                variant="outline"
-                                onClick={() => removeVariant(index)}
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </div>
-
-                            {/* Variant Image Upload */}
-                            <div>
-                              <Label className="text-sm font-medium">
-                                {t("products.variantImageOptional")}
-                              </Label>
-                              <div className="mt-2">
-                                {variant.image ? (
-                                  <div className="flex items-center gap-3">
-                                    <img
-                                      src={variant.image}
-                                      alt={variant.name}
-                                      className="w-16 h-16 object-cover rounded border"
-                                    />
-                                    <Button
-                                      type="button"
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        updateVariant(index, "image", "")
-                                      }
-                                    >
-                                      {t("products.removeImage")}
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                          try {
-                                            const imageUrl =
-                                              await uploadImage(file);
-                                            updateVariant(
-                                              index,
-                                              "image",
-                                              imageUrl,
-                                            );
-                                          } catch (error) {
-                                            console.error(
-                                              "Failed to upload variant image:",
-                                              error,
-                                            );
-                                          }
-                                        }
-                                      }}
-                                      className="hidden"
-                                      id={`variant-image-${index}`}
-                                    />
-                                    <label
-                                      htmlFor={`variant-image-${index}`}
-                                      className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-600 hover:text-gray-800"
-                                    >
-                                      <Plus className="w-6 h-6 mb-1" />
-                                      {t("products.uploadImage")}
-                                    </label>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </Card>
-                      ))}
-
-                      {formData.variants.length === 0 && (
-                        <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-                          <Package className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                          <p>{t("products.variants")}</p>
-                          <p className="text-sm">{t("products.addVariant")}</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg mt-4">
-                      <span className="font-medium">
-                        {t("products.stock")}:
-                      </span>
-                      <span className="text-xl font-bold text-dashboard-primary">
-                        {getTotalStock()}
-                      </span>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-lg font-bold text-primary">
+                          {product.price.toFixed(2)} BD
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {translateCategory(
+                            categories.find((c) => c.id === product.category)
+                          )}
+                        </span>
+                      </div>
+                      
+                      <div className="flex gap-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openDialog(product)}
+                          className="p-2 transform transition-all hover:scale-110"
+                          disabled={savingProductId === product.id}
+                        >
+                          {savingProductId === product.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Edit className="w-4 h-4" />
+                          )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="p-2 text-destructive hover:text-destructive hover:bg-destructive/10 transform transition-all hover:scale-110"
+                          onClick={() => handleDeleteProduct(product.id)}
+                          disabled={deletingProductId === product.id}
+                        >
+                          {deletingProductId === product.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </TabsContent>
-              </Tabs>
-
-              <DialogFooter className="mt-6">
-                <Button type="button" variant="outline" onClick={closeDialog}>
-                  {t("products.cancel")}
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-dashboard-primary hover:bg-dashboard-primary-light"
-                >
-                  {editingProduct ? t("common.save") : t("products.addProduct")}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder={t("products.search")}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 w-full sm:w-72 bg-background"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => {
-          const category = getCategoryById(product.category_id || "");
-          const stockStatus = getStockStatus(product.total_stock || 0);
-
-          return (
-            <Card
-              key={product.id}
-              className="overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
-            >
-              <CardHeader className="p-0 relative">
-                <div className="aspect-square w-full bg-secondary">
-                  {product.images && product.images.length > 0 ? (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Package className="w-16 h-16 text-muted-foreground" />
-                    </div>
-                  )}
-                </div>
-                <div className="absolute top-3 right-3 flex items-center gap-2">
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="w-8 h-8 bg-background/80 backdrop-blur-sm hover:bg-background"
-                    onClick={() => openDialog(product)}
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="w-8 h-8 bg-background/80 backdrop-blur-sm hover:bg-background text-destructive hover:text-destructive"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 flex-grow flex flex-col">
-                <div className="flex-grow">
-                  {category && (
-                    <Badge variant="secondary" className="mb-2">
-                      {translateCategory(category.name)}
-                    </Badge>
-                  )}
-                  <h3 className="text-lg font-semibold text-foreground truncate">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground h-10 overflow-hidden">
-                    {product.description}
-                  </p>
-                </div>
-                <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                  <span className="text-xl font-bold text-primary">
-                    {product.price.toFixed(2)} BD
-                  </span>
-                  <Badge className={`${stockStatus.color} px-2 py-1`}>
-                    {product.total_stock} {stockStatus.text}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
       {filteredProducts.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
-          <Package className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-xl font-semibold">
-            {t("empty.noProductsFound")}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center py-12"
+        >
+          <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-foreground mb-2">
+            {searchTerm || selectedCategory !== "all"
+              ? t("empty.noProductsFound")
+              : t("empty.noProducts")}
           </h3>
-          <p className="mt-2">
-            {searchTerm ? t("empty.adjustSearch") : t("empty.addFirstProduct")}
+          <p className="text-muted-foreground mb-4">
+            {searchTerm || selectedCategory !== "all"
+              ? t("empty.adjustSearch")
+              : t("empty.addFirstProduct")}
           </p>
-        </div>
+          <Button onClick={() => openDialog()}>
+            <Plus className="w-4 h-4 mr-2" />
+            {t("empty.createProduct")}
+          </Button>
+        </motion.div>
       )}
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[95vh] overflow-y-auto rounded-lg sm:rounded-md bg-white border border-gray-200">
+          <DialogHeader>
+            <DialogTitle>
+              {editingProduct ? t("products.editProduct") : t("products.addProduct")}
+            </DialogTitle>
+            <DialogDescription>
+              {editingProduct ? t("products.editProduct") : t("products.addProduct")}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-6 py-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">{t("products.productName")}</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    placeholder={t("products.productName")}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nameAr">{t("products.productNameAr")}</Label>
+                  <Input
+                    id="nameAr"
+                    value={formData.nameAr}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, nameAr: e.target.value }))
+                    }
+                    placeholder={t("products.productNameAr")}
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="description">{t("products.description")}</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    placeholder={t("products.description")}
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="descriptionAr">{t("products.descriptionAr")}</Label>
+                  <Textarea
+                    id="descriptionAr"
+                    value={formData.descriptionAr}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        descriptionAr: e.target.value,
+                      }))
+                    }
+                    placeholder={t("products.descriptionAr")}
+                    dir="rtl"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="price">{t("products.price")}</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.price}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, price: e.target.value }))
+                    }
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">{t("products.category")}</Label>
+                  <Select
+                    value={formData.category}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, category: value }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("products.selectCategory")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {translateCategory(category)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>{t("products.images")}</Label>
+                <ImageUpload
+                  images={formData.images}
+                  onImagesChange={(images) =>
+                    setFormData((prev) => ({ ...prev, images }))
+                  }
+                  maxImages={5}
+                />
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="isVisible"
+                    checked={formData.isVisible}
+                    onCheckedChange={(checked) =>
+                      setFormData((prev) => ({ ...prev, isVisible: checked }))
+                    }
+                  />
+                  <Label htmlFor="isVisible" className="cursor-pointer">
+                    {t("products.visible")}
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="featured"
+                    checked={formData.featured}
+                    onCheckedChange={(checked) =>
+                      setFormData((prev) => ({ ...prev, featured: checked }))
+                    }
+                  />
+                  <Label htmlFor="featured" className="cursor-pointer">
+                    {t("products.featured")}
+                  </Label>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-base font-medium">
+                    {t("products.variants")}
+                  </Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddVariant}
+                    className="transform transition-all hover:scale-105"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    {t("products.addVariant")}
+                  </Button>
+                </div>
+
+                {formData.variants.map((variant, index) => (
+                  <motion.div
+                    key={variant.id}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="p-4 border rounded-lg space-y-3 bg-muted/50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-medium">
+                        {t("products.variant")} {index + 1}
+                      </h4>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveVariant(index)}
+                        className="text-destructive hover:text-destructive transform transition-all hover:scale-110"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">
+                          {t("products.variantName")}
+                        </Label>
+                        <Input
+                          value={variant.name}
+                          onChange={(e) =>
+                            handleUpdateVariant(index, "name", e.target.value)
+                          }
+                          placeholder={t("products.variantName")}
+                          size="sm"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">
+                          {t("products.variantNameAr")}
+                        </Label>
+                        <Input
+                          value={variant.nameAr || ""}
+                          onChange={(e) =>
+                            handleUpdateVariant(index, "nameAr", e.target.value)
+                          }
+                          placeholder={t("products.variantNameAr")}
+                          dir="rtl"
+                          size="sm"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">{t("products.price")}</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={variant.price}
+                          onChange={(e) =>
+                            handleUpdateVariant(
+                              index,
+                              "price",
+                              parseFloat(e.target.value) || 0
+                            )
+                          }
+                          placeholder="0.00"
+                          size="sm"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">{t("products.stock")}</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={variant.stock}
+                          onChange={(e) =>
+                            handleUpdateVariant(
+                              index,
+                              "stock",
+                              parseInt(e.target.value) || 0
+                            )
+                          }
+                          placeholder="0"
+                          size="sm"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={closeDialog}>
+                {t("common.cancel")}
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={savingProductId !== null}
+                className="transform transition-all hover:scale-105"
+              >
+                {savingProductId ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    {t("common.saving")}
+                  </>
+                ) : (
+                  t("common.save")
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

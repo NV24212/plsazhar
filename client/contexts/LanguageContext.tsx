@@ -13,7 +13,7 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   isRTL: boolean;
   t: (key: string) => string;
-  translateCategory: (categoryName: string) => string;
+  translateCategory: (category: any) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -196,6 +196,9 @@ const translations = {
     "common.next": "Next",
     "common.success": "Success",
     "common.added": "Added",
+    "common.saving": "Saving...",
+    "common.create": "Create",
+    "common.update": "Update",
 
     // Empty states
     "empty.noProductsFound": "No products found",
@@ -225,6 +228,78 @@ const translations = {
     "message.customerSaveError": "Failed to save customer. Please try again.",
     "message.productSaveError": "Failed to save product. Please try again.",
     "message.uploadError": "Failed to upload images. Please try again.",
+
+    // Categories
+    "categories.title": "Categories",
+    "categories.addNew": "Add Category",
+    "categories.addCategory": "Add Category",
+    "categories.editCategory": "Edit Category",
+    "categories.categoryName": "Category Name",
+    "categories.categoryNameAr": "Category Name (Arabic)",
+    "categories.searchPlaceholder": "Search categories...",
+    "categories.products": "products",
+    "categories.englishName": "English Name",
+    "categories.arabicName": "Arabic Name",
+    "categories.delete": "Delete Category",
+    "categories.deleteTitle": "Delete Category",
+    "categories.deleteMessage": "Are you sure you want to delete this category?",
+    "categories.cannotDeleteTitle": "Cannot Delete Category",
+    "categories.cannotDeleteMessage": "This category is being used by {count} products and cannot be deleted.",
+    "categories.addSuccess": "Category added successfully",
+    "categories.updateSuccess": "Category updated successfully",
+    "categories.deleteSuccess": "Category deleted successfully",
+    "categories.nameRequired": "Category name is required",
+
+    // Products
+    "products.title": "Products",
+    "products.addNew": "Add Product",
+    "products.addProduct": "Add Product",
+    "products.editProduct": "Edit Product",
+    "products.productName": "Product Name",
+    "products.productNameAr": "Product Name (Arabic)",
+    "products.description": "Description",
+    "products.descriptionAr": "Description (Arabic)",
+    "products.price": "Price",
+    "products.category": "Category",
+    "products.selectCategory": "Select Category",
+    "products.images": "Images",
+    "products.visible": "Visible",
+    "products.featured": "Featured",
+    "products.hidden": "Hidden",
+    "products.variants": "Variants",
+    "products.addVariant": "Add Variant",
+    "products.variant": "Variant",
+    "products.variantName": "Variant Name",
+    "products.variantNameAr": "Variant Name (Arabic)",
+    "products.stock": "Stock",
+    "products.searchPlaceholder": "Search products...",
+    "products.allCategories": "All Categories",
+    "products.delete": "Delete Product",
+
+    // Customers
+    "customers.title": "Customers",
+    "customers.addNew": "Add Customer",
+    "customers.addCustomer": "Add Customer",
+    "customers.editCustomer": "Edit Customer",
+    "customers.customerName": "Customer Name",
+    "customers.customerPhone": "Phone Number",
+    "customers.customerAddress": "Address",
+    "customers.customerHome": "Home",
+    "customers.customerRoad": "Road",
+    "customers.customerBlock": "Block",
+    "customers.customerTown": "Town",
+    "customers.searchPlaceholder": "Search customers...",
+    "customers.delete": "Delete Customer",
+
+    // Empty states
+    "empty.noProducts": "No products yet",
+    "empty.noCustomers": "No customers yet",
+    "empty.noCategories": "No categories yet",
+    "empty.noCategoriesFound": "No categories found",
+    "empty.createProduct": "Create Product",
+    "empty.createCustomer": "Create Customer",
+    "empty.createCategory": "Create Category",
+    "empty.addFirstCategory": "Start by adding your first category",
 
     // Login
     "login.title": "Admin Login",
@@ -596,7 +671,7 @@ const translations = {
 
     // Products
     "products.title": "المنتجات",
-    "products.subtitle": "إدارة مخزون المنتجات",
+    "products.subtitle": "إدا��ة مخزون المنتجات",
     "products.addNew": "إضافة منتج جديد",
     "products.search": "البحث في المنتجات...",
     "products.name": "الاسم",
@@ -613,7 +688,7 @@ const translations = {
     "products.productPrice": "سعر المنتج",
     "products.productDescription": "وصف المنتج",
     "products.productImages": "صور المنتج",
-    "products.addVariant": "إضافة نوع",
+    "products.addVariant": "إض��فة نوع",
     "products.variantName": "اسم النوع",
     "products.variantStock": "مخزون النوع",
     "products.save": "حفظ",
@@ -628,7 +703,7 @@ const translations = {
     // Added keys (AR)
     "products.category": "التصنيف",
     "products.selectCategory": "اختر التصنيف",
-    "products.variantImageOptional": "صورة النوع (اختياري)",
+    "products.variantImageOptional": "صورة النو�� (اختياري)",
     "products.removeImage": "إزالة الصورة",
     "products.uploadImage": "رفع صورة",
 
@@ -718,7 +793,7 @@ const translations = {
     "revenue.ordersCount": "عدد الطلبات",
     "revenue.avgOrderValue": "متوسط قيمة الطلب",
     "revenue.monthlyTrend": "اتجاه الإيرادات الشهرية",
-    "revenue.dailyRevenue": "الإيرادات اليومية (هذا الشهر)",
+    "revenue.dailyRevenue": "الإيرادات ا��يومية (هذا الشهر)",
     "revenue.topProducts": "أفضل المنتجات من حيث الإيرادات",
     "revenue.deliveryAnalysis": "تحليل وع التسليم",
     "revenue.revenueByStatus": "الإيرادات حسب حالة الطلب",
@@ -747,6 +822,9 @@ const translations = {
     "common.next": "التالي",
     "common.success": "نجح",
     "common.added": "تمت الإضافة",
+    "common.saving": "جارٍ الحفظ...",
+    "common.create": "إنشاء",
+    "common.update": "تحديث",
 
     // Empty states
     "empty.noProductsFound": "لا توجد منتجات",
@@ -761,7 +839,7 @@ const translations = {
     "empty.createOrder": "إنشاء طلب",
 
     // Messages
-    "message.deleteConfirm": "هل أنت متأكد من حذف هذا العنصر؟",
+    "message.deleteConfirm": "هل أ��ت متأكد من حذف هذا العنصر؟",
     "message.productAdded": "تم إضافة المنتج بنجاح",
     "message.productUpdated": "تم تحديث المنتج بنجاح",
     "message.productDeleted": "تم حذف المنتج بنجاح",
@@ -777,6 +855,78 @@ const translations = {
     "message.customerSaveError": "فشل في حفظ العميل. يرجى المحاولة مرة أخرى.",
     "message.productSaveError": "فشل في حفظ المنتج. يرجى المحاولة مرة أخرى.",
     "message.uploadError": "فشل في رفع الصور. يرجى المحاولة مرة أخرى.",
+
+    // Categories
+    "categories.title": "الفئات",
+    "categories.addNew": "إضافة فئة",
+    "categories.addCategory": "إضافة فئة",
+    "categories.editCategory": "تعديل الفئة",
+    "categories.categoryName": "اسم الفئة",
+    "categories.categoryNameAr": "اسم الفئة (عربي)",
+    "categories.searchPlaceholder": "البحث في الفئات...",
+    "categories.products": "منتجات",
+    "categories.englishName": "الاسم الإنجليزي",
+    "categories.arabicName": "الاسم العربي",
+    "categories.delete": "حذف الفئة",
+    "categories.deleteTitle": "حذف الفئة",
+    "categories.deleteMessage": "هل أنت متأكد من حذف هذه الفئة؟",
+    "categories.cannotDeleteTitle": "لا يمكن حذف الفئة",
+    "categories.cannotDeleteMessage": "هذه الفئة مستخدمة بواسطة {count} منتجات ولا يمكن حذفها.",
+    "categories.addSuccess": "تم إضافة الفئة بنجاح",
+    "categories.updateSuccess": "تم تحديث الفئة بنجاح",
+    "categories.deleteSuccess": "تم حذف الفئة بنجاح",
+    "categories.nameRequired": "اسم الفئة مطلوب",
+
+    // Products
+    "products.title": "المنتجات",
+    "products.addNew": "إضافة منتج",
+    "products.addProduct": "إضافة منتج",
+    "products.editProduct": "تعديل المنتج",
+    "products.productName": "اسم المنتج",
+    "products.productNameAr": "اسم المنتج (عربي)",
+    "products.description": "الوصف",
+    "products.descriptionAr": "الوصف (عربي)",
+    "products.price": "السعر",
+    "products.category": "الفئة",
+    "products.selectCategory": "اختر الفئة",
+    "products.images": "الصور",
+    "products.visible": "مرئي",
+    "products.featured": "مميز",
+    "products.hidden": "مخفي",
+    "products.variants": "المتغيرات",
+    "products.addVariant": "إضافة متغير",
+    "products.variant": "متغير",
+    "products.variantName": "��سم المتغير",
+    "products.variantNameAr": "اسم المتغير (عربي)",
+    "products.stock": "المخزون",
+    "products.searchPlaceholder": "البحث في المنتجات...",
+    "products.allCategories": "جميع الفئات",
+    "products.delete": "حذف المنتج",
+
+    // Customers
+    "customers.title": "العملاء",
+    "customers.addNew": "إضافة عميل",
+    "customers.addCustomer": "إضافة عميل",
+    "customers.editCustomer": "تعديل العميل",
+    "customers.customerName": "اسم العميل",
+    "customers.customerPhone": "رقم الهاتف",
+    "customers.customerAddress": "العنوان",
+    "customers.customerHome": "المنزل",
+    "customers.customerRoad": "الطريق",
+    "customers.customerBlock": "المجمع",
+    "customers.customerTown": "المدينة",
+    "customers.searchPlaceholder": "البحث في العملاء...",
+    "customers.delete": "حذف العميل",
+
+    // Empty states
+    "empty.noProducts": "لا توجد منتجات بعد",
+    "empty.noCustomers": "لا يوجد عملاء بعد",
+    "empty.noCategories": "لا توجد فئات بعد",
+    "empty.noCategoriesFound": "لا توجد ف��ات",
+    "empty.createProduct": "إنشاء منتج",
+    "empty.createCustomer": "إنشاء عميل",
+    "empty.createCategory": "إنشاء فئة",
+    "empty.addFirstCategory": "ابدأ بإضافة أول فئة لك",
 
     // Login
     "login.title": "تسجيل دخول الإدارة",
@@ -827,12 +977,12 @@ const translations = {
     "checkout.placeOrder": "إرسال الطلب",
     "checkout.orderSuccess": "تم أكيد الطلب بنجاح!",
     "checkout.thankYou":
-      "شكراً لك على طلبك! لقد استلمنا طلبك وسنقوم بمعالجته قريباً.",
+      "شكراً لك على طلبك! ��قد استلمنا طلبك وسنقوم بمعالجته قريباً.",
     "checkout.orderNumber": "رقم الطلب",
     "checkout.backToStore": "العودة للمتجر",
     "checkout.noCreditCard": "لا حاجة لبطاقة ائتمان - الدفع عند التسليم فقط!",
     "checkout.paymentMethod": "طريقة الدفع",
-    "checkout.cashOnDelivery": "الدفع عند التسليم",
+    "checkout.cashOnDelivery": "الدفع ��ند التسليم",
     "checkout.free": "مجاني",
     "checkout.deliveryDescription": "سنقوم بالتوصيل إلى عنوانك",
     "checkout.pickupDescription": "الاستلام من متجرنا",
@@ -869,7 +1019,7 @@ const translations = {
     // Category dialogs
     "categories.deleteTitle": "حذف التصنيف",
     "categories.deleteMessage":
-      "هل أنت متأكد من حذف هذا التصنيف؟ هذا الإجراء لا يمكن التراجع عنه.",
+      "هل أنت متأكد من حذف هذا التصنيف؟ هذا الإجراء لا يم��ن التراجع عنه.",
     "categories.deleteSuccess": "تم حذف التصنيف بنجاح.",
     "categories.cannotDeleteTitle": "لا يمكن حذف التصنيف",
     "categories.cannotDeleteMessage":
@@ -890,7 +1040,7 @@ const translations = {
     "analytics.inStock": "متوفر",
     "analytics.active": "نشط",
     "analytics.activeSessions": "نشط الآن",
-    "analytics.dailyPerformance": "الأداء اليومي",
+    "analytics.dailyPerformance": "الأداء ال��ومي",
     "analytics.dailyTrends": "الاتجاهات اليومية",
     "analytics.deviceBreakdown": "توزيع الأجهزة",
     "analytics.topPages": "أهم الصفحات",
@@ -910,12 +1060,12 @@ const translations = {
     "analytics.dataDescription":
       "تُظهر هذه اللوحة بيانات حقيقية من استخدام موقعك. البيانات محدثة كل 30 ثانية.",
     "analytics.noDataAvailable":
-      "لا توجد بيانات تحليلات متاحة حالياً. ابدأ باستخدام الموقع لجمع البيانات.",
+      "لا توجد بيانات تحليلات متاحة حالياً. ابدأ باستخدام الموقع لجمع البي��نات.",
     "analytics.loadingData": "جارٍ تحميل بيانات التحليلات...",
     "analytics.tryAgain": "إعادة المحاولة",
     "analytics.noPageData": "لا توجد بيانات صفحات متاحة",
     "analytics.noDeviceData": "لا توجد بيانات أجهزة متاحة",
-    "analytics.noErrorsGood": "لا توجد أخطاء - الموقع يعمل بشكل جيد!",
+    "analytics.noErrorsGood": "لا توجد أخطاء - الموقع يعمل ب��كل جيد!",
     "analytics.desktop": "الكمبيوتر المكتبي",
     "analytics.mobile": "الهاتف المحمول",
     "analytics.tablet": "الجهاز اللوحي",
@@ -926,11 +1076,11 @@ const translations = {
     "common.unknownProduct": "منتج غير معروف",
     "common.product": "منتج",
     "common.default": "افتراضي",
-    "errors.orderFailed": "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى.",
+    "errors.orderFailed": "فشل في إرسال الطلب. يرجى المحاولة مر�� أخرى.",
     "dashboard.noOrdersYet": "لا توجد طلبات بعد. أنشئ أول طلب لك لرؤيته هنا!",
     "notFound.title": "404",
     "notFound.message": "عذراً! الصفحة غير موجودة",
-    "notFound.returnHome": "العودة للصفحة الرئيسية",
+    "notFound.returnHome": "العودة للصفحة ا��رئيسية",
 
     // Settings
     "settings.title": "الإعدادات",
@@ -951,7 +1101,7 @@ const translations = {
     "settings.all": "الكل",
     "settings.error": "خطأ",
     "settings.warning": "تحذير",
-    "settings.info": "معلومات",
+    "settings.info": "معل��مات",
     "settings.debug": "تصحيح",
     "settings.system": "النظام",
     "settings.user": "المستخدم",
@@ -965,9 +1115,9 @@ const translations = {
     "settings.save": "حفظ الإعدادات",
     "settings.reset": "إعادة تعيين",
     "settings.saveSuccess": "تم حفظ الإعدادات بنجاح!",
-    "settings.saveError": "فشل في حفظ الإعدادات. يرجى المناولة مرة أخرى.",
+    "settings.saveError": "فشل في حف�� الإعدادات. يرجى المناولة مرة أخرى.",
     "settings.resetConfirm":
-      "هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافتراضية؟",
+      "هل أنت متأكد من إعادة تعيين جميع الإعدادات للقيم الافت��اضية؟",
     "settings.unsavedChanges": "لديك تغييرات غير محفوظة. لا تنس الفظ!",
     "settings.advancedSettings": "الإعدادات المتقدمة",
     "settings.performanceMode": "وضع الأداء",
@@ -1012,7 +1162,7 @@ const translations = {
     "settings.uiBehavior": "سلوك الواجهة",
     "settings.adminSettings": "إعدادات الإدارة",
     "settings.adminInformation": "معلومات الإدارة",
-    "settings.adminPassword": "كلمة مرور الإدارة",
+    "settings.adminPassword": "كل��ة مرور الإدارة",
     "settings.adminEmail": "بريد الإدارة الإلكتروني",
     "settings.changePassword": "تغيير كلمة المرور",
     "settings.currentPassword": "كلمة المرور الحالية",
@@ -1038,7 +1188,7 @@ const translations = {
     "settings.enableNotifications": "الإشعارات",
     "settings.enableAnalytics": "التحليلات",
     "settings.enableAutoBackup": "النسخ الاحتياطي التلقائي",
-    "settings.enableDebugMode": "وضع التصحيح",
+    "settings.enableDebugMode": "وض�� التصحيح",
     "settings.dialogScrollDesc": "تفعيل التمرير في حوارات الطلبات",
     "settings.autoScrollDesc": "التمرير التلقائي إلى قسم الملخص",
     "settings.adminPasswordHint": "قم بتغيير لمة المرور للوصول إلى لوحة التحكم",
@@ -1085,7 +1235,7 @@ const translations = {
     "settings.pickupMessages": "رسائل الاستلام",
     "settings.pickupMessageEn": "رسالة الاستلام (إنجليزي)",
     "settings.pickupMessageAr": "رسالة الاستلام (عربي)",
-    "settings.deliveryMessages": "رسائل التوصيل",
+    "settings.deliveryMessages": "رسائ�� التوصيل",
     "settings.deliveryMessageEn": "رسالة التوصيل (إنجليزي)",
     "settings.deliveryMessageAr": "رسالة التوصيل (عربي)",
 
@@ -1097,7 +1247,7 @@ const translations = {
     "settings.orderInstructions": "تعليمات الطلب",
     "settings.note": "ملاحظة",
     "settings.orderMessageNote":
-      "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجرك وتقديم المعلومات ذات الصلة.",
+      "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجر�� وتقديم المعلومات ذات الصلة.",
 
     // Currency and formatting
     "common.currency": "د.ب",
@@ -1116,7 +1266,7 @@ const translations = {
     "orderSuccess.headlineAr": "تم تأكيد الطلب!",
     "orderSuccess.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "orderSuccess.prepareOrderAr": "سنقوم بتجهيز طبك خلال 2-4 ساعات",
-    "orderSuccess.contactPhone": "سيتم التواصل معك عبر الهاتف للتأكيد",
+    "orderSuccess.contactPhone": "سيتم التواصل ��عك عبر الهاتف للتأكيد",
     "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأكيد",
     "orderSuccess.deliveryTime": "التوصيل خلال 1-3 أيام عمل",
     "orderSuccess.deliveryTimeAr": "التوصيل خلال 1-3 أيام عمل",
@@ -1160,12 +1310,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   // Helper function to translate category names
-  const translateCategory = (categoryName: string): string => {
-    // Convert category name to translation key format
-    const key = `category.${categoryName.toLowerCase().replace(/\s+/g, "")}`;
-    const translated = t(key);
-    // If translation key doesn't exist, fall back to original name
-    return translated === key ? categoryName : translated;
+  const translateCategory = (category: any): string => {
+    // Handle null, undefined, or empty values
+    if (!category) return "";
+
+    // If it's a Category object with name and nameAr
+    if (typeof category === 'object' && category.name) {
+      return language === 'ar' && category.nameAr ? category.nameAr : category.name;
+    }
+
+    // If it's a string (legacy support)
+    if (typeof category === 'string') {
+      // Convert category name to translation key format
+      const key = `category.${category.toLowerCase().replace(/\s+/g, "")}`;
+      const translated = t(key);
+      // If translation key doesn't exist, fall back to original name
+      return translated === key ? category : translated;
+    }
+
+    return String(category);
   };
 
   const isRTL = language === "ar";
