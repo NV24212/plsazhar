@@ -165,6 +165,8 @@ const defaultSettings: StoreSettings = {
   orderInstructionsEn:
     "For any changes or questions about your order, please contact us.",
   orderInstructionsAr: "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا.",
+  preOrderConfirmationMessageEn: "Are you sure you want to place the order?",
+  preOrderConfirmationMessageAr: "هل أنت متأكد من إرسال الطلب؟",
   businessHours: {
     monday: { open: "09:00", close: "18:00", isOpen: true },
     tuesday: { open: "09:00", close: "18:00", isOpen: true },
@@ -190,7 +192,7 @@ const defaultSettings: StoreSettings = {
   deliveryConcerns: 1.5,
   pickupOrderConfig: 0,
   successHeadlineEn: "Order Confirmed!",
-  successHeadlineAr: "تم تأكيد الطلب!",
+  successHeadlineAr: "تم تأك��د الطلب!",
   successSubtextEn: "We'll share updates by phone as your order progresses.",
   successSubtextAr: "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك.",
   displayOrderNumber: true,
@@ -253,11 +255,14 @@ export default function Settings() {
   }, [contextSettings]);
 
   useEffect(() => {
-    // Load admin email from context
-    if (adminInfo?.email && formState) {
-      setFormState((prev) => ({ ...prev, adminEmail: adminInfo.email }));
-    }
-  }, [adminInfo, formState]);
+    if (!adminInfo?.email) return;
+    // Update adminEmail only if changed to avoid render loops
+    setFormState((prev) => {
+      if (!prev) return prev;
+      if (prev.adminEmail === adminInfo.email) return prev;
+      return { ...prev, adminEmail: adminInfo.email };
+    });
+  }, [adminInfo?.email]);
 
   const handleInputChange = (field: string, value: any) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -392,6 +397,10 @@ export default function Settings() {
       }
 
       setHasChanges(false);
+      // Persist to localStorage for components that read from it (e.g., checkout dialog)
+      try {
+        localStorage.setItem("storeSettings", JSON.stringify(formState));
+      } catch {}
       showAlert({
         title: t("settings.saveSuccess"),
         message: t("settings.saveSuccess"),
@@ -954,6 +963,48 @@ export default function Settings() {
                       className="auto-text"
                       rows={4}
                       placeholder="أدخل تعليمات التوصيل بالع��بية..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Order Confirmation Message */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    {language === "ar" ? "رسالة تأكيد الطلب" : "Order Confirmation Message"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="preOrderConfirmationMessageEn" className="auto-text">
+                      {language === "ar" ? "رسالة التأكيد (إنجليزي)" : "Confirmation (English)"}
+                    </Label>
+                    <Textarea
+                      id="preOrderConfirmationMessageEn"
+                      value={formState.preOrderConfirmationMessageEn || ""}
+                      onChange={(e) =>
+                        handleInputChange("preOrderConfirmationMessageEn", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={3}
+                      placeholder="Are you sure you want to place the order?"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="preOrderConfirmationMessageAr" className="auto-text">
+                      {language === "ar" ? "رسالة التأكيد (عربي)" : "Confirmation (Arabic)"}
+                    </Label>
+                    <Textarea
+                      id="preOrderConfirmationMessageAr"
+                      value={formState.preOrderConfirmationMessageAr || ""}
+                      onChange={(e) =>
+                        handleInputChange("preOrderConfirmationMessageAr", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={3}
+                      placeholder="هل أنت متأكد من إرسال الطلب؟"
                     />
                   </div>
                 </CardContent>

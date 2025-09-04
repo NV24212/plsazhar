@@ -39,14 +39,17 @@ const getNavigation = (t: (key: string) => string) => [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = React.useRef<HTMLDivElement | null>(null);
+  const toggleRef = React.useRef<HTMLButtonElement | null>(null);
   const { logout } = useAuth();
   const { language, setLanguage, isRTL, t } = useLanguage();
   const location = useLocation();
 
-  // Force sidebar to close when language changes to prevent RTL/LTR positioning issues
+  // Force sidebar to close when language or route changes
   React.useEffect(() => {
     setSidebarOpen(false);
-  }, [isRTL]);
+  }, [isRTL, location.pathname]);
+
 
   const navigation = getNavigation(t);
 
@@ -56,13 +59,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div
-      className={`flex h-screen bg-gray-50 text-gray-900 ${
-        isRTL ? "rtl" : "ltr"
-      }`}
+      className={`flex h-screen bg-gray-50 text-gray-900 ${isRTL ? "rtl" : "ltr"}`}
     >
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -70,10 +71,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <div
         key={`sidebar-${language}`}
+        ref={sidebarRef}
         className={cn(
           "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           "border-gray-200",
-          isRTL ? "right-0 border-l" : "left-0 border-r",
+          isRTL ? "admin-sidebar-rtl border-l" : "admin-sidebar-ltr border-r",
+          sidebarOpen ? "pointer-events-auto" : "pointer-events-none",
           {
             "translate-x-0": sidebarOpen,
             "translate-x-full": isRTL && !sidebarOpen,
@@ -142,8 +145,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-6">
             <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+              ref={toggleRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSidebarOpen((v) => !v);
+              }}
+              className="relative z-[60] text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+              aria-label="Toggle sidebar"
+              type="button"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -154,7 +163,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6 bg-gray-50">{children}</main>
+        <main className="flex-1 overflow-auto p-6 bg-gray-50">
+          {children}
+        </main>
 
         <Footer />
       </div>

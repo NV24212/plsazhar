@@ -30,21 +30,28 @@ async function apiCall<T>(
       let errorMessage = `API Error: ${response.status}`;
 
       try {
-        // Clone the response to avoid "body stream already read" error
-        const responseClone = response.clone();
-        const errorData = await responseClone.json();
+        // Read raw text once from the original response (we won't use it afterward)
+        const raw = await response.text();
+        let errorData: any = null;
+        try {
+          errorData = raw ? JSON.parse(raw) : null;
+        } catch {
+          errorData = null;
+        }
 
         console.error("API Error details:", {
           url: `${API_BASE}${url}`,
           status: response.status,
           statusText: response.statusText,
-          errorData,
+          errorData: errorData ?? raw,
         });
 
         if (errorData?.error) {
-          errorMessage = errorData.error;
+          errorMessage = `${errorMessage} ${errorData.error}`;
         } else if (errorData?.message) {
-          errorMessage = errorData.message;
+          errorMessage = `${errorMessage} ${errorData.message}`;
+        } else if (typeof raw === "string" && raw.trim().length > 0) {
+          errorMessage = `${errorMessage} ${raw.trim()}`;
         } else {
           errorMessage = `${errorMessage} ${response.statusText}`;
         }
@@ -62,9 +69,7 @@ async function apiCall<T>(
           }
         }
       } catch (parseError) {
-        // If response isn't JSON, use status text
         console.error("Failed to parse error response:", parseError);
-        errorMessage = `${errorMessage} ${response.statusText || "Unknown error"}`;
       }
 
       throw new Error(errorMessage);
