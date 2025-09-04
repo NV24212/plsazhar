@@ -161,7 +161,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex items-center justify-between h-16 px-6">
             <button
               ref={toggleRef}
-              onClick={() => setSidebarOpen((v) => !v)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSidebarOpen((v) => !v);
+              }}
               className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
               aria-label="Toggle sidebar"
             >
