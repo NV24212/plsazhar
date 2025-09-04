@@ -28,7 +28,6 @@ import {
 } from "../components/ui/dropdown-menu";
 import AddToCartDialog from "../components/AddToCartDialog";
 import CartSidebar from "../components/CartSidebar";
-import Footer from "../components/Footer";
 
 interface Product {
   id: string;
@@ -388,9 +387,6 @@ export default function Store() {
 
       {/* Cart Sidebar */}
       <CartSidebar open={isCartOpen} onClose={() => setIsCartOpen(false)} />
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
