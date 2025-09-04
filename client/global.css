@@ -435,4 +435,14 @@
   html[dir="ltr"] .auto-text {
     text-align: left !important;
   }
+
+  /* Force-position classes for admin sidebar to avoid global RTL overrides */
+  .admin-sidebar-rtl {
+    right: 0 !important;
+    left: auto !important;
+  }
+  .admin-sidebar-ltr {
+    left: 0 !important;
+    right: auto !important;
+  }
 }
