@@ -54,29 +54,32 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     setLanguage(language === "en" ? "ar" : "en");
   };
 
-  const handleCloseSidebar = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Close button clicked, current sidebarOpen:", sidebarOpen);
-    setSidebarOpen(false);
-  };
-
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-900">
+    <div
+      className={`flex h-screen bg-gray-50 text-gray-900 ${
+        isRTL ? "rtl" : "ltr"
+      }`}
+    >
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out border-r border-gray-200 right-0",
-          sidebarOpen ? "translate-x-0" : "translate-x-full",
+          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
+          "border-gray-200",
+          isRTL ? "right-0 border-l" : "left-0 border-r",
+          {
+            "translate-x-0": sidebarOpen,
+            "translate-x-full": isRTL && !sidebarOpen,
+            "-translate-x-full": !isRTL && !sidebarOpen,
+          },
         )}
-        data-sidebar-open={sidebarOpen}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
           <div className="flex items-center gap-3">
@@ -90,8 +93,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </h1>
           </div>
           <button
-            onClick={handleCloseSidebar}
+            onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+            aria-label="Close sidebar"
           >
             <X className="w-6 h-6" />
           </button>
