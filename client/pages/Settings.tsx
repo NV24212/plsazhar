@@ -190,7 +190,7 @@ const defaultSettings: StoreSettings = {
   deliveryConcerns: 1.5,
   pickupOrderConfig: 0,
   successHeadlineEn: "Order Confirmed!",
-  successHeadlineAr: "تم تأكيد الطلب!",
+  successHeadlineAr: "تم تأك��د الطلب!",
   successSubtextEn: "We'll share updates by phone as your order progresses.",
   successSubtextAr: "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك.",
   displayOrderNumber: true,
@@ -253,11 +253,14 @@ export default function Settings() {
   }, [contextSettings]);
 
   useEffect(() => {
-    // Load admin email from context
-    if (adminInfo?.email && formState) {
-      setFormState((prev) => ({ ...prev, adminEmail: adminInfo.email }));
-    }
-  }, [adminInfo, formState]);
+    if (!adminInfo?.email) return;
+    // Update adminEmail only if changed to avoid render loops
+    setFormState((prev) => {
+      if (!prev) return prev;
+      if (prev.adminEmail === adminInfo.email) return prev;
+      return { ...prev, adminEmail: adminInfo.email };
+    });
+  }, [adminInfo?.email]);
 
   const handleInputChange = (field: string, value: any) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
