@@ -967,6 +967,48 @@ export default function Settings() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Order Confirmation Message */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    {language === "ar" ? "رسالة تأكيد الطلب" : "Order Confirmation Message"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="preOrderConfirmationMessageEn" className="auto-text">
+                      {language === "ar" ? "رسالة التأكيد (إنجليزي)" : "Confirmation (English)"}
+                    </Label>
+                    <Textarea
+                      id="preOrderConfirmationMessageEn"
+                      value={formState.preOrderConfirmationMessageEn || ""}
+                      onChange={(e) =>
+                        handleInputChange("preOrderConfirmationMessageEn", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={3}
+                      placeholder="Are you sure you want to place the order?"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="preOrderConfirmationMessageAr" className="auto-text">
+                      {language === "ar" ? "رسالة التأكيد (عربي)" : "Confirmation (Arabic)"}
+                    </Label>
+                    <Textarea
+                      id="preOrderConfirmationMessageAr"
+                      value={formState.preOrderConfirmationMessageAr || ""}
+                      onChange={(e) =>
+                        handleInputChange("preOrderConfirmationMessageAr", e.target.value)
+                      }
+                      className="auto-text"
+                      rows={3}
+                      placeholder="هل أنت متأكد من إرسال الطلب؟"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
 
