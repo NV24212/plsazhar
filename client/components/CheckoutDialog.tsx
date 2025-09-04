@@ -33,34 +33,46 @@ import { motion, AnimatePresence } from "framer-motion";
 // Order Success Popup Component
 const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
   const { language } = useLanguage();
-  
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ zIndex: 9999 }}>
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        className="relative z-[2001] w-[90vw] max-w-md bg-white rounded-lg shadow-xl border border-gray-200 p-6"
+        initial={{ opacity: 0, scale: 0.8, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.8, y: 50 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative z-[10000] w-[90vw] max-w-md bg-white rounded-xl shadow-2xl border border-gray-200 p-6"
+        style={{ zIndex: 10000 }}
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-green-600" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 auto-text">{language === "ar" ? "تم استلام الطلب، شكراً لك!" : "Order received, thank you!"}</h2>
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600" />
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <p className="text-gray-700 auto-text leading-relaxed">
-            {orderMessages.successMessage}
+          <h2 className="text-2xl font-bold text-gray-900 auto-text mb-2">
+            {language === "ar" ? "تم استلام الطلب!" : "Order received!"}
+          </h2>
+          <p className="text-lg text-gray-600 auto-text mb-6">
+            {language === "ar" ? "شكراً لك!" : "Thank you!"}
           </p>
         </div>
+
+        <div className="bg-primary/10 rounded-lg p-4 mb-6">
+          <p className="text-gray-700 auto-text leading-relaxed">
+            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعالجته قريباً." : "Your order has been received successfully. We'll process it soon.")}
+          </p>
+        </div>
+
+        <Button
+          onClick={onClose}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
+        >
+          <span className="auto-text">
+            {language === "ar" ? "إغلاق" : "Close"}
+          </span>
+        </Button>
       </motion.div>
     </div>
   );
@@ -532,7 +544,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         };
       }
       return {
-        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم بتجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
+        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
         instructions: language === "ar" ? "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا." : "For any changes or questions about your order, please contact us.",
         headline: language === "ar" ? t("orderSuccess.headlineAr") : t("orderSuccess.headline"),
         subtext: language === "ar" ? "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك." : "We'll share updates by phone as your order progresses.",
@@ -581,14 +593,15 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const totalPrice = getTotalPrice();
 
   useEffect(() => {
-    if (open && !orderSuccess) {
+    if (open) {
       setStep(1);
       setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
       setDeliveryType("delivery");
       setDeliveryArea("sitra");
       setIsSubmitting(false);
+      setShowSuccessPopup(false);
     }
-  }, [open, orderSuccess]);
+  }, [open]);
 
   useEffect(() => {
     if (autoScrollToSummary && step === 3) {
@@ -684,9 +697,9 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
       } catch (error) {
         setOrderNumber(order.id.slice(-6));
       }
-      setOrderSuccess(true);
       clearCart();
-      // Show success popup immediately after setting orderSuccess
+      // Close main dialog and show popup
+      onClose();
       setShowSuccessPopup(true);
     } catch (error) {
       console.error("Error placing order:", error);
@@ -716,18 +729,22 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const handleSuccessPopupClose = () => {
     setShowSuccessPopup(false);
-    handleClose();
+    setStep(1);
+    setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
+    setDeliveryType("delivery");
+    setDeliveryArea("sitra");
+    setOrderSuccess(false);
+    setOrderNumber("");
+    setOrderItems([]);
+    setOrderTotalPrice(0);
   };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={orderSuccess ? onClose : handleClose}>
+      <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
           <AnimatePresence mode="wait">
-            {orderSuccess ? (
-              <SuccessView orderMessages={orderMessages} onClose={onClose} />
-            ) : (
-              <CheckoutForm
+            <CheckoutForm
                 step={step}
                 handleBack={handleBack}
                 handleNext={handleNext}
@@ -755,15 +772,14 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                 items={items}
                 enableDialogScroll={enableDialogScroll}
               />
-            )}
           </AnimatePresence>
         </DialogContent>
       </Dialog>
-      
-      <OrderSuccessPopup 
-        isOpen={showSuccessPopup} 
-        onClose={handleSuccessPopupClose} 
-        orderMessages={orderMessages} 
+
+      <OrderSuccessPopup
+        isOpen={showSuccessPopup}
+        onClose={handleSuccessPopupClose}
+        orderMessages={orderMessages}
       />
     </>
   );
