@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         key={`sidebar-${language}`}
         className={cn(
-          "fixed lg:static inset-y-0 z-50 w-64 bg-white shadow-xl lg:shadow-none transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           "border-gray-200",
           isRTL ? "right-0 border-l" : "left-0 border-r",
           {
@@ -77,7 +77,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             "translate-x-full": isRTL && !sidebarOpen,
             "-translate-x-full": !isRTL && !sidebarOpen,
           },
-          "lg:translate-x-0",
         )}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
@@ -137,12 +136,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </div>
 
-      <div className={cn("flex-1 flex flex-col min-w-0", isRTL ? "lg:mr-64" : "lg:ml-64")}>
+      <div className="flex-1 flex flex-col min-w-0">
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-6">
             <button
               onClick={() => setSidebarOpen((v) => !v)}
-              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100 lg:hidden"
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+              aria-label="Toggle sidebar"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -153,7 +153,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6 bg-gray-50">{children}</main>
+        <main
+          className="flex-1 overflow-auto p-6 bg-gray-50"
+          onClick={() => sidebarOpen && setSidebarOpen(false)}
+        >
+          {children}
+        </main>
 
         <Footer />
       </div>
