@@ -101,5 +101,18 @@
     "ip": "127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
     "timestamp": "2025-09-04T09:50:22.974Z"
+  },
+  {
+    "level": "info",
+    "category": "product",
+    "message": "New product added: fasdfa",
+    "details": {
+      "productName": "fasdfa",
+      "price": 231122.99,
+      "variants": 0
+    },
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+    "timestamp": "2025-09-04T10:05:03.729Z"
   }
 ]
