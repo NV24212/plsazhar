@@ -150,8 +150,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 e.stopPropagation();
                 setSidebarOpen((v) => !v);
               }}
-              className="text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
+              className="relative z-[60] text-gray-500 hover:text-gray-700 p-2 rounded-md hover:bg-gray-100"
               aria-label="Toggle sidebar"
+              type="button"
             >
               <Menu className="w-6 h-6" />
             </button>
