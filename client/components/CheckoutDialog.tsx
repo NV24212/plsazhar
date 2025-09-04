@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useData } from "../contexts/DataContext";
 import { useCart } from "../contexts/CartContext";
+import { useDialog } from "../contexts/DialogContext";
 import { createCustomer, createOrder } from "../services/api";
 import { formatPrice, formatPriceWithSymbol } from "@/lib/formatters";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -25,8 +26,57 @@ import {
   Clock,
   CheckCircle,
   Loader2,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Order Success Popup Component
+const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
+  const { language } = useLanguage();
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ zIndex: 9999 }}>
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm"></div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.8, y: 50 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative z-[10000] w-[90vw] max-w-md bg-white rounded-xl shadow-2xl border border-gray-200 p-6"
+        style={{ zIndex: 10000 }}
+      >
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 auto-text mb-2">
+            {language === "ar" ? "تم استلام الطلب!" : "Order received!"}
+          </h2>
+          <p className="text-lg text-gray-600 auto-text mb-6">
+            {language === "ar" ? "شكراً لك!" : "Thank you!"}
+          </p>
+        </div>
+
+        <div className="bg-primary/10 rounded-lg p-4 mb-6">
+          <p className="text-gray-700 auto-text leading-relaxed">
+            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعالجته قريباً." : "Your order has been received successfully. We'll process it soon.")}
+          </p>
+        </div>
+
+        <Button
+          onClick={onClose}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
+        >
+          <span className="auto-text">
+            {language === "ar" ? "إغلاق" : "Close"}
+          </span>
+        </Button>
+      </motion.div>
+    </div>
+  );
+};
 
 // Helper component for the success screen
 const SuccessView = ({ orderMessages, onClose }) => {
@@ -202,36 +252,116 @@ const CheckoutForm = ({
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
-                      <div className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="delivery" id="delivery" />
-                          <Label htmlFor="delivery">{t("checkout.delivery")}</Label>
+                      <div 
+                        onClick={() => setDeliveryType("delivery")}
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          deliveryType === "delivery" 
+                            ? "border-primary bg-primary/10 shadow-md" 
+                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <RadioGroupItem value="delivery" id="delivery" className="pointer-events-none" />
+                            <div className="flex items-center space-x-3">
+                              <Truck className="w-5 h-5 text-primary" />
+                              <Label htmlFor="delivery" className="font-semibold text-lg cursor-pointer">
+                                {t("checkout.delivery")}
+                              </Label>
+                            </div>
+                          </div>
+                          <Badge 
+                            variant="outline" 
+                            className="bg-primary/10 text-primary border-primary/20"
+                          >
+                            {formatPriceWithSymbol(deliveryAreaSitra, language)}
+                          </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground ml-6">{t("checkout.deliveryDescription")}</p>
                       </div>
-                      <div className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="pickup" id="pickup" />
-                          <Label htmlFor="pickup">{t("checkout.pickup")}</Label>
+                      <div 
+                        onClick={() => setDeliveryType("pickup")}
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          deliveryType === "pickup" 
+                            ? "border-primary bg-primary/10 shadow-md" 
+                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <RadioGroupItem value="pickup" id="pickup" className="pointer-events-none" />
+                            <div className="flex items-center space-x-3">
+                              <Package className="w-5 h-5 text-green-600" />
+                              <Label htmlFor="pickup" className="font-semibold text-lg cursor-pointer">
+                                {t("checkout.pickup")}
+                              </Label>
+                            </div>
+                          </div>
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-green-100 text-green-700 border-green-200"
+                          >
+                            {t("checkout.free")}
+                          </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground ml-6">{t("checkout.pickupDescription")}</p>
                       </div>
                     </RadioGroup>
                     {deliveryType === "delivery" && (
                       <div className="mt-4">
                         <h3 className="text-lg font-medium mb-2">{t("settings.deliveryAreas")}</h3>
                         <RadioGroup value={deliveryArea} onValueChange={(value) => setDeliveryArea(value as any)}>
-                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <RadioGroupItem value="sitra" id="sitra" />
-                            <Label htmlFor="sitra">{sitraAreaName}</Label>
+                          <div 
+                            onClick={() => setDeliveryArea("sitra")}
+                            className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                              deliveryArea === "sitra" 
+                                ? "border-primary bg-primary/10 shadow-md" 
+                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <RadioGroupItem value="sitra" id="sitra" className="pointer-events-none" />
+                                <Label htmlFor="sitra" className="font-medium cursor-pointer">{sitraAreaName}</Label>
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {formatPriceWithSymbol(deliveryAreaSitra, language)}
+                              </Badge>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <RadioGroupItem value="muharraq" id="muharraq" />
-                            <Label htmlFor="muharraq">{muharraqAreaName}</Label>
+                          <div 
+                            onClick={() => setDeliveryArea("muharraq")}
+                            className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                              deliveryArea === "muharraq" 
+                                ? "border-primary bg-primary/10 shadow-md" 
+                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <RadioGroupItem value="muharraq" id="muharraq" className="pointer-events-none" />
+                                <Label htmlFor="muharraq" className="font-medium cursor-pointer">{muharraqAreaName}</Label>
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {formatPriceWithSymbol(deliveryAreaMuharraq, language)}
+                              </Badge>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <RadioGroupItem value="other" id="other" />
-                            <Label htmlFor="other">{otherAreaName}</Label>
+                          <div 
+                            onClick={() => setDeliveryArea("other")}
+                            className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                              deliveryArea === "other" 
+                                ? "border-primary bg-primary/10 shadow-md" 
+                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <RadioGroupItem value="other" id="other" className="pointer-events-none" />
+                                <Label htmlFor="other" className="font-medium cursor-pointer">{otherAreaName}</Label>
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {formatPriceWithSymbol(deliveryAreaOther, language)}
+                              </Badge>
+                            </div>
                           </div>
                         </RadioGroup>
                       </div>
@@ -294,7 +424,7 @@ const CheckoutForm = ({
                               </div>
                             )}
                             <Separator className="my-3" />
-                            <div className="flex justify-between font-bold text-lg p-3 bg-blue-50 rounded-lg">
+                            <div className="flex justify-between font-bold text-lg p-3 bg-primary/10 rounded-lg">
                               <span>{t("checkout.total")}</span>
                               <span className="text-primary">{formatPrice(subtotal + fee, language)}</span>
                             </div>
@@ -366,6 +496,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const { t, language } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCart();
   const { refetchData, getOrderNumber } = useData();
+  const { showConfirm, showAlert } = useDialog();
 
   const savedSettingsRaw = localStorage.getItem("storeSettings");
   const savedSettings = savedSettingsRaw ? JSON.parse(savedSettingsRaw) : {};
@@ -413,7 +544,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         };
       }
       return {
-        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم بتجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
+        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
         instructions: language === "ar" ? "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا." : "For any changes or questions about your order, please contact us.",
         headline: language === "ar" ? t("orderSuccess.headlineAr") : t("orderSuccess.headline"),
         subtext: language === "ar" ? "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك." : "We'll share updates by phone as your order progresses.",
@@ -457,18 +588,20 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const [orderNumber, setOrderNumber] = useState("");
   const [orderItems, setOrderItems] = useState<typeof items>([]);
   const [orderTotalPrice, setOrderTotalPrice] = useState(0);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const totalPrice = getTotalPrice();
 
   useEffect(() => {
-    if (open && !orderSuccess) {
+    if (open && !showSuccessPopup) {
       setStep(1);
       setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
       setDeliveryType("delivery");
       setDeliveryArea("sitra");
       setIsSubmitting(false);
+      setOrderSuccess(false);
     }
-  }, [open, orderSuccess]);
+  }, [open, showSuccessPopup]);
 
   useEffect(() => {
     if (autoScrollToSummary && step === 3) {
@@ -521,7 +654,14 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     const confirmationMessage = language === "ar"
       ? (savedSettings?.preOrderConfirmationMessageAr || "هل أنت متأكد من إرسال الطلب؟")
       : (savedSettings?.preOrderConfirmationMessageEn || "Are you sure you want to place the order?");
-    const confirmed = window.confirm(confirmationMessage);
+    
+    const confirmed = await showConfirm({
+      title: language === "ar" ? "تأكيد الطلب" : "Confirm Order",
+      message: confirmationMessage,
+      type: "warning",
+      confirmText: language === "ar" ? "نعم" : "Yes",
+      cancelText: language === "ar" ? "إلغاء" : "Cancel",
+    });
     if (!confirmed) return;
 
     setIsSubmitting(true);
@@ -557,11 +697,21 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
       } catch (error) {
         setOrderNumber(order.id.slice(-6));
       }
-      setOrderSuccess(true);
       clearCart();
+      setOrderSuccess(true);
+      // Close main dialog first, then show popup after a brief delay
+      onClose();
+      setTimeout(() => {
+        setShowSuccessPopup(true);
+      }, 100);
     } catch (error) {
       console.error("Error placing order:", error);
-      alert(t("errors.orderFailed"));
+      showAlert({
+        title: language === "ar" ? "خطأ" : "Error",
+        message: language === "ar" ? "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى." : "Failed to place order. Please try again.",
+        type: "error",
+        buttonText: language === "ar" ? "إغلاق" : "Close",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -576,47 +726,67 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     setOrderNumber("");
     setOrderItems([]);
     setOrderTotalPrice(0);
+    setShowSuccessPopup(false);
     onClose();
   };
 
+  const handleSuccessPopupClose = () => {
+    setShowSuccessPopup(false);
+    // Reset all form state
+    setTimeout(() => {
+      setStep(1);
+      setCustomerInfo({ name: "", phone: "", address: "", home: "", road: "", block: "", town: "" });
+      setDeliveryType("delivery");
+      setDeliveryArea("sitra");
+      setOrderSuccess(false);
+      setOrderNumber("");
+      setOrderItems([]);
+      setOrderTotalPrice(0);
+    }, 200);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={orderSuccess ? onClose : handleClose}>
-      <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-2xl border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
-        <AnimatePresence mode="wait">
-          {orderSuccess ? (
-            <SuccessView orderMessages={orderMessages} onClose={onClose} />
-          ) : (
+    <>
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
+          <AnimatePresence mode="wait">
             <CheckoutForm
-              step={step}
-              handleBack={handleBack}
-              handleNext={handleNext}
-              handlePlaceOrder={handlePlaceOrder}
-              isStep1Valid={isStep1Valid}
-              isFormValid={isFormValid}
-              isSubmitting={isSubmitting}
-              customerInfo={customerInfo}
-              handleInputChange={handleInputChange}
-              deliveryType={deliveryType}
-              setDeliveryType={setDeliveryType}
-              deliveryArea={deliveryArea}
-              setDeliveryArea={setDeliveryArea}
-              deliveryAreaName={getDeliveryAreaName(deliveryArea)}
-              sitraAreaName={getDeliveryAreaName("sitra")}
-              muharraqAreaName={getDeliveryAreaName("muharraq")}
-              otherAreaName={getDeliveryAreaName("other")}
-              deliveryAreaSitra={deliveryAreaSitra}
-              deliveryAreaMuharraq={deliveryAreaMuharraq}
-              deliveryAreaOther={deliveryAreaOther}
-              currencySymbol={currencySymbol}
-              language={language}
-              totalPrice={totalPrice}
-              freeDeliveryMinimum={freeDeliveryMinimum}
-              items={items}
-              enableDialogScroll={enableDialogScroll}
-            />
-          )}
-        </AnimatePresence>
-      </DialogContent>
-    </Dialog>
+                step={step}
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handlePlaceOrder={handlePlaceOrder}
+                isStep1Valid={isStep1Valid}
+                isFormValid={isFormValid}
+                isSubmitting={isSubmitting}
+                customerInfo={customerInfo}
+                handleInputChange={handleInputChange}
+                deliveryType={deliveryType}
+                setDeliveryType={setDeliveryType}
+                deliveryArea={deliveryArea}
+                setDeliveryArea={setDeliveryArea}
+                deliveryAreaName={getDeliveryAreaName(deliveryArea)}
+                sitraAreaName={getDeliveryAreaName("sitra")}
+                muharraqAreaName={getDeliveryAreaName("muharraq")}
+                otherAreaName={getDeliveryAreaName("other")}
+                deliveryAreaSitra={deliveryAreaSitra}
+                deliveryAreaMuharraq={deliveryAreaMuharraq}
+                deliveryAreaOther={deliveryAreaOther}
+                currencySymbol={currencySymbol}
+                language={language}
+                totalPrice={totalPrice}
+                freeDeliveryMinimum={freeDeliveryMinimum}
+                items={items}
+                enableDialogScroll={enableDialogScroll}
+              />
+          </AnimatePresence>
+        </DialogContent>
+      </Dialog>
+
+      <OrderSuccessPopup
+        isOpen={showSuccessPopup}
+        onClose={handleSuccessPopupClose}
+        orderMessages={orderMessages}
+      />
+    </>
   );
 }
