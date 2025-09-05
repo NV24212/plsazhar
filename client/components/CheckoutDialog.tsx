@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useData } from "../contexts/DataContext";
 import { useCart } from "../contexts/CartContext";
@@ -33,6 +34,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // Order Success Popup Component
 const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
   const { language } = useLanguage();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -65,14 +67,22 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
           </p>
         </div>
 
-        <Button
-          onClick={onClose}
-          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
-        >
-          <span className="auto-text">
-            {language === "ar" ? "إغلاق" : "Close"}
-          </span>
-        </Button>
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            type="button"
+            onClick={() => { onClose(); navigate('/'); }}
+            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
+          >
+            <span className="auto-text">{language === "ar" ? "متابعة التسوق" : "Continue shopping"}</span>
+          </Button>
+          <Button
+            type="button"
+            onClick={onClose}
+            className="w-full bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg"
+          >
+            <span className="auto-text">{language === "ar" ? "إغلاق" : "Close"}</span>
+          </Button>
+        </div>
       </motion.div>
     </div>
   );
@@ -81,6 +91,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
 // Helper component for the success screen
 const SuccessView = ({ orderMessages, onClose }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   return (
     <motion.div
       key="success"
@@ -117,7 +128,8 @@ const SuccessView = ({ orderMessages, onClose }) => {
       </ScrollArea>
       <div className="border-t p-4 bg-white">
         <Button
-          onClick={onClose}
+          type="button"
+          onClick={() => { onClose(); navigate('/'); }}
           className="w-full bg-primary hover:bg-primary/90 touch-manipulation h-12 text-base font-semibold"
         >
           <span className="auto-text">{t("checkout.backToStore")}</span>
@@ -443,6 +455,7 @@ const CheckoutForm = ({
         <div className="flex items-center gap-3 sm:gap-4">
           {step > 1 && (
             <Button
+              type="button"
               variant="outline"
               onClick={handleBack}
               className="flex items-center gap-2 h-12 sm:h-14 px-4 sm:px-6 touch-manipulation"
@@ -455,6 +468,7 @@ const CheckoutForm = ({
           <div className="flex-1">
             {step < 3 ? (
               <Button
+                type="button"
                 onClick={handleNext}
                 disabled={step === 1 && !isStep1Valid()}
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
@@ -465,7 +479,8 @@ const CheckoutForm = ({
               </Button>
             ) : (
               <Button
-                onClick={handlePlaceOrder}
+                type="button"
+                onClick={(e) => handlePlaceOrder(e)}
                 disabled={!isFormValid() || isSubmitting}
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
                 size="lg"
@@ -496,7 +511,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const { t, language } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCart();
   const { refetchData, getOrderNumber } = useData();
-  const { showConfirm, showAlert } = useDialog();
+  const { showAlert } = useDialog();
 
   const savedSettingsRaw = localStorage.getItem("storeSettings");
   const savedSettings = savedSettingsRaw ? JSON.parse(savedSettingsRaw) : {};
@@ -519,7 +534,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         return area;
     }
   };
-  const pickupAddress: string = language === "ar" ? savedSettings?.pickupAddressAr || "منزل 1348، طريق 416، مجمع 604، سترة القرية" : savedSettings?.pickupAddressEn || "Home 1348, Road 416, Block 604, Sitra Alqarya";
+  const pickupAddress: string = language === "ar" ? savedSettings?.pickupAddressAr || "منزل 1348، طري�� 416، مجمع 604، سترة القرية" : savedSettings?.pickupAddressEn || "Home 1348, Road 416, Block 604, Sitra Alqarya";
   const contactPhone: string = savedSettings?.contactPhone || "+973 36283382";
   const enableDialogScroll: boolean = savedSettings?.enableDialogScroll ?? true;
   const autoScrollToSummary: boolean = savedSettings?.autoScrollToSummary ?? true;
@@ -544,7 +559,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         };
       }
       return {
-        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
+        successMessage: language === "ar" ? "ش��راً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
         instructions: language === "ar" ? "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا." : "For any changes or questions about your order, please contact us.",
         headline: language === "ar" ? t("orderSuccess.headlineAr") : t("orderSuccess.headline"),
         subtext: language === "ar" ? "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك." : "We'll share updates by phone as your order progresses.",
@@ -647,22 +662,11 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     }
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (e?: React.MouseEvent) => {
+    try {
+      e?.preventDefault();
+    } catch {}
     if (!isFormValid()) return;
-
-    // Confirmation popup with customizable text via Settings
-    const confirmationMessage = language === "ar"
-      ? (savedSettings?.preOrderConfirmationMessageAr || "هل أنت متأكد من إرسال الطلب؟")
-      : (savedSettings?.preOrderConfirmationMessageEn || "Are you sure you want to place the order?");
-    
-    const confirmed = await showConfirm({
-      title: language === "ar" ? "تأكيد الطلب" : "Confirm Order",
-      message: confirmationMessage,
-      type: "warning",
-      confirmText: language === "ar" ? "نعم" : "Yes",
-      cancelText: language === "ar" ? "إلغاء" : "Cancel",
-    });
-    if (!confirmed) return;
 
     setIsSubmitting(true);
     try {

@@ -1077,7 +1077,7 @@ export default function Settings() {
                       onChange={(e) =>
                         handleInputChange("newPassword", e.target.value)
                       }
-                      placeholder="••••••••"
+                      placeholder="•••••��••"
                       className="ltr-text"
                     />
                   </div>

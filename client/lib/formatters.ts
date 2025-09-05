@@ -102,8 +102,8 @@ export function formatPriceWithSymbol(
   const formattedAmount = Number(amount).toFixed(3);
 
   if (language === "ar") {
-    // Use Arabic currency symbol if available, otherwise use provided symbol
-    const arabicSymbol = currencySymbol === "BD" ? "د.ب" : currencySymbol;
+    // Use Arabic currency symbol if the currency represents BHD (BD or BH), otherwise use provided symbol
+    const arabicSymbol = (currencySymbol === "BD" || currencySymbol === "BH") ? "د.ب" : currencySymbol;
     return `${formattedAmount} ${arabicSymbol}`;
   }
 
