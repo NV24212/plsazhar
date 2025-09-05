@@ -449,6 +449,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const product = getProductById(productId);
     return product?.variants.find((variant) => variant.id === variantId);
   };
+  // Convenience helper to return all variants for a product (safe when product not found)
+  const getProductVariants = (productId: string) => {
+    const product = getProductById(productId);
+    return product?.variants ?? [];
+  };
   const getCategoryById = (id: string) =>
     categories.find((category) => category.id === id);
 
