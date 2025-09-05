@@ -695,7 +695,6 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
       setOrderItems([...items]);
       setOrderTotalPrice(orderTotal);
       try {
-        await refetchData();
         const orderNum = getOrderNumber(order.id);
         setOrderNumber(orderNum > 0 ? orderNum.toString() : order.id.slice(-6));
       } catch (error) {
@@ -736,6 +735,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const handleSuccessPopupClose = () => {
     setShowSuccessPopup(false);
+    refetchData();
     // Reset all form state
     setTimeout(() => {
       setStep(1);
