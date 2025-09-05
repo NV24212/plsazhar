@@ -113,7 +113,7 @@ export default function Dashboard() {
           itemsCount > 1
             ? `${mainProduct?.name || t("common.product")} +${itemsCount - 1} more`
             : mainProduct?.name || t("common.unknownProduct"),
-        amount: `BH ${order.total.toFixed(2)}`,
+        amount: `BD ${order.total.toFixed(2)}`,
         status: getStatusText(order.status, t),
         date: formattedDate,
       };
