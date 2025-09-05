@@ -457,6 +457,7 @@ const CheckoutForm = ({
           <div className="flex-1">
             {step < 3 ? (
               <Button
+                type="button"
                 onClick={handleNext}
                 disabled={step === 1 && !isStep1Valid()}
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
@@ -467,6 +468,7 @@ const CheckoutForm = ({
               </Button>
             ) : (
               <Button
+                type="button"
                 onClick={handlePlaceOrder}
                 disabled={!isFormValid() || isSubmitting}
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
@@ -546,7 +548,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         };
       }
       return {
-        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه ��لال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
+        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
         instructions: language === "ar" ? "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا." : "For any changes or questions about your order, please contact us.",
         headline: language === "ar" ? t("orderSuccess.headlineAr") : t("orderSuccess.headline"),
         subtext: language === "ar" ? "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك." : "We'll share updates by phone as your order progresses.",
