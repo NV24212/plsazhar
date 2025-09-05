@@ -63,7 +63,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
 
         <div className="bg-primary/10 rounded-lg p-4 mb-6">
           <p className="text-gray-700 auto-text leading-relaxed">
-            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعالجته قريباً." : "Your order has been received successfully. We'll process it soon.")}
+            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعا��جته قريباً." : "Your order has been received successfully. We'll process it soon.")}
           </p>
         </div>
 
@@ -662,9 +662,11 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     }
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (e?: React.MouseEvent) => {
+    try {
+      e?.preventDefault();
+    } catch {}
     if (!isFormValid()) return;
-
 
     setIsSubmitting(true);
     try {
