@@ -496,7 +496,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const { t, language } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCart();
   const { refetchData, getOrderNumber } = useData();
-  const { showConfirm, showAlert } = useDialog();
+  const { showAlert } = useDialog();
 
   const savedSettingsRaw = localStorage.getItem("storeSettings");
   const savedSettings = savedSettingsRaw ? JSON.parse(savedSettingsRaw) : {};
