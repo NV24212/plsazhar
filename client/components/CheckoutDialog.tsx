@@ -71,7 +71,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
           <Button
             type="button"
             onClick={onClose}
-            className="w-full max-w-xs bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg"
+            className="w-full max-w-xs bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <span className="auto-text">{language === "ar" ? "إغلاق" : "Close"}</span>
           </Button>

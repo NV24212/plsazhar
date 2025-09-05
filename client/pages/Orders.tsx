@@ -350,11 +350,17 @@ export default function Orders() {
                         <SelectValue placeholder={t("orders.selectCustomer")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {customers.map((customer) => (
-                          <SelectItem key={customer.id} value={customer.id}>
-                            {customer.name} - {customer.phone}
-                          </SelectItem>
-                        ))}
+                        {customers.length > 0 ? (
+                          customers.map((customer) => (
+                            <SelectItem key={customer.id} value={customer.id}>
+                              {customer.name} - {customer.phone}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <div className="p-4 text-center text-sm text-muted-foreground">
+                            {t("orders.noCustomers")}
+                          </div>
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
@@ -391,23 +397,29 @@ export default function Orders() {
                                   />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {products.map((product) => (
-                                    <SelectItem
-                                      key={product.id}
-                                      value={product.id}
-                                    >
-                                      <span
-                                        className="auto-text inline-block"
-                                        dir="auto"
+                                  {products.length > 0 ? (
+                                    products.map((product) => (
+                                      <SelectItem
+                                        key={product.id}
+                                        value={product.id}
                                       >
-                                        {product.name}
-                                      </span>
-                                      <span className="ltr-text ml-2" dir="ltr">
-                                        {" "}
-                                        - {formatPrice(product.price, language)}
-                                      </span>
-                                    </SelectItem>
-                                  ))}
+                                        <span
+                                          className="auto-text inline-block"
+                                          dir="auto"
+                                        >
+                                          {product.name}
+                                        </span>
+                                        <span className="ltr-text ml-2" dir="ltr">
+                                          {" "}
+                                          - {formatPrice(product.price, language)}
+                                        </span>
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <div className="p-4 text-center text-sm text-muted-foreground">
+                                      {t("orders.noProducts")}
+                                    </div>
+                                  )}
                                 </SelectContent>
                               </Select>
                             </div>
@@ -600,8 +612,8 @@ export default function Orders() {
                     />
                   </div>
 
-                  <div className="flex justify-between items-center p-4 bg-secondary rounded-lg">
-                    <span className="font-medium">Total:</span>
+                  <div className="flex justify-between items-center p-4 bg-secondary rounded-lg [dir=rtl]:flex-row-reverse">
+                    <span className="font-medium">{t("orders.total")}:</span>
                     <span
                       className="text-xl font-bold text-primary ltr-text"
                       dir="ltr"
@@ -651,7 +663,7 @@ export default function Orders() {
           return (
             <Card
               key={order.id}
-              className="hover:shadow-lg transition-shadow border-l-4 border-primary"
+              className="hover:shadow-lg transition-shadow border border-gray-200 rounded-xl"
             >
               <CardHeader className="pb-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4 [dir=rtl]:sm:flex-row-reverse">
@@ -827,8 +839,8 @@ export default function Orders() {
 
       {/* View Order Details Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="w-[90vw] sm:max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border-0 shadow-2xl bg-background">
-          <DialogHeader className="pb-6 border-b">
+        <DialogContent className="w-[90vw] sm:max-w-3xl max-h-[85vh] overflow-y-auto rounded-lg bg-background">
+          <DialogHeader className="pb-4 border-b">
             <DialogTitle className="text-2xl font-bold text-foreground">
               {t("orders.orderDetailsTitle")} #
               {viewingOrder ? getOrderNumber(viewingOrder.id) : ""}
