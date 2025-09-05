@@ -15,13 +15,34 @@ async function apiCall<T>(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000); // Reduced timeout to 8s
 
+    // Clone options so we can safely modify headers without mutating caller object
+    const requestOptions: RequestInit = { ...(options || {}) };
+
+    // If JSON body was passed as an object, stringify it once here so retries can reuse the string
+    if (requestOptions.body && typeof requestOptions.body !== "string") {
+      try {
+        // If it's already FormData/Blob/URLSearchParams, leave it as-is (non-retryable)
+        const bodyType = Object.prototype.toString.call(requestOptions.body);
+        const nonRetryableTypes = ["[object FormData]", "[object Blob]", "[object URLSearchParams]", "[object ReadableStream]"];
+        if (!nonRetryableTypes.includes(bodyType)) {
+          requestOptions.body = JSON.stringify(requestOptions.body);
+          requestOptions.headers = {
+            "Content-Type": "application/json",
+            ...(requestOptions.headers as Record<string, string> | undefined),
+          };
+        }
+      } catch (e) {
+        // if stringify fails, leave body as-is
+      }
+    }
+
     const response = await fetch(`${API_BASE}${url}`, {
       headers: {
         "Content-Type": "application/json",
-        ...options?.headers,
+        ...((requestOptions.headers as Record<string, string>) || {}),
       },
       signal: controller.signal,
-      ...options,
+      ...requestOptions,
     });
 
     clearTimeout(timeoutId);
@@ -30,8 +51,19 @@ async function apiCall<T>(
       let errorMessage = `API Error: ${response.status}`;
 
       try {
-        // Read raw text once from the original response (we won't use it afterward)
-        const raw = await response.text();
+        // Attempt to read response body safely. Try clone first; if clone fails (body used), fallback to direct text()
+        let raw: string | null = null;
+        try {
+          raw = await response.clone().text();
+        } catch (cloneErr) {
+          try {
+            raw = await response.text();
+          } catch (textErr) {
+            raw = null;
+            console.error("Failed to read response body via clone() and text():", { cloneErr, textErr });
+          }
+        }
+
         let errorData: any = null;
         try {
           errorData = raw ? JSON.parse(raw) : null;
@@ -83,16 +115,22 @@ async function apiCall<T>(
   } catch (error) {
     console.error(`API call failed (attempt ${retryCount + 1}):`, {
       url: `${API_BASE}${url}`,
-      error: error instanceof Error ? error.message : String(error),
+      error: error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : String(error),
     });
 
-    // Check if we should retry - only retry network errors
+    // Decide whether the request body is retryable. If options.body exists and is not a string,
+    // it's likely a stream (FormData, File) and cannot be retried safely.
+    const bodyIsRetryable = !options?.body || typeof options.body === "string";
+
+    // Check if we should retry - only retry network errors and when body is retryable
     if (
       retryCount < maxRetries &&
       error instanceof Error &&
+      bodyIsRetryable &&
       (error.name === "AbortError" ||
         error.message.includes("Failed to fetch") ||
-        error.message.includes("Network error"))
+        error.message.includes("Network error") ||
+        error.message.includes("ECONNRESET"))
     ) {
       console.log(`Retrying API call in ${retryDelay}ms...`);
       await new Promise((resolve) => setTimeout(resolve, retryDelay));
