@@ -69,7 +69,7 @@ export default function Dashboard() {
     },
     {
       title: t("revenue.avgOrderValue"),
-      value: `BH ${avgOrderValue.toFixed(2)}`,
+      value: `BD ${avgOrderValue.toFixed(2)}`,
       description: t("orders.orderTotal"),
       icon: TrendingUp,
       color: "text-purple-600",
