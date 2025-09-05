@@ -204,7 +204,6 @@ export default function Products() {
         {
           id: `temp_${Date.now()}`,
           name: "",
-          nameAr: "",
           price: 0,
           stock: 0,
         },
