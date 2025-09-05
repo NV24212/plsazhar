@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ImageUpload from "@/components/ImageUpload";
 
 export default function Products() {
@@ -80,8 +81,6 @@ export default function Products() {
     price: "",
     category: "",
     images: [] as string[],
-    isVisible: true,
-    featured: false,
     variants: [] as ProductVariant[],
   });
 
@@ -111,8 +110,6 @@ export default function Products() {
         price: product.price.toString(),
         category: product.category,
         images: product.images || [],
-        isVisible: product.isVisible ?? true,
-        featured: product.featured ?? false,
         variants: getProductVariants(product.id),
       });
     } else {
@@ -125,8 +122,6 @@ export default function Products() {
         price: "",
         category: categories[0]?.id || "",
         images: [],
-        isVisible: true,
-        featured: false,
         variants: [],
       });
     }
@@ -154,8 +149,6 @@ export default function Products() {
         price: parseFloat(formData.price),
         category: formData.category,
         images: formData.images,
-        isVisible: formData.isVisible,
-        featured: formData.featured,
         variants: formData.variants,
       };
 
@@ -166,7 +159,7 @@ export default function Products() {
         await addProduct(productData);
         toast.success(t("message.productAdded"));
       }
-      
+
       closeDialog();
     } catch (error) {
       const errorMessage =
@@ -422,251 +415,242 @@ export default function Products() {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6 py-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">{t("products.productName")}</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, name: e.target.value }))
-                    }
-                    placeholder={t("products.productName")}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="nameAr">{t("products.productNameAr")}</Label>
-                  <Input
-                    id="nameAr"
-                    value={formData.nameAr}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, nameAr: e.target.value }))
-                    }
-                    placeholder={t("products.productNameAr")}
-                    dir="rtl"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="description">{t("products.description")}</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        description: e.target.value,
-                      }))
-                    }
-                    placeholder={t("products.description")}
-                    rows={3}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="descriptionAr">{t("products.descriptionAr")}</Label>
-                  <Textarea
-                    id="descriptionAr"
-                    value={formData.descriptionAr}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        descriptionAr: e.target.value,
-                      }))
-                    }
-                    placeholder={t("products.descriptionAr")}
-                    dir="rtl"
-                    rows={3}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="price">{t("products.price")}</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.price}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, price: e.target.value }))
-                    }
-                    placeholder="0.00"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="category">{t("products.category")}</Label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value) =>
-                      setFormData((prev) => ({ ...prev, category: value }))
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("products.selectCategory")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {translateCategory(category)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>{t("products.images")}</Label>
-                <ImageUpload
-                  images={formData.images}
-                  onImagesChange={(images) =>
-                    setFormData((prev) => ({ ...prev, images }))
-                  }
-                  maxImages={5}
-                />
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="isVisible"
-                    checked={formData.isVisible}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, isVisible: checked }))
-                    }
-                  />
-                  <Label htmlFor="isVisible" className="cursor-pointer">
-                    {t("products.visible")}
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="featured"
-                    checked={formData.featured}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, featured: checked }))
-                    }
-                  />
-                  <Label htmlFor="featured" className="cursor-pointer">
-                    {t("products.featured")}
-                  </Label>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label className="text-base font-medium">
+              <Tabs defaultValue="types">
+                <TabsList className="bg-gray-100 p-2 rounded-lg grid grid-cols-3">
+                  <TabsTrigger value="types" className="text-center py-2">
                     {t("products.variants")}
-                  </Label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleAddVariant}
-                    className="transform transition-all hover:scale-105"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    {t("products.addVariant")}
-                  </Button>
-                </div>
+                  </TabsTrigger>
+                  <TabsTrigger value="images" className="text-center py-2">
+                    {t("products.images")}
+                  </TabsTrigger>
+                  <TabsTrigger value="details" className="text-center py-2">
+                    {t("products.productName")}
+                  </TabsTrigger>
+                </TabsList>
 
-                {formData.variants.map((variant, index) => (
-                  <motion.div
-                    key={variant.id}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="p-4 border rounded-lg space-y-3 bg-muted/50"
-                  >
+                <TabsContent value="types" className="pt-4">
+                  <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium">
-                        {t("products.variant")} {index + 1}
-                      </h4>
+                      <Label className="text-base font-medium">
+                        {t("products.variants")}
+                      </Label>
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
-                        onClick={() => handleRemoveVariant(index)}
-                        className="text-destructive hover:text-destructive transform transition-all hover:scale-110"
+                        onClick={handleAddVariant}
+                        className="transform transition-all hover:scale-105"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t("products.addVariant")}
                       </Button>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="space-y-1">
-                        <Label className="text-xs">
-                          {t("products.variantName")}
-                        </Label>
-                        <Input
-                          value={variant.name}
-                          onChange={(e) =>
-                            handleUpdateVariant(index, "name", e.target.value)
-                          }
-                          placeholder={t("products.variantName")}
-                          size="sm"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">
-                          {t("products.variantNameAr")}
-                        </Label>
-                        <Input
-                          value={variant.nameAr || ""}
-                          onChange={(e) =>
-                            handleUpdateVariant(index, "nameAr", e.target.value)
-                          }
-                          placeholder={t("products.variantNameAr")}
-                          dir="rtl"
-                          size="sm"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">{t("products.price")}</Label>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          value={variant.price}
-                          onChange={(e) =>
-                            handleUpdateVariant(
-                              index,
-                              "price",
-                              parseFloat(e.target.value) || 0
-                            )
-                          }
-                          placeholder="0.00"
-                          size="sm"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">{t("products.stock")}</Label>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={variant.stock}
-                          onChange={(e) =>
-                            handleUpdateVariant(
-                              index,
-                              "stock",
-                              parseInt(e.target.value) || 0
-                            )
-                          }
-                          placeholder="0"
-                          size="sm"
-                        />
-                      </div>
+
+                    {formData.variants.map((variant, index) => (
+                      <motion.div
+                        key={variant.id}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="p-4 border rounded-lg space-y-3 bg-muted/50"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium">
+                            {t("products.variant")} {index + 1}
+                          </h4>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleRemoveVariant(index)}
+                            className="text-destructive hover:text-destructive transform transition-all hover:scale-110"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs">
+                              {t("products.variantName")}
+                            </Label>
+                            <Input
+                              value={variant.name}
+                              onChange={(e) =>
+                                handleUpdateVariant(index, "name", e.target.value)
+                              }
+                              placeholder={t("products.variantName")}
+                              size="sm"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">
+                              {t("products.variantNameAr")}
+                            </Label>
+                            <Input
+                              value={variant.nameAr || ""}
+                              onChange={(e) =>
+                                handleUpdateVariant(index, "nameAr", e.target.value)
+                              }
+                              placeholder={t("products.variantNameAr")}
+                              dir="rtl"
+                              size="sm"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">{t("products.price")}</Label>
+                            <Input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              value={variant.price}
+                              onChange={(e) =>
+                                handleUpdateVariant(
+                                  index,
+                                  "price",
+                                  parseFloat(e.target.value) || 0
+                                )
+                              }
+                              placeholder="0.00"
+                              size="sm"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">{t("products.stock")}</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              value={variant.stock}
+                              onChange={(e) =>
+                                handleUpdateVariant(
+                                  index,
+                                  "stock",
+                                  parseInt(e.target.value) || 0
+                                )
+                              }
+                              placeholder="0"
+                              size="sm"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="images" className="pt-4">
+                  <div className="space-y-2">
+                    <Label>{t("products.images")}</Label>
+                    <ImageUpload
+                      images={formData.images}
+                      onImagesChange={(images) =>
+                        setFormData((prev) => ({ ...prev, images }))
+                      }
+                      maxImages={5}
+                    />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="details" className="pt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">{t("products.productName")}</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, name: e.target.value }))
+                        }
+                        placeholder={t("products.productName")}
+                        required
+                      />
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="nameAr">{t("products.productNameAr")}</Label>
+                      <Input
+                        id="nameAr"
+                        value={formData.nameAr}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, nameAr: e.target.value }))
+                        }
+                        placeholder={t("products.productNameAr")}
+                        dir="rtl"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="description">{t("products.description")}</Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                        }
+                        placeholder={t("products.description")}
+                        rows={3}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionAr">{t("products.descriptionAr")}</Label>
+                      <Textarea
+                        id="descriptionAr"
+                        value={formData.descriptionAr}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            descriptionAr: e.target.value,
+                          }))
+                        }
+                        placeholder={t("products.descriptionAr")}
+                        dir="rtl"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="price">{t("products.price")}</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.price}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, price: e.target.value }))
+                        }
+                        placeholder="0.00"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="category">{t("products.category")}</Label>
+                      <Select
+                        value={formData.category}
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({ ...prev, category: value }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("products.selectCategory")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {translateCategory(category)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={closeDialog}>
