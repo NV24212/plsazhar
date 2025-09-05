@@ -348,7 +348,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const addOrder = async (
     orderData: Omit<Order, "id" | "createdAt" | "updatedAt">,
-  ) => {
+  ): Promise<Order> => {
     try {
       const newOrder = await orderApi.create(orderData);
       setOrders((prev) => [...prev, newOrder]);
@@ -362,6 +362,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         itemCount: newOrder.items.length,
         deliveryType: newOrder.deliveryType,
       });
+      return newOrder;
     } catch (error) {
       console.error("Failed to add order:", error);
       addLog("error", "order", "Failed to create order", {
