@@ -114,6 +114,7 @@ export const orderDb = {
     >,
   ): Promise<Order> {
     const newOrderPayload = {
+      id: generateId(),
       customer_id: order.customerId,
       items: order.items,
       total: order.total,

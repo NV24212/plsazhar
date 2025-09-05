@@ -4,7 +4,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useData } from "../contexts/DataContext";
 import { useCart } from "../contexts/CartContext";
 import { useDialog } from "../contexts/DialogContext";
-import { createCustomer, createOrder } from "../services/api";
+import { createCustomer } from "../services/api";
 import { formatPrice, formatPriceWithSymbol } from "@/lib/formatters";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
@@ -503,7 +503,7 @@ interface CheckoutDialogProps {
 export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const { t, language } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCart();
-  const { refetchData, getOrderNumber } = useData();
+  const { addOrder, getOrderNumber } = useData();
   const { showAlert } = useDialog();
 
   const savedSettingsRaw = localStorage.getItem("storeSettings");
@@ -684,7 +684,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
       };
       const deliveryFee = getDeliveryFeeForArea();
       const orderTotal = totalPrice + deliveryFee;
-      const order = await createOrder({ customerId: customer.id, items: orderItemsData, total: orderTotal, status: "processing", deliveryType: deliveryType, deliveryArea: deliveryArea, notes: "" });
+      const order = await addOrder({ customerId: customer.id, items: orderItemsData, total: orderTotal, status: "processing", deliveryType: deliveryType, deliveryArea: deliveryArea, notes: "" });
       setOrderItems([...items]);
       setOrderTotalPrice(orderTotal);
       try {
@@ -728,7 +728,6 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const handleSuccessPopupClose = () => {
     setShowSuccessPopup(false);
-    refetchData();
     // Reset all form state
     setTimeout(() => {
       setStep(1);
