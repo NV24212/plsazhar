@@ -44,6 +44,7 @@ import {
   Phone,
   MapPin,
   Clock,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -52,6 +53,7 @@ export default function Orders() {
     orders,
     customers,
     products,
+    loading,
     addOrder,
     updateOrder,
     deleteOrder,
@@ -322,8 +324,13 @@ export default function Orders() {
               <Button
                 onClick={() => openDialog()}
                 className="bg-primary hover:bg-primary/90 text-white shadow-sm"
+                disabled={loading}
               >
-                <Plus className="w-4 h-4 mr-2" />
+                {loading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Plus className="w-4 h-4 mr-2" />
+                )}
                 {t("orders.addNew")}
               </Button>
             </DialogTrigger>
