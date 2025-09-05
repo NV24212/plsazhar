@@ -561,22 +561,6 @@ export default function Products() {
                         rows={3}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="descriptionAr">{t("products.descriptionAr")}</Label>
-                      <Textarea
-                        id="descriptionAr"
-                        value={formData.descriptionAr}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            descriptionAr: e.target.value,
-                          }))
-                        }
-                        placeholder={t("products.descriptionAr")}
-                        dir="rtl"
-                        rows={3}
-                      />
-                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
