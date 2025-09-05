@@ -500,7 +500,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
 
   const savedSettingsRaw = localStorage.getItem("storeSettings");
   const savedSettings = savedSettingsRaw ? JSON.parse(savedSettingsRaw) : {};
-  const currencySymbol: string = savedSettings?.currencySymbol || "BD";
+  const currencySymbol: string = savedSettings?.currencySymbol || "BH";
   const deliveryFeeSetting: number = Number(savedSettings?.deliveryFee ?? 1.5);
   const freeDeliveryMinimum: number = Number(savedSettings?.freeDeliveryMinimum ?? 20);
   const deliveryAreaSitra: number = Number(savedSettings?.deliveryAreaSitra ?? 1.0);
