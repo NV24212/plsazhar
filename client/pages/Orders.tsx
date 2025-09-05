@@ -319,7 +319,7 @@ export default function Orders() {
           {t("orders.title")}
         </h1>
         <div className="flex items-center gap-2">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} modal={false}>
             <DialogTrigger asChild>
               <Button
                 onClick={() => openDialog()}
