@@ -35,8 +35,8 @@ export function formatBHD(
     return `${formattedAmount}${separator}د.ب`;
   }
 
-  // For English locale, show BH after amount (site uses BH as the symbol)
-  return `${formattedAmount}${separator}BH`;
+  // For English locale, show BD after amount (standard BHD format)
+  return `${formattedAmount}${separator}BD`;
 }
 
 /**
@@ -52,7 +52,7 @@ export function getCurrencySettings(): {
     if (savedSettings) {
       const settings = JSON.parse(savedSettings);
       return {
-        currencySymbol: settings.currencySymbol || "BH",
+        currencySymbol: settings.currencySymbol || "BD",
         currency: settings.currency || "BHD",
         locale: settings.language || "en-BH",
       };
@@ -62,7 +62,7 @@ export function getCurrencySettings(): {
   }
 
   return {
-    currencySymbol: "BH",
+    currencySymbol: "BD",
     currency: "BHD",
     locale: "en-BH",
   };
