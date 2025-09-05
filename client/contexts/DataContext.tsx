@@ -516,6 +516,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         getCustomerById,
         getProductById,
         getVariantById,
+        getProductVariants,
         getCategoryById,
         getOrderNumber,
         refetchData,
