@@ -603,18 +603,21 @@ export default function Products() {
 
                   {/* Stock input - show only when no variants are present */}
                   {(!formData.variants || formData.variants.length === 0) && (
-                    <div className="mt-4 space-y-2 sm:w-1/3">
-                      <Label htmlFor="total_stock">{t("products.stock")}</Label>
-                      <Input
-                        id="total_stock"
-                        type="number"
-                        min="0"
-                        value={formData.total_stock}
-                        onChange={(e) =>
-                          setFormData((prev) => ({ ...prev, total_stock: parseInt(e.target.value || "0") }))
-                        }
-                        placeholder="0"
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="total_stock">{t("products.stock")}</Label>
+                        <Input
+                          id="total_stock"
+                          type="number"
+                          min="0"
+                          value={formData.total_stock}
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, total_stock: parseInt(e.target.value || "0") }))
+                          }
+                          placeholder="0"
+                        />
+                      </div>
+                      <div />
                     </div>
                   )}
                 </TabsContent>
