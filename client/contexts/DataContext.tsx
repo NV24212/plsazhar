@@ -119,6 +119,8 @@ interface DataContextType {
     productId: string,
     variantId: string,
   ) => ProductVariant | undefined;
+  // Returns all variants for a product (convenience helper)
+  getProductVariants: (productId: string) => ProductVariant[];
   getCategoryById: (id: string) => Category | undefined;
   getOrderNumber: (orderId: string) => number;
   refetchData: () => Promise<void>;
