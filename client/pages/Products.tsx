@@ -476,20 +476,6 @@ export default function Products() {
                             />
                           </div>
                           <div className="space-y-1">
-                            <Label className="text-xs">
-                              {t("products.variantNameAr")}
-                            </Label>
-                            <Input
-                              value={variant.nameAr || ""}
-                              onChange={(e) =>
-                                handleUpdateVariant(index, "nameAr", e.target.value)
-                              }
-                              placeholder={t("products.variantNameAr")}
-                              dir="rtl"
-                              size="sm"
-                            />
-                          </div>
-                          <div className="space-y-1">
                             <Label className="text-xs">{t("products.price")}</Label>
                             <Input
                               type="number"
