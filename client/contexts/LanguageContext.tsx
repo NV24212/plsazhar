@@ -628,7 +628,7 @@ const translations = {
     "settings.autoScrollDesc": "Automatically scroll to summary section",
 
     // Currency and formatting
-    "common.currency": "BH",
+    "common.currency": "BD",
     "common.currencyAr": "د.ب",
     "common.total": "Total",
     "common.totalAr": "المجموع",
@@ -666,7 +666,7 @@ const translations = {
     "dashboard.title": "لوحة التحكم",
     "dashboard.totalRevenue": "إجمالي الإيرادات",
     "dashboard.totalOrders": "إجمالي الطلبات",
-    "dashboard.recentOrders": "الطلبات الأخير��",
+    "dashboard.recentOrders": "الطلبات الأخيرة",
     "dashboard.welcome": "مرحباً بك في لوحة الإدارة",
 
     // Products
@@ -780,7 +780,7 @@ const translations = {
     "customers.customerName": "اسم العميل",
     "customers.customerPhone": "هاتف العميل",
     "customers.customerAddress": "عنوان العميل",
-    "customers.customerHome": "رقم ��لمنزل",
+    "customers.customerHome": "رقم المنزل",
     "customers.customerRoad": "رقم الطريق",
     "customers.customerBlock": "رقم المجمع",
     "customers.customerTown": "البلدة/المنطقة",
@@ -792,7 +792,7 @@ const translations = {
     "revenue.totalRevenue": "إجمالي الإيرادات",
     "revenue.ordersCount": "عدد الطلبات",
     "revenue.avgOrderValue": "متوسط قيمة الطلب",
-    "revenue.monthlyTrend": "اتجاه الإيرادات الشهرية",
+    "revenue.monthlyTrend": "اتجا�� الإيرادات الشهرية",
     "revenue.dailyRevenue": "الإيرادات ا��يومية (هذا الشهر)",
     "revenue.topProducts": "أفضل المنتجات من حيث الإيرادات",
     "revenue.deliveryAnalysis": "تحليل وع التسليم",
@@ -854,7 +854,7 @@ const translations = {
 
     "message.customerSaveError": "فشل في حفظ العميل. يرجى المحاولة مرة أخرى.",
     "message.productSaveError": "فشل في حفظ المنتج. يرجى المحاولة مرة أخرى.",
-    "message.uploadError": "فشل في رفع الصور. ��رجى المحاولة مرة أخرى.",
+    "message.uploadError": "فشل في رفع الصور. يرجى المحاولة مرة أخرى.",
 
     // Categories
     "categories.title": "الفئات",
@@ -875,7 +875,7 @@ const translations = {
     "categories.addSuccess": "تم إضافة الفئة بنجاح",
     "categories.updateSuccess": "تم تحديث الفئة بنجاح",
     "categories.deleteSuccess": "تم حذف الفئة بنجاح",
-    "categories.nameRequired": "اس�� الفئة مطلوب",
+    "categories.nameRequired": "اسم الفئة مطلوب",
 
     // Products
     "products.title": "المنتجات",
@@ -946,7 +946,7 @@ const translations = {
     "store.quantity": "الكمية",
     "store.variant": "النوع",
     "store.selectVariant": "اختر النوع",
-    "store.cartEmpty": "سلتك فارغة",
+    "store.cartEmpty": "��لتك فارغة",
     "store.cartTotal": "إجمالي السلة",
     "store.checkout": "إتمام الطلب",
     "store.continueShopping": "متابعة التسوق",
@@ -993,7 +993,7 @@ const translations = {
     "checkout.export": "تصدير",
     "checkout.import": "استيراد",
     "checkout.settingsImported": "تم استيراد الإعدادات بنجاح. لا تنس الحفظ!",
-    "checkout.importError": "فشل استيراد الإعدادات. يرجى التحقق من تنسيق الملف.",
+    "checkout.importError": "فشل استيراد الإعداد��ت. يرجى التحقق من تنسيق الملف.",
 
     "checkout.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "checkout.contactPhone": "سيتم التواصل معك عبر الهاتف للتأكيد",
@@ -1091,7 +1091,7 @@ const translations = {
     "settings.production": "إنتاج",
     "settings.serverStatus": "حالة الخادم",
     "settings.running": "يعمل",
-    "settings.uptime": "وقت ا��تشغيل",
+    "settings.uptime": "وقت التشغيل",
     "settings.connected": "متصل",
     "settings.systemHealth": "صحة النظام",
     "settings.databaseStatus": "حالة قاعدة البيانات",
@@ -1154,7 +1154,7 @@ const translations = {
     "settings.successSubtext": "نص فرعي للنجاح",
     "settings.pickupAddress": "عنوان الاستلام",
     "settings.pickupAddressEn": "عنوان الاستلام (إنجليزي)",
-    "settings.pickupAddressAr": "عنوان الاستلام (عرب��)",
+    "settings.pickupAddressAr": "عنوان الاستلام (عربي)",
     "settings.deliveryAreas": "مناطق التوصيل",
     "settings.addDeliveryArea": "إضافة منطقة توصيل",
     "settings.removeDeliveryArea": "إزالة",
@@ -1204,7 +1204,7 @@ const translations = {
     "settings.euro": "اليورو",
 
     // Contact Information
-    "settings.contactInformation": "معلومات الاتصال",
+    "settings.contactInformation": "معلومات الات��ال",
     "settings.contactPhone": "رقم الهاتف",
     "settings.contactEmail": "البريد الإلكتروني",
     "settings.contactAddress": "العنوان",
@@ -1229,7 +1229,7 @@ const translations = {
     "settings.estimatedDeliveryTime": "الوقت المتوقع للتوصيل",
     "settings.deliveryPricing": "أسعار التوصيل",
     "settings.freeDeliveryMinimum": "الحد الأدنى للتوصيل المجاني",
-    "settings.deliveryFeeHint": "التكلفة المحملة لخدمة التوصيل",
+    "settings.deliveryFeeHint": "التكلفة المحملة لخدمة التوص��ل",
     "settings.freeDeliveryMinimumHint":
       "الطلبات فوق هذا المبلغ تحصل على توصيل مجاني",
     "settings.pickupMessages": "رسائل الاستلام",
@@ -1240,11 +1240,11 @@ const translations = {
     "settings.deliveryMessageAr": "رسالة التوصيل (عربي)",
 
     // Order Messages
-    "settings.orderMessages": "رسائل الطلب��ت",
+    "settings.orderMessages": "رسائل الطلبات",
     "settings.englishMessages": "الرسائل الإنجليزية",
     "settings.arabicMessages": "الرسائل العربية",
     "settings.orderSuccessMessage": "رسالة نجاح الطلب",
-    "settings.orderInstructions": "��عليمات الطلب",
+    "settings.orderInstructions": "تعليمات الطلب",
     "settings.note": "ملاحظة",
     "settings.orderMessageNote":
       "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجر�� وتقديم المعلومات ذات الصلة.",
@@ -1267,7 +1267,7 @@ const translations = {
     "orderSuccess.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "orderSuccess.prepareOrderAr": "سنقوم بتجهيز طبك خلال 2-4 ساعات",
     "orderSuccess.contactPhone": "سيتم التواصل ��عك عبر الهاتف للتأكيد",
-    "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأ��يد",
+    "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأكيد",
     "orderSuccess.deliveryTime": "التوصيل خلال 1-3 أيام عمل",
     "orderSuccess.deliveryTimeAr": "التوصيل خلال 1-3 أيام عمل",
   },
