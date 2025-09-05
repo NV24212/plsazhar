@@ -137,9 +137,7 @@ export default function Products() {
     try {
       const productData = {
         name: formData.name.trim(),
-        nameAr: formData.nameAr.trim(),
         description: formData.description.trim(),
-        descriptionAr: formData.descriptionAr.trim(),
         price: parseFloat(formData.price),
         category: formData.category,
         images: formData.images,
