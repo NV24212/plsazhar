@@ -30,8 +30,8 @@ async function apiCall<T>(
       let errorMessage = `API Error: ${response.status}`;
 
       try {
-        // Read raw text once from the original response (we won't use it afterward)
-        const raw = await response.text();
+        // Use a clone to safely read the body without affecting the original response stream
+        const raw = await response.clone().text();
         let errorData: any = null;
         try {
           errorData = raw ? JSON.parse(raw) : null;
