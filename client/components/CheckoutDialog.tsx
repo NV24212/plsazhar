@@ -34,6 +34,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // Order Success Popup Component
 const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
   const { language } = useLanguage();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
