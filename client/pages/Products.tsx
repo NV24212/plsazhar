@@ -72,7 +72,7 @@ export default function Products() {
   const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
   const [savingProductId, setSavingProductId] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormFormData] = useState({
     name: "",
     nameAr: "",
     description: "",
@@ -80,6 +80,7 @@ export default function Products() {
     price: "",
     category: "",
     images: [] as string[],
+    total_stock: 1,
     variants: [] as ProductVariant[],
   });
 
@@ -109,6 +110,7 @@ export default function Products() {
         price: product.price.toString(),
         category: product.category,
         images: product.images || [],
+        total_stock: product.total_stock ?? (product as any).totalStock ?? (product as any).stock ?? 1,
         variants: getProductVariants(product.id),
       });
     } else {
@@ -121,6 +123,7 @@ export default function Products() {
         price: "",
         category: categories[0]?.id || "",
         images: [],
+        total_stock: 1,
         variants: [],
       });
     }
@@ -148,6 +151,8 @@ export default function Products() {
         price: parseFloat(formData.price),
         category: formData.category,
         images: formData.images,
+        // only include total_stock when no variants exist
+        total_stock: formData.variants && formData.variants.length > 0 ? undefined : Number(formData.total_stock ?? 0),
         variants: formData.variants,
       };
 
@@ -414,15 +419,15 @@ export default function Products() {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6 py-4">
-              <Tabs defaultValue="types">
-                <TabsList className="bg-gray-100 p-2 rounded-lg grid grid-cols-3">
-                  <TabsTrigger value="types" className="text-center py-2">
+              <Tabs defaultValue="details">
+                <TabsList className="bg-gray-100 p-1 rounded-lg grid grid-cols-3">
+                  <TabsTrigger value="types" className="text-center w-full">
                     {t("products.variants")}
                   </TabsTrigger>
-                  <TabsTrigger value="images" className="text-center py-2">
+                  <TabsTrigger value="images" className="text-center w-full">
                     {t("products.images")}
                   </TabsTrigger>
-                  <TabsTrigger value="details" className="text-center py-2">
+                  <TabsTrigger value="details" className="text-center w-full">
                     {t("products.productName")}
                   </TabsTrigger>
                 </TabsList>
@@ -648,6 +653,23 @@ export default function Products() {
                       </Select>
                     </div>
                   </div>
+
+                  {/* Stock input - show only when no variants are present */}
+                  {(!formData.variants || formData.variants.length === 0) && (
+                    <div className="mt-4 space-y-2 sm:w-1/3">
+                      <Label htmlFor="total_stock">{t("products.stock")}</Label>
+                      <Input
+                        id="total_stock"
+                        type="number"
+                        min="0"
+                        value={formData.total_stock}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, total_stock: parseInt(e.target.value || "0") }))
+                        }
+                        placeholder="0"
+                      />
+                    </div>
+                  )}
                 </TabsContent>
               </Tabs>
             </div>
