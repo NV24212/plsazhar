@@ -62,7 +62,7 @@ export default function Products() {
     getProductVariants,
   } = useData();
   const { showConfirm, showAlert } = useDialog();
-  const { t, translateCategory } = useLanguage();
+  const { t, translateCategory, language } = useLanguage();
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
