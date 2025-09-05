@@ -67,14 +67,22 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
           </p>
         </div>
 
-        <Button
-          onClick={onClose}
-          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
-        >
-          <span className="auto-text">
-            {language === "ar" ? "إغلاق" : "Close"}
-          </span>
-        </Button>
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            type="button"
+            onClick={() => { onClose(); navigate('/'); }}
+            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
+          >
+            <span className="auto-text">{language === "ar" ? "متابعة التسوق" : "Continue shopping"}</span>
+          </Button>
+          <Button
+            type="button"
+            onClick={onClose}
+            className="w-full bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg"
+          >
+            <span className="auto-text">{language === "ar" ? "إغلاق" : "Close"}</span>
+          </Button>
+        </div>
       </motion.div>
     </div>
   );
@@ -551,7 +559,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         };
       }
       return {
-        successMessage: language === "ar" ? "شكراً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
+        successMessage: language === "ar" ? "ش��راً لك على طلبك! سنقوم ��تجهيزه خلال 2-4 ساعات وسيصل خلال 1-3 أيام عمل." : "Thank you for your order! We'll process it within 2-4 hours and deliver within 1-3 business days.",
         instructions: language === "ar" ? "لأي تغييرات أو أسئلة حول طلبك، يرجى التواصل معنا." : "For any changes or questions about your order, please contact us.",
         headline: language === "ar" ? t("orderSuccess.headlineAr") : t("orderSuccess.headline"),
         subtext: language === "ar" ? "سنقوم بإبلاغك بالتحديثات عبر الهاتف حسب تقدم طلبك." : "We'll share updates by phone as your order progresses.",
