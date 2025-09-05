@@ -543,18 +543,6 @@ export default function Products() {
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nameAr">{t("products.productNameAr")}</Label>
-                      <Input
-                        id="nameAr"
-                        value={formData.nameAr}
-                        onChange={(e) =>
-                          setFormData((prev) => ({ ...prev, nameAr: e.target.value }))
-                        }
-                        placeholder={t("products.productNameAr")}
-                        dir="rtl"
-                      />
-                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
