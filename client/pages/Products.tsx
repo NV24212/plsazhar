@@ -100,9 +100,7 @@ export default function Products() {
       setEditingProduct(product);
       setFormData({
         name: product.name,
-        nameAr: product.nameAr || "",
         description: product.description,
-        descriptionAr: product.descriptionAr || "",
         price: product.price.toString(),
         category: product.category,
         images: product.images || [],
@@ -113,9 +111,7 @@ export default function Products() {
       setEditingProduct(null);
       setFormData({
         name: "",
-        nameAr: "",
         description: "",
-        descriptionAr: "",
         price: "",
         category: categories[0]?.id || "",
         images: [],
