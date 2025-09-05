@@ -313,7 +313,7 @@ export default function Checkout() {
                         variant="outline"
                         className="bg-blue-50 text-blue-700 border-blue-200"
                       >
-                        {formatPriceWithSymbol(deliveryFeeSetting, settings?.currencySymbol || "BH", language)}
+                        {formatPriceWithSymbol(deliveryFeeSetting, settings?.currencySymbol || "BD", language)}
                       </Badge>
                     </div>
 
