@@ -63,7 +63,7 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
 
         <div className="bg-primary/10 rounded-lg p-4 mb-6">
           <p className="text-gray-700 auto-text leading-relaxed">
-            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعا��جته قريباً." : "Your order has been received successfully. We'll process it soon.")}
+            {orderMessages.successMessage || (language === "ar" ? "تم استلام طلبك بنجاح. سنقوم بمعالجته قريباً." : "Your order has been received successfully. We'll process it soon.")}
           </p>
         </div>
 
@@ -480,7 +480,7 @@ const CheckoutForm = ({
             ) : (
               <Button
                 type="button"
-                onClick={handlePlaceOrder}
+                onClick={(e) => handlePlaceOrder(e)}
                 disabled={!isFormValid() || isSubmitting}
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 h-12 sm:h-14 w-full touch-manipulation"
                 size="lg"
@@ -534,7 +534,7 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
         return area;
     }
   };
-  const pickupAddress: string = language === "ar" ? savedSettings?.pickupAddressAr || "منزل 1348، طريق 416، مجمع 604، سترة القرية" : savedSettings?.pickupAddressEn || "Home 1348, Road 416, Block 604, Sitra Alqarya";
+  const pickupAddress: string = language === "ar" ? savedSettings?.pickupAddressAr || "منزل 1348، طري�� 416، مجمع 604، سترة القرية" : savedSettings?.pickupAddressEn || "Home 1348, Road 416, Block 604, Sitra Alqarya";
   const contactPhone: string = savedSettings?.contactPhone || "+973 36283382";
   const enableDialogScroll: boolean = savedSettings?.enableDialogScroll ?? true;
   const autoScrollToSummary: boolean = savedSettings?.autoScrollToSummary ?? true;
