@@ -51,8 +51,19 @@ async function apiCall<T>(
       let errorMessage = `API Error: ${response.status}`;
 
       try {
-        // Use a clone to safely read the body without affecting the original response stream
-        const raw = await response.clone().text();
+        // Attempt to read response body safely. Try clone first; if clone fails (body used), fallback to direct text()
+        let raw: string | null = null;
+        try {
+          raw = await response.clone().text();
+        } catch (cloneErr) {
+          try {
+            raw = await response.text();
+          } catch (textErr) {
+            raw = null;
+            console.error("Failed to read response body via clone() and text():", { cloneErr, textErr });
+          }
+        }
+
         let errorData: any = null;
         try {
           errorData = raw ? JSON.parse(raw) : null;
