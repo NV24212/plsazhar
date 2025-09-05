@@ -72,7 +72,7 @@ export default function Products() {
   const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
   const [savingProductId, setSavingProductId] = useState<string | null>(null);
 
-  const [formData, setFormFormData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     nameAr: "",
     description: "",
