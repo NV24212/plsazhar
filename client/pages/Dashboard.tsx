@@ -53,7 +53,7 @@ export default function Dashboard() {
   const stats = [
     {
       title: t("dashboard.totalRevenue"),
-      value: `BH ${totalRevenue.toFixed(2)}`,
+      value: `BD ${totalRevenue.toFixed(2)}`,
       description: `${t("dashboard.totalOrders")}: ${orders.length}`,
       icon: DollarSign,
       color: "text-green-600",
