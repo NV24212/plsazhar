@@ -15,13 +15,34 @@ async function apiCall<T>(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000); // Reduced timeout to 8s
 
+    // Clone options so we can safely modify headers without mutating caller object
+    const requestOptions: RequestInit = { ...(options || {}) };
+
+    // If JSON body was passed as an object, stringify it once here so retries can reuse the string
+    if (requestOptions.body && typeof requestOptions.body !== "string") {
+      try {
+        // If it's already FormData/Blob/URLSearchParams, leave it as-is (non-retryable)
+        const bodyType = Object.prototype.toString.call(requestOptions.body);
+        const nonRetryableTypes = ["[object FormData]", "[object Blob]", "[object URLSearchParams]", "[object ReadableStream]"];
+        if (!nonRetryableTypes.includes(bodyType)) {
+          requestOptions.body = JSON.stringify(requestOptions.body);
+          requestOptions.headers = {
+            "Content-Type": "application/json",
+            ...(requestOptions.headers as Record<string, string> | undefined),
+          };
+        }
+      } catch (e) {
+        // if stringify fails, leave body as-is
+      }
+    }
+
     const response = await fetch(`${API_BASE}${url}`, {
       headers: {
         "Content-Type": "application/json",
-        ...options?.headers,
+        ...((requestOptions.headers as Record<string, string>) || {}),
       },
       signal: controller.signal,
-      ...options,
+      ...requestOptions,
     });
 
     clearTimeout(timeoutId);
