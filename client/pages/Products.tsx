@@ -86,9 +86,7 @@ export default function Products() {
     return products.filter((product) => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.nameAr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.descriptionAr?.toLowerCase().includes(searchTerm.toLowerCase());
+        product.description.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
         selectedCategory === "all" || product.category === selectedCategory;
