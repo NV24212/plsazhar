@@ -468,6 +468,8 @@ export default function Products() {
                             </Label>
                             <Input
                               value={variant.name}
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                              className={language === "ar" ? "rtl-text" : "ltr-text"}
                               onChange={(e) =>
                                 handleUpdateVariant(index, "name", e.target.value)
                               }
@@ -479,6 +481,8 @@ export default function Products() {
                             <Label className="text-xs">{t("products.price")}</Label>
                             <Input
                               type="number"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                              className={language === "ar" ? "rtl-text" : "ltr-text"}
                               step="0.01"
                               min="0"
                               value={variant.price}
@@ -497,6 +501,8 @@ export default function Products() {
                             <Label className="text-xs">{t("products.stock")}</Label>
                             <Input
                               type="number"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                              className={language === "ar" ? "rtl-text" : "ltr-text"}
                               min="0"
                               value={variant.stock}
                               onChange={(e) =>
@@ -535,6 +541,8 @@ export default function Products() {
                       <Label htmlFor="name">{t("products.productName")}</Label>
                       <Input
                         id="name"
+                        dir={language === "ar" ? "rtl" : "ltr"}
+                        className={language === "ar" ? "rtl-text" : "ltr-text"}
                         value={formData.name}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -550,6 +558,8 @@ export default function Products() {
                       <Label htmlFor="description">{t("products.description")}</Label>
                       <Textarea
                         id="description"
+                        dir={language === "ar" ? "rtl" : "ltr"}
+                        className={language === "ar" ? "rtl-text" : "ltr-text"}
                         value={formData.description}
                         onChange={(e) =>
                           setFormData((prev) => ({
@@ -568,6 +578,8 @@ export default function Products() {
                       <Label htmlFor="price">{t("products.price")}</Label>
                       <Input
                         id="price"
+                        dir={language === "ar" ? "rtl" : "ltr"}
+                        className={language === "ar" ? "rtl-text" : "ltr-text"}
                         type="number"
                         step="0.01"
                         min="0"
@@ -587,7 +599,7 @@ export default function Products() {
                           setFormData((prev) => ({ ...prev, category: value }))
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger dir={language === "ar" ? "rtl" : "ltr"} className={language === "ar" ? "rtl-text" : "ltr-text"}>
                           <SelectValue placeholder={t("products.selectCategory")} />
                         </SelectTrigger>
                         <SelectContent>
@@ -607,15 +619,17 @@ export default function Products() {
                       <div className="space-y-2">
                         <Label htmlFor="total_stock">{t("products.stock")}</Label>
                         <Input
-                          id="total_stock"
-                          type="number"
-                          min="0"
-                          value={formData.total_stock}
-                          onChange={(e) =>
-                            setFormData((prev) => ({ ...prev, total_stock: parseInt(e.target.value || "0") }))
-                          }
-                          placeholder="0"
-                        />
+                        id="total_stock"
+                        dir={language === "ar" ? "rtl" : "ltr"}
+                        className={language === "ar" ? "rtl-text" : "ltr-text"}
+                        type="number"
+                        min="0"
+                        value={formData.total_stock}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, total_stock: parseInt(e.target.value || "0") }))
+                        }
+                        placeholder="0"
+                      />
                       </div>
                       <div />
                     </div>
