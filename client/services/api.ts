@@ -104,16 +104,22 @@ async function apiCall<T>(
   } catch (error) {
     console.error(`API call failed (attempt ${retryCount + 1}):`, {
       url: `${API_BASE}${url}`,
-      error: error instanceof Error ? error.message : String(error),
+      error: error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : String(error),
     });
 
-    // Check if we should retry - only retry network errors
+    // Decide whether the request body is retryable. If options.body exists and is not a string,
+    // it's likely a stream (FormData, File) and cannot be retried safely.
+    const bodyIsRetryable = !options?.body || typeof options.body === "string";
+
+    // Check if we should retry - only retry network errors and when body is retryable
     if (
       retryCount < maxRetries &&
       error instanceof Error &&
+      bodyIsRetryable &&
       (error.name === "AbortError" ||
         error.message.includes("Failed to fetch") ||
-        error.message.includes("Network error"))
+        error.message.includes("Network error") ||
+        error.message.includes("ECONNRESET"))
     ) {
       console.log(`Retrying API call in ${retryDelay}ms...`);
       await new Promise((resolve) => setTimeout(resolve, retryDelay));
