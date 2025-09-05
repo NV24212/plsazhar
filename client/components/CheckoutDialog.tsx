@@ -67,18 +67,11 @@ const OrderSuccessPopup = ({ isOpen, onClose, orderMessages }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            type="button"
-            onClick={() => { onClose(); navigate('/'); }}
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transform transition-all hover:scale-105"
-          >
-            <span className="auto-text">{language === "ar" ? "متابعة التسوق" : "Continue shopping"}</span>
-          </Button>
+        <div className="flex justify-center">
           <Button
             type="button"
             onClick={onClose}
-            className="w-full bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg"
+            className="w-full max-w-xs bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg"
           >
             <span className="auto-text">{language === "ar" ? "إغلاق" : "Close"}</span>
           </Button>
