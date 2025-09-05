@@ -154,7 +154,7 @@ const defaultSettings: StoreSettings = {
   storeName: "",
   storeDescription: "",
   currency: "BHD",
-  currencySymbol: "BH",
+  currencySymbol: "BD",
   contactPhone: "",
   contactEmail: "",
   contactAddress: "",
@@ -1077,7 +1077,7 @@ export default function Settings() {
                       onChange={(e) =>
                         handleInputChange("newPassword", e.target.value)
                       }
-                      placeholder="••••••••"
+                      placeholder="•••••��••"
                       className="ltr-text"
                     />
                   </div>
