@@ -35,8 +35,8 @@ export function formatBHD(
     return `${formattedAmount}${separator}د.ب`;
   }
 
-  // For English locale, show BD after amount (standard BHD format)
-  return `${formattedAmount}${separator}BD`;
+  // For English locale, show BH after amount (site uses BH as the symbol)
+  return `${formattedAmount}${separator}BH`;
 }
 
 /**
@@ -52,7 +52,7 @@ export function getCurrencySettings(): {
     if (savedSettings) {
       const settings = JSON.parse(savedSettings);
       return {
-        currencySymbol: settings.currencySymbol || "BD",
+        currencySymbol: settings.currencySymbol || "BH",
         currency: settings.currency || "BHD",
         locale: settings.language || "en-BH",
       };
@@ -62,7 +62,7 @@ export function getCurrencySettings(): {
   }
 
   return {
-    currencySymbol: "BD",
+    currencySymbol: "BH",
     currency: "BHD",
     locale: "en-BH",
   };
@@ -102,8 +102,8 @@ export function formatPriceWithSymbol(
   const formattedAmount = Number(amount).toFixed(3);
 
   if (language === "ar") {
-    // Use Arabic currency symbol if available, otherwise use provided symbol
-    const arabicSymbol = currencySymbol === "BD" ? "د.ب" : currencySymbol;
+    // Use Arabic currency symbol if the currency represents BHD (BD or BH), otherwise use provided symbol
+    const arabicSymbol = (currencySymbol === "BD" || currencySymbol === "BH") ? "د.ب" : currencySymbol;
     return `${formattedAmount} ${arabicSymbol}`;
   }
 

@@ -53,7 +53,7 @@ export default function Dashboard() {
   const stats = [
     {
       title: t("dashboard.totalRevenue"),
-      value: `BD ${totalRevenue.toFixed(2)}`,
+      value: `BH ${totalRevenue.toFixed(2)}`,
       description: `${t("dashboard.totalOrders")}: ${orders.length}`,
       icon: DollarSign,
       color: "text-green-600",
@@ -69,7 +69,7 @@ export default function Dashboard() {
     },
     {
       title: t("revenue.avgOrderValue"),
-      value: `BD ${avgOrderValue.toFixed(2)}`,
+      value: `BH ${avgOrderValue.toFixed(2)}`,
       description: t("orders.orderTotal"),
       icon: TrendingUp,
       color: "text-purple-600",
@@ -113,7 +113,7 @@ export default function Dashboard() {
           itemsCount > 1
             ? `${mainProduct?.name || t("common.product")} +${itemsCount - 1} more`
             : mainProduct?.name || t("common.unknownProduct"),
-        amount: `BD ${order.total.toFixed(2)}`,
+        amount: `BH ${order.total.toFixed(2)}`,
         status: getStatusText(order.status, t),
         date: formattedDate,
       };

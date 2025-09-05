@@ -154,7 +154,7 @@ const defaultSettings: StoreSettings = {
   storeName: "",
   storeDescription: "",
   currency: "BHD",
-  currencySymbol: "BD",
+  currencySymbol: "BH",
   contactPhone: "",
   contactEmail: "",
   contactAddress: "",

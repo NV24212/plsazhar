@@ -326,7 +326,7 @@ export default function Products() {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-lg font-bold text-primary">
-                          {product.price.toFixed(2)} BD
+                          {product.price.toFixed(2)} BH
                         </span>
                         <span className="text-xs text-muted-foreground">
                           {translateCategory(

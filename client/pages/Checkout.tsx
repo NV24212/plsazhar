@@ -5,6 +5,7 @@ import { useCart } from "../contexts/CartContext";
 import { useSettings } from "../contexts/SettingsContext";
 import { createCustomer, createOrder } from "../services/api";
 import { Button } from "../components/ui/button";
+import { formatPriceWithSymbol } from "../lib/formatters";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import {
@@ -312,7 +313,7 @@ export default function Checkout() {
                         variant="outline"
                         className="bg-blue-50 text-blue-700 border-blue-200"
                       >
-                        {language === "ar" ? "د.ب 1.50" : "BD 1.50"}
+                        {formatPriceWithSymbol(deliveryFeeSetting, settings?.currencySymbol || "BH", language)}
                       </Badge>
                     </div>
 

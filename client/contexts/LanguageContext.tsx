@@ -419,7 +419,7 @@ const translations = {
     "analytics.orderStatusDistribution": "Order Status Distribution",
     "analytics.deliveryMethodBreakdown": "Delivery Method Breakdown",
     "analytics.orders": "Orders",
-    "analytics.revenue": "Revenue (BD)",
+    "analytics.revenue": "Revenue (BH)",
     "analytics.visitors": "Visitors",
     "analytics.last7days": "Last 7 Days",
     "analytics.last30days": "Last 30 Days",
@@ -628,7 +628,7 @@ const translations = {
     "settings.autoScrollDesc": "Automatically scroll to summary section",
 
     // Currency and formatting
-    "common.currency": "BD",
+    "common.currency": "BH",
     "common.currencyAr": "د.ب",
     "common.total": "Total",
     "common.totalAr": "المجموع",
@@ -666,7 +666,7 @@ const translations = {
     "dashboard.title": "لوحة التحكم",
     "dashboard.totalRevenue": "إجمالي الإيرادات",
     "dashboard.totalOrders": "إجمالي الطلبات",
-    "dashboard.recentOrders": "الطلبات الأخيرة",
+    "dashboard.recentOrders": "الطلبات الأخير��",
     "dashboard.welcome": "مرحباً بك في لوحة الإدارة",
 
     // Products
@@ -780,7 +780,7 @@ const translations = {
     "customers.customerName": "اسم العميل",
     "customers.customerPhone": "هاتف العميل",
     "customers.customerAddress": "عنوان العميل",
-    "customers.customerHome": "رقم المنزل",
+    "customers.customerHome": "رقم ��لمنزل",
     "customers.customerRoad": "رقم الطريق",
     "customers.customerBlock": "رقم المجمع",
     "customers.customerTown": "البلدة/المنطقة",
@@ -854,7 +854,7 @@ const translations = {
 
     "message.customerSaveError": "فشل في حفظ العميل. يرجى المحاولة مرة أخرى.",
     "message.productSaveError": "فشل في حفظ المنتج. يرجى المحاولة مرة أخرى.",
-    "message.uploadError": "فشل في رفع الصور. يرجى المحاولة مرة أخرى.",
+    "message.uploadError": "فشل في رفع الصور. ��رجى المحاولة مرة أخرى.",
 
     // Categories
     "categories.title": "الفئات",
@@ -875,7 +875,7 @@ const translations = {
     "categories.addSuccess": "تم إضافة الفئة بنجاح",
     "categories.updateSuccess": "تم تحديث الفئة بنجاح",
     "categories.deleteSuccess": "تم حذف الفئة بنجاح",
-    "categories.nameRequired": "اسم الفئة مطلوب",
+    "categories.nameRequired": "اس�� الفئة مطلوب",
 
     // Products
     "products.title": "المنتجات",
@@ -1091,7 +1091,7 @@ const translations = {
     "settings.production": "إنتاج",
     "settings.serverStatus": "حالة الخادم",
     "settings.running": "يعمل",
-    "settings.uptime": "وقت التشغيل",
+    "settings.uptime": "وقت ا��تشغيل",
     "settings.connected": "متصل",
     "settings.systemHealth": "صحة النظام",
     "settings.databaseStatus": "حالة قاعدة البيانات",
@@ -1154,7 +1154,7 @@ const translations = {
     "settings.successSubtext": "نص فرعي للنجاح",
     "settings.pickupAddress": "عنوان الاستلام",
     "settings.pickupAddressEn": "عنوان الاستلام (إنجليزي)",
-    "settings.pickupAddressAr": "عنوان الاستلام (عربي)",
+    "settings.pickupAddressAr": "عنوان الاستلام (عرب��)",
     "settings.deliveryAreas": "مناطق التوصيل",
     "settings.addDeliveryArea": "إضافة منطقة توصيل",
     "settings.removeDeliveryArea": "إزالة",
@@ -1240,11 +1240,11 @@ const translations = {
     "settings.deliveryMessageAr": "رسالة التوصيل (عربي)",
 
     // Order Messages
-    "settings.orderMessages": "رسائل الطلبات",
+    "settings.orderMessages": "رسائل الطلب��ت",
     "settings.englishMessages": "الرسائل الإنجليزية",
     "settings.arabicMessages": "الرسائل العربية",
     "settings.orderSuccessMessage": "رسالة نجاح الطلب",
-    "settings.orderInstructions": "تعليمات الطلب",
+    "settings.orderInstructions": "��عليمات الطلب",
     "settings.note": "ملاحظة",
     "settings.orderMessageNote":
       "ستظهر هذه الرسائل للعملاء عند نجاح تقديم طلبهم. قم بتخصيصها لتتناسب مع طابع متجر�� وتقديم المعلومات ذات الصلة.",
@@ -1267,7 +1267,7 @@ const translations = {
     "orderSuccess.prepareOrder": "سنقوم بتجهيز طلبك خلال 2-4 ساعات",
     "orderSuccess.prepareOrderAr": "سنقوم بتجهيز طبك خلال 2-4 ساعات",
     "orderSuccess.contactPhone": "سيتم التواصل ��عك عبر الهاتف للتأكيد",
-    "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأكيد",
+    "orderSuccess.contactPhoneAr": "سيتم التواصل معك عبر الهاتف للتأ��يد",
     "orderSuccess.deliveryTime": "التوصيل خلال 1-3 أيام عمل",
     "orderSuccess.deliveryTimeAr": "التوصيل خلال 1-3 أيام عمل",
   },

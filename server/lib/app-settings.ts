@@ -69,7 +69,7 @@ export const defaultSettings: AppSettings = {
   storeName: "My Store",
   storeDescription: "A description of my store.",
   currency: "BHD",
-  currencySymbol: "BD",
+  currencySymbol: "BH",
   contactPhone: "",
   contactEmail: "",
   contactAddress: "",

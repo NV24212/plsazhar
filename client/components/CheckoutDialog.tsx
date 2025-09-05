@@ -650,19 +650,6 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const handlePlaceOrder = async () => {
     if (!isFormValid()) return;
 
-    // Confirmation popup with customizable text via Settings
-    const confirmationMessage = language === "ar"
-      ? (savedSettings?.preOrderConfirmationMessageAr || "هل أنت متأكد من إرسال الطلب؟")
-      : (savedSettings?.preOrderConfirmationMessageEn || "Are you sure you want to place the order?");
-    
-    const confirmed = await showConfirm({
-      title: language === "ar" ? "تأكيد الطلب" : "Confirm Order",
-      message: confirmationMessage,
-      type: "warning",
-      confirmText: language === "ar" ? "نعم" : "Yes",
-      cancelText: language === "ar" ? "إلغاء" : "Cancel",
-    });
-    if (!confirmed) return;
 
     setIsSubmitting(true);
     try {
