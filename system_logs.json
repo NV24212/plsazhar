@@ -127,5 +127,16 @@
     "ip": "127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
     "timestamp": "2025-09-04T10:06:33.741Z"
+  },
+  {
+    "level": "error",
+    "category": "product",
+    "message": "Failed to create product",
+    "details": {
+      "error": "API Error: 400"
+    },
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "timestamp": "2025-09-05T12:42:51.663Z"
   }
 ]
