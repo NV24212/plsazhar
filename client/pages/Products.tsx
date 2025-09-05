@@ -74,9 +74,7 @@ export default function Products() {
 
   const [formData, setFormData] = useState({
     name: "",
-    nameAr: "",
     description: "",
-    descriptionAr: "",
     price: "",
     category: "",
     images: [] as string[],
