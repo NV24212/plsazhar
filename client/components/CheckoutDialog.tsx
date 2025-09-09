@@ -26,7 +26,7 @@ import {
   MapPin,
   Clock,
   CheckCircle,
-  Loader,
+  Refresh as Loader,
   Xmark as X,
 } from "iconoir-react";
 import { motion, AnimatePresence } from "framer-motion";
