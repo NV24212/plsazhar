@@ -16,19 +16,12 @@ import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
 import {
-  Check,
-  CreditCard,
+  CheckCircle,
   Truck,
   Box as Package,
-  ArrowLeft,
-  ArrowRight,
-  Phone,
-  MapPin,
-  Clock,
-  CheckCircle,
-  Refresh as Loader,
-  Xmark as X,
 } from "iconoir-react";
+import Stepper, { Step } from "./Stepper";
+import "./Stepper.css";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Order Success Popup Component
@@ -132,8 +125,57 @@ const SuccessView = ({ orderMessages, onClose }) => {
   );
 };
 
-import Stepper, { Step } from "./Stepper";
-import "./Stepper.css";
+// Helper component for the success screen
+const SuccessView = ({ orderMessages, onClose }) => {
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+  return (
+    <motion.div
+      key="success"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col h-full"
+    >
+      <DialogHeader className="p-6 pb-4 border-b bg-primary/10">
+        <div className="flex items-center justify-center mb-4">
+          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-lg">
+            <CheckCircle className="h-10 w-10 text-primary" />
+          </div>
+        </div>
+        <div>
+          <DialogTitle className="text-center text-2xl font-bold text-primary auto-text leading-tight">
+            {orderMessages.headline}
+          </DialogTitle>
+          <p className="text-center text-primary/80 auto-text text-sm mt-2 leading-relaxed">
+            {orderMessages.subtext}
+          </p>
+        </div>
+      </DialogHeader>
+      <ScrollArea className="flex-1 p-6">
+        <div id="checkout-success-bottom" className="flex items-center justify-center min-h-full py-8">
+          <div className="text-center max-w-md mx-auto">
+            <div className="bg-secondary p-8 rounded-lg border">
+              <p className="text-foreground auto-text text-lg leading-relaxed">
+                {orderMessages.successMessage}
+              </p>
+            </div>
+          </div>
+        </div>
+      </ScrollArea>
+      <div className="border-t p-4 bg-white">
+        <Button
+          type="button"
+          onClick={() => { onClose(); navigate('/'); }}
+          className="w-full bg-primary hover:bg-primary/90 touch-manipulation h-12 text-base font-semibold"
+        >
+          <span className="auto-text">{t("checkout.backToStore")}</span>
+        </Button>
+      </div>
+    </motion.div>
+  );
+};
+
 interface CheckoutDialogProps {
   open: boolean;
   onClose: () => void;
@@ -280,7 +322,6 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     return isStep1Valid() && items.length > 0;
   };
 
-
   const handlePlaceOrder = async (e?: React.MouseEvent) => {
     try {
       e?.preventDefault();
@@ -367,250 +408,244 @@ export default function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     }, 200);
   };
 
-  const onStepChange = (newStep: number) => {
-    if (newStep === 1 && !isStep1Valid()) {
-        return;
-    }
-    setStep(newStep);
-  };
-
   return (
     <>
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="w-[90vw] max-w-md max-h-[90vh] flex flex-col p-0 rounded-lg border border-gray-200 shadow-lg bg-white mx-auto dialog-content-scroll">
-            <Stepper
-              initialStep={step}
-              onStepChange={onStepChange}
-              onFinalStepCompleted={handlePlaceOrder}
-              backButtonText={t("common.back")}
-              nextButtonText={t("common.next")}
-              onNext={() => {
-                if (step === 1) {
-                  return isStep1Valid();
-                }
-                return true;
-              }}
-              isSubmitting={isSubmitting}
-              isFormValid={isFormValid()}
-            >
-                <Step>
-                    <Card className="border-none shadow-none bg-white">
-                        <CardHeader>
-                            <CardTitle>{t("checkout.customerInfo")}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="space-y-2">
-                            <Label htmlFor="name">{t("checkout.customerName")}</Label>
-                            <Input id="name" value={customerInfo.name} onChange={(e) => handleInputChange("name", e.target.value)} required />
+          <Stepper
+            initialStep={step}
+            onStepChange={setStep}
+            onFinalStepCompleted={handlePlaceOrder}
+            backButtonText={t("common.back")}
+            nextButtonText={t("common.next")}
+            onNext={() => {
+              if (step === 1) {
+                return isStep1Valid();
+              }
+              return true;
+            }}
+            isSubmitting={isSubmitting}
+            isFormValid={isFormValid()}
+            dir={language === 'ar' ? 'rtl' : 'ltr'}
+          >
+            <Step>
+              <Card className="border-none shadow-none bg-white">
+                <CardHeader>
+                  <CardTitle>{t("checkout.customerInfo")}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">{t("checkout.customerName")}</Label>
+                    <Input id="name" value={customerInfo.name} onChange={(e) => handleInputChange("name", e.target.value)} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">{t("checkout.customerPhone")}</Label>
+                    <Input id="phone" value={customerInfo.phone} onChange={(e) => handleInputChange("phone", e.target.value)} required />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="home" className="text-sm text-muted-foreground">{t("checkout.customerHome")}</Label>
+                      <Input id="home" value={customerInfo.home} onChange={(e) => handleInputChange("home", e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="road" className="text-sm text-muted-foreground">{t("checkout.customerRoad")}</Label>
+                      <Input id="road" value={customerInfo.road} onChange={(e) => handleInputChange("road", e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="block" className="text-sm text-muted-foreground">{t("checkout.customerBlock")}</Label>
+                      <Input id="block" value={customerInfo.block} onChange={(e) => handleInputChange("block", e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="town" className="text-sm text-muted-foreground">{t("checkout.customerTown")}</Label>
+                      <Input id="town" value={customerInfo.town} onChange={(e) => handleInputChange("town", e.target.value)} required />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Step>
+            <Step>
+              <Card className="border-none shadow-none bg-white">
+                <CardHeader>
+                  <CardTitle>{t("checkout.deliveryOptions")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
+                    <div
+                      onClick={() => setDeliveryType("delivery")}
+                      className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                        deliveryType === "delivery"
+                          ? "border-primary bg-primary/10 shadow-md"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="delivery" id="delivery" className="pointer-events-none" />
+                          <div className="flex items-center space-x-3">
+                            <Truck className="w-5 h-5 text-primary" />
+                            <Label htmlFor="delivery" className="font-semibold text-lg cursor-pointer">
+                              {t("checkout.delivery")}
+                            </Label>
+                          </div>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className="bg-primary/10 text-primary border-primary/20"
+                        >
+                          {formatPriceWithSymbol(deliveryAreaSitra, language)}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => setDeliveryType("pickup")}
+                      className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                        deliveryType === "pickup"
+                          ? "border-primary bg-primary/10 shadow-md"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="pickup" id="pickup" className="pointer-events-none" />
+                          <div className="flex items-center space-x-3">
+                            <Package className="w-5 h-5 text-green-600" />
+                            <Label htmlFor="pickup" className="font-semibold text-lg cursor-pointer">
+                              {t("checkout.pickup")}
+                            </Label>
+                          </div>
+                        </div>
+                        <Badge
+                          variant="secondary"
+                          className="bg-green-100 text-green-700 border-green-200"
+                        >
+                          {t("checkout.free")}
+                        </Badge>
+                      </div>
+                    </div>
+                  </RadioGroup>
+                  {deliveryType === "delivery" && (
+                    <div className="mt-4">
+                      <h3 className="text-lg font-medium mb-2">{t("settings.deliveryAreas")}</h3>
+                      <RadioGroup value={deliveryArea} onValueChange={(value) => setDeliveryArea(value as any)}>
+                        <div
+                          onClick={() => setDeliveryArea("sitra")}
+                          className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                            deliveryArea === "sitra"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <RadioGroupItem value="sitra" id="sitra" className="pointer-events-none" />
+                              <Label htmlFor="sitra" className="font-medium cursor-pointer">{getDeliveryAreaName("sitra")}</Label>
                             </div>
-                            <div className="space-y-2">
-                            <Label htmlFor="phone">{t("checkout.customerPhone")}</Label>
-                            <Input id="phone" value={customerInfo.phone} onChange={(e) => handleInputChange("phone", e.target.value)} required />
+                            <Badge variant="outline" className="text-xs">
+                              {formatPriceWithSymbol(deliveryAreaSitra, language)}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => setDeliveryArea("muharraq")}
+                          className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                            deliveryArea === "muharraq"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <RadioGroupItem value="muharraq" id="muharraq" className="pointer-events-none" />
+                              <Label htmlFor="muharraq" className="font-medium cursor-pointer">{getDeliveryAreaName("muharraq")}</Label>
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                                <Label htmlFor="home" className="text-sm text-muted-foreground">{t("checkout.customerHome")}</Label>
-                                <Input id="home" value={customerInfo.home} onChange={(e) => handleInputChange("home", e.target.value)} />
+                            <Badge variant="outline" className="text-xs">
+                              {formatPriceWithSymbol(deliveryAreaMuharraq, language)}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => setDeliveryArea("other")}
+                          className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                            deliveryArea === "other"
+                              ? "border-primary bg-primary/10 shadow-md"
+                              : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <RadioGroupItem value="other" id="other" className="pointer-events-none" />
+                              <Label htmlFor="other" className="font-medium cursor-pointer">{getDeliveryAreaName("other")}</Label>
                             </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="road" className="text-sm text-muted-foreground">{t("checkout.customerRoad")}</Label>
-                                <Input id="road" value={customerInfo.road} onChange={(e) => handleInputChange("road", e.target.value)} />
+                            <Badge variant="outline" className="text-xs">
+                              {formatPriceWithSymbol(deliveryAreaOther, language)}
+                            </Badge>
+                          </div>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </Step>
+            <Step>
+              <Card className="border-none shadow-none bg-white">
+                <CardHeader>
+                  <CardTitle>{t("checkout.orderSummary")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {items.map((item) => (
+                      <div key={`${item.productId}-${item.variantId}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <span className="font-medium">{item.productName}</span>
+                          <span className="text-sm text-muted-foreground ml-2">x {item.quantity}</span>
+                        </div>
+                        <span className="font-bold text-primary">{formatPrice(item.price * item.quantity, language)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Separator className="my-4" />
+                  <div className="space-y-2">
+                    {(() => {
+                      const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+                      const fee = deliveryType !== "delivery"
+                        ? 0
+                        : subtotal >= freeDeliveryMinimum
+                          ? 0
+                          : (deliveryArea === "sitra" ? deliveryAreaSitra : deliveryArea === "muharraq" ? deliveryAreaMuharraq : deliveryAreaOther);
+                      return (
+                        <>
+                          <div className="flex justify-between text-sm">
+                            <span>{t("checkout.subtotal")}</span>
+                            <span className="font-medium">{formatPrice(subtotal, language)}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>
+                              {t("checkout.deliveryFee")} {deliveryType === "delivery" ? `(${getDeliveryAreaName(deliveryArea)})` : ""}
+                            </span>
+                            <span className="font-medium">{fee === 0 ? t("checkout.free") : formatPrice(fee, language)}</span>
+                          </div>
+                          {deliveryType === "delivery" && (customerInfo.home || customerInfo.road || customerInfo.block || customerInfo.town) && (
+                            <div className="text-xs text-muted-foreground bg-gray-50 rounded p-2">
+                              <span>{t("checkout.customerAddress")}: </span>
+                              <span className="auto-text">
+                                {[customerInfo.home && `House ${customerInfo.home}`, customerInfo.road && `Road ${customerInfo.road}`, customerInfo.block && `Block ${customerInfo.block}`, customerInfo.town].filter(Boolean).join(", ")}
+                              </span>
                             </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="block" className="text-sm text-muted-foreground">{t("checkout.customerBlock")}</Label>
-                                <Input id="block" value={customerInfo.block} onChange={(e) => handleInputChange("block", e.target.value)} />
-                            </div>
-                            <div className="space-y-1">
-                                <Label htmlFor="town" className="text-sm text-muted-foreground">{t("checkout.customerTown")}</Label>
-                                <Input id="town" value={customerInfo.town} onChange={(e) => handleInputChange("town", e.target.value)} required />
-                            </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </Step>
-                <Step>
-                    <Card className="border-none shadow-none bg-white">
-                        <CardHeader>
-                            <CardTitle>{t("checkout.deliveryOptions")}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <RadioGroup value={deliveryType} onValueChange={setDeliveryType}>
-                            <div
-                                onClick={() => setDeliveryType("delivery")}
-                                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                deliveryType === "delivery"
-                                    ? "border-primary bg-primary/10 shadow-md"
-                                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                }`}
-                            >
-                                <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <RadioGroupItem value="delivery" id="delivery" className="pointer-events-none" />
-                                    <div className="flex items-center space-x-3">
-                                    <Truck className="w-5 h-5 text-primary" />
-                                    <Label htmlFor="delivery" className="font-semibold text-lg cursor-pointer">
-                                        {t("checkout.delivery")}
-                                    </Label>
-                                    </div>
-                                </div>
-                                <Badge
-                                    variant="outline"
-                                    className="bg-primary/10 text-primary border-primary/20"
-                                >
-                                    {formatPriceWithSymbol(deliveryAreaSitra, language)}
-                                </Badge>
-                                </div>
-                            </div>
-                            <div
-                                onClick={() => setDeliveryType("pickup")}
-                                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                deliveryType === "pickup"
-                                    ? "border-primary bg-primary/10 shadow-md"
-                                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                }`}
-                            >
-                                <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <RadioGroupItem value="pickup" id="pickup" className="pointer-events-none" />
-                                    <div className="flex items-center space-x-3">
-                                    <Package className="w-5 h-5 text-green-600" />
-                                    <Label htmlFor="pickup" className="font-semibold text-lg cursor-pointer">
-                                        {t("checkout.pickup")}
-                                    </Label>
-                                    </div>
-                                </div>
-                                <Badge
-                                    variant="secondary"
-                                    className="bg-green-100 text-green-700 border-green-200"
-                                >
-                                    {t("checkout.free")}
-                                </Badge>
-                                </div>
-                            </div>
-                            </RadioGroup>
-                            {deliveryType === "delivery" && (
-                            <div className="mt-4">
-                                <h3 className="text-lg font-medium mb-2">{t("settings.deliveryAreas")}</h3>
-                                <RadioGroup value={deliveryArea} onValueChange={(value) => setDeliveryArea(value as any)}>
-                                <div
-                                    onClick={() => setDeliveryArea("sitra")}
-                                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                    deliveryArea === "sitra"
-                                        ? "border-primary bg-primary/10 shadow-md"
-                                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <RadioGroupItem value="sitra" id="sitra" className="pointer-events-none" />
-                                        <Label htmlFor="sitra" className="font-medium cursor-pointer">{getDeliveryAreaName("sitra")}</Label>
-                                    </div>
-                                    <Badge variant="outline" className="text-xs">
-                                        {formatPriceWithSymbol(deliveryAreaSitra, language)}
-                                    </Badge>
-                                    </div>
-                                </div>
-                                <div
-                                    onClick={() => setDeliveryArea("muharraq")}
-                                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                    deliveryArea === "muharraq"
-                                        ? "border-primary bg-primary/10 shadow-md"
-                                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <RadioGroupItem value="muharraq" id="muharraq" className="pointer-events-none" />
-                                        <Label htmlFor="muharraq" className="font-medium cursor-pointer">{getDeliveryAreaName("muharraq")}</Label>
-                                    </div>
-                                    <Badge variant="outline" className="text-xs">
-                                        {formatPriceWithSymbol(deliveryAreaMuharraq, language)}
-                                    </Badge>
-                                    </div>
-                                </div>
-                                <div
-                                    onClick={() => setDeliveryArea("other")}
-                                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                    deliveryArea === "other"
-                                        ? "border-primary bg-primary/10 shadow-md"
-                                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <RadioGroupItem value="other" id="other" className="pointer-events-none" />
-                                        <Label htmlFor="other" className="font-medium cursor-pointer">{getDeliveryAreaName("other")}</Label>
-                                    </div>
-                                    <Badge variant="outline" className="text-xs">
-                                        {formatPriceWithSymbol(deliveryAreaOther, language)}
-                                    </Badge>
-                                    </div>
-                                </div>
-                                </RadioGroup>
-                            </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                </Step>
-                <Step>
-                    <Card className="border-none shadow-none bg-white">
-                        <CardHeader>
-                            <CardTitle>{t("checkout.orderSummary")}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
-                            {items.map((item) => (
-                                <div key={`${item.productId}-${item.variantId}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <span className="font-medium">{item.productName}</span>
-                                    <span className="text-sm text-muted-foreground ml-2">x {item.quantity}</span>
-                                </div>
-                                <span className="font-bold text-primary">{formatPrice(item.price * item.quantity, language)}</span>
-                                </div>
-                            ))}
-                            </div>
-                            <Separator className="my-4" />
-                            <div className="space-y-2">
-                            {(() => {
-                                const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-                                const fee = deliveryType !== "delivery"
-                                ? 0
-                                : subtotal >= freeDeliveryMinimum
-                                    ? 0
-                                    : (deliveryArea === "sitra" ? deliveryAreaSitra : deliveryArea === "muharraq" ? deliveryAreaMuharraq : deliveryAreaOther);
-                                return (
-                                <>
-                                    <div className="flex justify-between text-sm">
-                                    <span>{t("checkout.subtotal")}</span>
-                                    <span className="font-medium">{formatPrice(subtotal, language)}</span>
-                                    </div>
-                                    <div className="flex justify-between text-sm">
-                                    <span>
-                                        {t("checkout.deliveryFee")} {deliveryType === "delivery" ? `(${getDeliveryAreaName(deliveryArea)})` : ""}
-                                    </span>
-                                    <span className="font-medium">{fee === 0 ? t("checkout.free") : formatPrice(fee, language)}</span>
-                                    </div>
-                                    {deliveryType === "delivery" && (customerInfo.home || customerInfo.road || customerInfo.block || customerInfo.town) && (
-                                    <div className="text-xs text-muted-foreground bg-gray-50 rounded p-2">
-                                        <span>{t("checkout.customerAddress")}: </span>
-                                        <span className="auto-text">
-                                        {[customerInfo.home && `House ${customerInfo.home}`, customerInfo.road && `Road ${customerInfo.road}`, customerInfo.block && `Block ${customerInfo.block}`, customerInfo.town].filter(Boolean).join(", ")}
-                                        </span>
-                                    </div>
-                                    )}
-                                    <Separator className="my-3" />
-                                    <div className="flex justify-between font-bold text-lg p-3 bg-primary/10 rounded-lg">
-                                    <span>{t("checkout.total")}</span>
-                                    <span className="text-primary">{formatPrice(subtotal + fee, language)}</span>
-                                    </div>
-                                </>
-                                );
-                            })()}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </Step>
-            </Stepper>
+                          )}
+                          <Separator className="my-3" />
+                          <div className="flex justify-between font-bold text-lg p-3 bg-primary/10 rounded-lg">
+                            <span>{t("checkout.total")}</span>
+                            <span className="text-primary">{formatPrice(subtotal + fee, language)}</span>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </CardContent>
+              </Card>
+            </Step>
+          </Stepper>
         </DialogContent>
       </Dialog>
 
