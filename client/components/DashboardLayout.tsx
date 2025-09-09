@@ -103,11 +103,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <SidebarFooter>
             <div className="p-4 space-y-2">
               <Button onClick={toggleLanguage} variant="outline" className="w-full justify-start">
-                <Language className="w-4 h-4 mr-2" />
+                <Language className="w-4 h-4 me-2" />
                 {t("language.switch")}
               </Button>
               <Button onClick={logout} variant="outline" className="w-full justify-start text-red-600 hover:text-red-700">
-                <LogOut className="w-4 h-4 mr-2" />
+                <LogOut className="w-4 h-4 me-2" />
                 {t("nav.logout")}
               </Button>
             </div>
