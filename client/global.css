@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -88,7 +88,7 @@
   }
 
   html[lang="ar"] {
-    font-family: "Noto Kufi Arabic", sans-serif;
+    font-family: "Tajawal", sans-serif;
     font-optical-sizing: auto;
   }
 
