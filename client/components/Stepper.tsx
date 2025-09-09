@@ -1,6 +1,6 @@
 import React, { useState, Children, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader } from 'iconoir-react';
+import { Refresh } from 'iconoir-react';
 
 import './Stepper.css';
 
@@ -123,7 +123,7 @@ export default function Stepper({
               >
                 {isSubmitting ? (
                   <>
-                    <Loader className="w-4 h-4 animate-spin mr-2" />
+                    <Refresh className="w-4 h-4 animate-spin mr-2" />
                     Submitting...
                   </>
                 ) : isLastStep ? (
