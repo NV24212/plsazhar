@@ -4,31 +4,43 @@ import path from "path";
 import fs from "fs";
 import { imageStorage } from "../lib/image-storage";
 
-// Create uploads directory if it doesn't exist (fallback)
-const uploadsDir = path.join(process.cwd(), "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Determine uploads directory with environment override and safe fallback
+const uploadsDir = process.env.UPLOADS_DIR || "/tmp/uploads";
+
+// Detect if local storage is writable; do not crash in read-only environments
+let hasLocalStorage = false;
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  fs.accessSync(uploadsDir, fs.constants.W_OK);
+  hasLocalStorage = true;
+} catch (e) {
+  console.warn(
+    "Local uploads directory is not writable. Falling back to non-persistent memory storage unless Supabase is configured.",
+  );
 }
 
 // Configure multer for file uploads
-// When using Supabase, we use memory storage instead of disk storage
+// Prefer memory storage when using Supabase; otherwise use disk storage if available; else memory (non-persistent)
+const diskStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, `image-${uniqueSuffix}${ext}`);
+  },
+});
+
 const storage = imageStorage.isAvailable()
-  ? multer.memoryStorage() // Use memory storage for Supabase
-  : multer.diskStorage({
-      // Use disk storage as fallback
-      destination: (req, file, cb) => {
-        cb(null, uploadsDir);
-      },
-      filename: (req, file, cb) => {
-        // Generate unique filename
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const ext = path.extname(file.originalname);
-        cb(null, `image-${uniqueSuffix}${ext}`);
-      },
-    });
+  ? multer.memoryStorage()
+  : hasLocalStorage
+    ? diskStorage
+    : multer.memoryStorage();
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  // Accept only image files
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
@@ -52,24 +64,13 @@ export const handleImageUpload: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    console.log(
-      "File uploaded:",
-      req.file.originalname,
-      "Size:",
-      req.file.size,
-    );
-
-    // Check if Supabase storage is available
+    // Use Supabase storage when available
     if (imageStorage.isAvailable()) {
-      // Use Supabase storage
-      console.log("Using Supabase storage for image upload");
+      const fileBlob = new Blob([new Uint8Array(req.file.buffer)], {
+        type: (req.file as any).mimetype,
+      });
 
-      // Convert buffer to Blob object for Supabase
-      const fileBlob = new Blob([new Uint8Array(req.file.buffer)], { type: req.file.mimetype });
-
-      // Determine folder based on request context (optional)
-      const folder = req.body.folder || "products";
-
+      const folder = (req.body as any).folder || "products";
       const result = await imageStorage.uploadImageFromBlob(
         fileBlob,
         req.file.originalname,
@@ -77,34 +78,34 @@ export const handleImageUpload: RequestHandler = async (req, res) => {
       );
 
       if (!result.success) {
-        console.error("Supabase upload failed:", result.error);
         return res.status(500).json({ error: result.error });
       }
 
-      console.log("Image uploaded to Supabase successfully:", result.url);
-      res.json({
+      return res.json({
         url: result.url,
         fileName: result.fileName,
         storage: "supabase",
       });
-    } else {
-      // Fallback to local storage
-      console.log("Using local storage for image upload");
-      const fileUrl = `/uploads/${req.file.filename}`;
-      res.json({
-        url: fileUrl,
-        fileName: req.file.filename,
-        storage: "local",
-      });
     }
-  } catch (error) {
+
+    // Local writable storage fallback
+    if (hasLocalStorage && (req.file as any).filename) {
+      const fileUrl = `/uploads/${(req.file as any).filename}`;
+      return res.json({ url: fileUrl, fileName: (req.file as any).filename, storage: "local" });
+    }
+
+    // No storage available
+    return res.status(503).json({
+      error: "Image storage unavailable. Configure Supabase or set UPLOADS_DIR to a writable path (e.g., /tmp/uploads).",
+    });
+  } catch (error: any) {
     console.error("Error handling image upload:", error);
-    res.status(500).json({ error: "Failed to process image upload" });
+    return res.status(500).json({ error: "Failed to process image upload" });
   }
 };
 
 export const handleMultipleImageUpload: RequestHandler = async (req, res) => {
-  const uploadMultiple = upload.array("images", 10); // Allow up to 10 images
+  const uploadMultiple = upload.array("images", 10);
 
   uploadMultiple(req, res, async (err) => {
     if (err) {
@@ -119,93 +120,79 @@ export const handleMultipleImageUpload: RequestHandler = async (req, res) => {
 
     try {
       if (imageStorage.isAvailable()) {
-        // Use Supabase storage
-        console.log("Using Supabase storage for multiple image upload");
-
         const fileObjects = files.map((file) => ({
           blob: new Blob([new Uint8Array(file.buffer)], { type: file.mimetype }),
           name: file.originalname,
         }));
-
-        const folder = req.body.folder || "products";
+        const folder = (req.body as any).folder || "products";
         const results = await imageStorage.uploadMultipleImagesFromBlobs(
           fileObjects,
           folder,
         );
-
         const successfulUploads = results.filter((r) => r.success);
         const failedUploads = results.filter((r) => !r.success);
+        return res.json({ success: successfulUploads, failed: failedUploads, storage: "supabase" });
+      }
 
-        if (failedUploads.length > 0) {
-          console.warn("Some uploads failed:", failedUploads);
-        }
-
-        res.json({
-          success: successfulUploads,
-          failed: failedUploads,
-          storage: "supabase",
-        });
-      } else {
-        // Fallback to local storage
-        console.log("Using local storage for multiple image upload");
-        const urls = files.map((file) => ({
+      if (hasLocalStorage) {
+        const urls = files.map((file: any) => ({
           success: true,
           url: `/uploads/${file.filename}`,
           fileName: file.filename,
         }));
-
-        res.json({
-          success: urls,
-          failed: [],
-          storage: "local",
-        });
+        return res.json({ success: urls, failed: [], storage: "local" });
       }
+
+      return res.status(503).json({
+        error: "Image storage unavailable. Configure Supabase or set UPLOADS_DIR to a writable path (e.g., /tmp/uploads).",
+      });
     } catch (error) {
       console.error("Error handling multiple image upload:", error);
-      res.status(500).json({ error: "Failed to process image uploads" });
+      return res.status(500).json({ error: "Failed to process image uploads" });
     }
   });
 };
 
 export const deleteImage: RequestHandler = async (req, res) => {
-  const { filename } = req.params;
-  const { storage } = req.query;
+  const { filename } = req.params as { filename: string };
+  const { storage } = req.query as { storage?: string };
 
   try {
     if (storage === "supabase" && imageStorage.isAvailable()) {
-      // Delete from Supabase storage
-      console.log("Deleting image from Supabase:", filename);
       const result = await imageStorage.deleteImage(filename);
-
       if (!result.success) {
-        console.error("Supabase delete failed:", result.error);
         return res.status(500).json({ error: result.error });
       }
+      return res.status(204).send();
+    }
 
-      res.status(204).send();
-    } else {
-      // Delete from local storage
-      console.log("Deleting image from local storage:", filename);
+    if (hasLocalStorage) {
       const filePath = path.join(uploadsDir, filename);
-
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
-        res.status(204).send();
-      } else {
-        res.status(404).json({ error: "File not found" });
+        return res.status(204).send();
       }
+      return res.status(404).json({ error: "File not found" });
     }
+
+    return res.status(503).json({ error: "No storage available" });
   } catch (error) {
     console.error("Error deleting file:", error);
-    res.status(500).json({ error: "Failed to delete file" });
+    return res.status(500).json({ error: "Failed to delete file" });
   }
 };
 
-// Health check endpoint for image storage
-export const getStorageInfo: RequestHandler = (req, res) => {
+export const getStorageInfo: RequestHandler = (_req, res) => {
+  const storageType = imageStorage.isAvailable()
+    ? "supabase"
+    : hasLocalStorage
+      ? "local"
+      : "none";
   res.json({
-    storageType: imageStorage.isAvailable() ? "supabase" : "local",
+    storageType,
     supabaseAvailable: imageStorage.isAvailable(),
+    localAvailable: hasLocalStorage,
+    uploadsDir,
     maxFileSize: "10MB",
     allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
   });
