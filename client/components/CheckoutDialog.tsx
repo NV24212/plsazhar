@@ -125,57 +125,6 @@ const SuccessView = ({ orderMessages, onClose }) => {
   );
 };
 
-// Helper component for the success screen
-const SuccessView = ({ orderMessages, onClose }) => {
-  const { t } = useLanguage();
-  const navigate = useNavigate();
-  return (
-    <motion.div
-      key="success"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="flex flex-col h-full"
-    >
-      <DialogHeader className="p-6 pb-4 border-b bg-primary/10">
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center shadow-lg">
-            <CheckCircle className="h-10 w-10 text-primary" />
-          </div>
-        </div>
-        <div>
-          <DialogTitle className="text-center text-2xl font-bold text-primary auto-text leading-tight">
-            {orderMessages.headline}
-          </DialogTitle>
-          <p className="text-center text-primary/80 auto-text text-sm mt-2 leading-relaxed">
-            {orderMessages.subtext}
-          </p>
-        </div>
-      </DialogHeader>
-      <ScrollArea className="flex-1 p-6">
-        <div id="checkout-success-bottom" className="flex items-center justify-center min-h-full py-8">
-          <div className="text-center max-w-md mx-auto">
-            <div className="bg-secondary p-8 rounded-lg border">
-              <p className="text-foreground auto-text text-lg leading-relaxed">
-                {orderMessages.successMessage}
-              </p>
-            </div>
-          </div>
-        </div>
-      </ScrollArea>
-      <div className="border-t p-4 bg-white">
-        <Button
-          type="button"
-          onClick={() => { onClose(); navigate('/'); }}
-          className="w-full bg-primary hover:bg-primary/90 touch-manipulation h-12 text-base font-semibold"
-        >
-          <span className="auto-text">{t("checkout.backToStore")}</span>
-        </Button>
-      </div>
-    </motion.div>
-  );
-};
-
 interface CheckoutDialogProps {
   open: boolean;
   onClose: () => void;
