@@ -1,4 +1,4 @@
-# Software Requirements Specification (SRS) for Fusion-Starter
+# Software Requirements Specification (SRS) for AzharStore
 
 **Version 1.0**
 
@@ -9,7 +9,7 @@
 ## 1. Introduction
 
 ### 1.1. Purpose
-This document provides a detailed Software Requirements Specification (SRS) for **Fusion-Starter**, a full-stack e-commerce application boilerplate. The project is designed to serve as a robust and scalable foundation for developers and businesses to build and deploy modern online stores or Point-of-Sale (POS) systems.
+This document provides a detailed Software Requirements Specification (SRS) for **AzharStore**, a full-stack e-commerce application boilerplate. The project is designed to serve as a robust and scalable foundation for developers and businesses to build and deploy modern online stores or Point-of-Sale (POS) systems.
 
 ### 1.2. Scope
 The application provides a comprehensive set of core e-commerce functionalities out-of-the-box, including:
@@ -18,7 +18,7 @@ The application provides a comprehensive set of core e-commerce functionalities 
 *   User authentication and profile management.
 *   A complete checkout and order processing workflow.
 
-This SRS document covers the existing features and architecture of the `fusion-starter` repository.
+This SRS document covers the existing features and architecture of the `AzharStore` repository.
 
 ### 1.3. Overview
 This document is organized to provide a clear understanding of the application's requirements. It details the overall description of the product, specific functional and non-functional requirements, UI/UX guidelines, and the underlying data model.
@@ -28,7 +28,7 @@ This document is organized to provide a clear understanding of the application's
 ## 2. Overall Description
 
 ### 2.1. Product Perspective
-Fusion-Starter is a self-contained, full-stack web application built with a modern technology stack. It integrates a React/Vite frontend with a Node.js/Express backend and leverages Supabase for database and backend services. It is designed to be a deployable template project.
+AzharStore is a self-contained, full-stack web application built with a modern technology stack. It integrates a React/Vite frontend with a Node.js/Express backend and leverages Supabase for database and backend services. It is designed to be a deployable template project.
 
 ### 2.2. Target Audience
 The primary audience for this project includes:
