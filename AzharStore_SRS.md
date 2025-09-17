@@ -15,8 +15,7 @@ This document provides a detailed Software Requirements Specification (SRS) for 
 The application provides a comprehensive set of core e-commerce functionalities out-of-the-box, including:
 *   A complete admin dashboard for managing products, orders, and customers.
 *   A customer-facing storefront for browsing products and making purchases.
-*   User authentication and profile management.
-*   A complete checkout and order processing workflow.
+*   A complete guest checkout and order processing workflow.
 
 This SRS document covers the existing features and architecture of the `AzharStore` repository.
 
@@ -116,24 +115,35 @@ The application is designed to be accessed on both desktop and mobile devices.
 
 ### 3.3. UI/UX Requirements
 
-*   **UI-1: Navigation Style:**
+*   **UI-1: Core Principle - Simplicity and Clarity:**
+    *   The entire user interface, particularly for customer-facing pages, must prioritize simplicity. The design should be clean, uncluttered, and intuitive, enabling users to find products and complete purchases with minimal friction.
+*   **UI-2: Navigation Style:**
     *   The application utilizes distinct navigation patterns. The public storefront uses a primary top navigation bar, while the admin area employs a persistent sidebar layout for navigating management sections.
-*   **UI-2: Interaction Style:**
-    *   The system heavily favors a modern Single-Page Application (SPA) interaction model, using components like modals, drawers, and popovers to handle actions without full-page reloads.
-*   **UI-3: Checkout Flow:**
+*   **UI-3: Interaction Style:**
+    *   The system heavily favors a modern Single-Page Application (SPA) interaction model. Using components like modals, drawers, and popovers for key workflows is a core design principle, preferred over traditional page reloads to create a smoother user experience.
+*   **UI-4: Product Page Layout:**
+    *   The product detail page shall use a clean, two-column layout on larger screens.
+    *   One column is dedicated to product imagery, including a primary image display and clickable thumbnails for all product and variant images.
+    *   The second column presents information in a clear hierarchy: product name, description, a large prominent price, stock status, selectable variants (if any), and a large, full-width "Add to Cart" button as the primary call-to-action.
+*   **UI-5: Header Design:**
+    *   The storefront header shall maintain a simple and functional layout. It includes the store logo on the left, and a set of action buttons on the right (e.g., Instagram link, language switcher, cart access).
+    *   To maintain a clean and consistent style, action buttons in the header are required to be rectangular, avoiding circular or icon-only button styles.
+*   **UI-6: Checkout Flow:**
     *   The guest checkout process is presented within a multi-step modal dialog (`CheckoutDialog.tsx`). This stepper guides the user through entering customer information, selecting delivery options, and confirming the order summary.
-*   **UI-4: Visual Design Guidelines:**
+    *   The workflow deliberately avoids immediate online payment processing, contributing to a simpler and faster checkout experience for the customer.
+*   **UI-7: Visual Design Guidelines:**
+    *   **Primary Color:** The visual design must prominently feature the primary brand color `#742370`.
     *   **Styling:** The UI is built with Tailwind CSS, following a utility-first methodology.
     *   **Component Library:** The application uses `shadcn/ui`, which provides a consistent, modern, and accessible set of pre-built components.
     *   **Icons:** The `lucide-react` library is used for a clean and consistent set of icons throughout the application.
     *   **Themes:** The inclusion of `next-themes` indicates support for user-selectable themes, such as light and dark modes.
-*   **UI-5: Responsive Behavior:**
-    *   All interfaces are required to be fully responsive and mobile-first, ensuring usability across desktops, tablets, and mobile devices.
-*   **UI-6: Error Handling & Feedback:**
+*   **UI-8: Responsive Design:**
+    *   A seamless and high-quality responsive design is a critical requirement. All interfaces must be mobile-first and adapt perfectly to all screen sizes, from small mobile devices to large desktop monitors, without any layout issues or loss of functionality.
+*   **UI-9: Error Handling & Feedback:**
     *   Forms utilize real-time, inline validation, managed by `react-hook-form` and `zod` resolvers.
     *   Asynchronous action feedback (e.g., success, error, loading states) is provided through non-intrusive toast notifications (`sonner`) and custom success popups (e.g., after placing an order).
-*   **UI-7: Micro-interactions:**
-    *   The application requires smooth transitions and animations for interactive elements to improve the user experience. This is facilitated by libraries such as `framer-motion` and `tailwindcss-animate`.
+*   **UI-10: Animations & Micro-interactions:**
+    *   The application must feature high-quality, "good feeling" animations and micro-interactions that enhance the user experience. Transitions should be smooth and purposeful, providing users with satisfying visual feedback. This is facilitated by libraries such as `framer-motion` and `tailwindcss-animate`.
 
 ---
 
