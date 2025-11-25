@@ -118,6 +118,7 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = () => {
+    console.log("Add to Cart clicked. Selected Variant ID:", selectedVariantId);
     if (product) {
       setIsAddToCartOpen(true);
     }

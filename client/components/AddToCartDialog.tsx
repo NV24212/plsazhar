@@ -54,6 +54,7 @@ export default function AddToCartDialog({
   const [quantity, setQuantity] = useState(1);
 
   console.log("Initial Variant ID Prop:", initialVariantId);
+  console.log("Product variants:", product.variants);
 
   const selectedVariant = product.variants.find(
     (v) => v.id === selectedVariantId,
