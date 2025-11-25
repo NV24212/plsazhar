@@ -39,12 +39,14 @@ interface AddToCartDialogProps {
   product: Product;
   open: boolean;
   onClose: () => void;
+  selectedVariantId?: string | null;
 }
 
 export default function AddToCartDialog({
   product,
   open,
   onClose,
+  selectedVariantId: initialVariantId,
 }: AddToCartDialogProps) {
   const { t, language } = useLanguage();
   const { addItem } = useCart();
@@ -64,10 +66,10 @@ export default function AddToCartDialog({
   // Reset form when dialog opens
   useEffect(() => {
     if (open) {
-      setSelectedVariantId("");
+      setSelectedVariantId(initialVariantId || "");
       setQuantity(1);
     }
-  }, [open]);
+  }, [open, initialVariantId]);
 
   const handleAddToCart = () => {
     // For products without variants, allow adding to cart without variant selection
