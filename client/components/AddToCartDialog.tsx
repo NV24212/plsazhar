@@ -39,21 +39,18 @@ interface AddToCartDialogProps {
   product: Product;
   open: boolean;
   onClose: () => void;
-  selectedVariantId?: string | null;
+  initialSelectedVariantId?: string | null;
 }
 
-export default function AddToCartDialog({
-  product,
-  open,
-  onClose,
-  selectedVariantId: initialVariantId,
-}: AddToCartDialogProps) {
+export default function AddToCartDialog(props: AddToCartDialogProps) {
+  const { product, open, onClose, initialSelectedVariantId } = props;
   const { t, language } = useLanguage();
   const { addItem } = useCart();
   const [selectedVariantId, setSelectedVariantId] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
 
-  console.log("Initial Variant ID Prop:", initialVariantId);
+  console.log("AddToCartDialog props:", props);
+  console.log("Initial Variant ID Prop:", initialSelectedVariantId);
   console.log("Product variants:", product.variants);
 
   const selectedVariant = product.variants.find(
@@ -72,11 +69,11 @@ export default function AddToCartDialog({
   // Reset form when dialog opens
   useEffect(() => {
     if (open) {
-      console.log("Setting selectedVariantId in useEffect:", initialVariantId);
-      setSelectedVariantId(initialVariantId || "");
+      console.log("Setting selectedVariantId in useEffect:", initialSelectedVariantId);
+      setSelectedVariantId(initialSelectedVariantId || "");
       setQuantity(1);
     }
-  }, [open, initialVariantId]);
+  }, [open, initialSelectedVariantId]);
 
   const handleAddToCart = () => {
     // For products without variants, allow adding to cart without variant selection

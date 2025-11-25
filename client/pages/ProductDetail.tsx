@@ -397,7 +397,7 @@ export default function ProductDetail() {
           product={{ ...product, total_stock: product.total_stock || 0 }}
           open={isAddToCartOpen}
           onClose={() => setIsAddToCartOpen(false)}
-          selectedVariantId={selectedVariantId}
+          initialSelectedVariantId={selectedVariantId}
         />
       )}
 
