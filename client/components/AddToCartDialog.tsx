@@ -49,16 +49,9 @@ export default function AddToCartDialog(props: AddToCartDialogProps) {
   const [selectedVariantId, setSelectedVariantId] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
 
-  console.log("AddToCartDialog props:", props);
-  console.log("Initial Variant ID Prop:", initialSelectedVariantId);
-  console.log("Product variants:", product.variants);
-
   const selectedVariant = product.variants.find(
     (v) => v.id === selectedVariantId,
   );
-
-  console.log("Selected Variant Object:", selectedVariant);
-
 
   // For products without variants, use total_stock; otherwise use variant stock (max 50)
   const maxQuantity =
@@ -66,10 +59,9 @@ export default function AddToCartDialog(props: AddToCartDialogProps) {
       ? Math.min(product.total_stock || 0, 50)
       : Math.min(selectedVariant?.stock || 0, 50);
 
-  // Reset form when dialog opens
+  // Reset form when dialog opens or variant changes
   useEffect(() => {
     if (open) {
-      console.log("Setting selectedVariantId in useEffect:", initialSelectedVariantId);
       setSelectedVariantId(initialSelectedVariantId || "");
       setQuantity(1);
     }
@@ -140,10 +132,7 @@ export default function AddToCartDialog(props: AddToCartDialogProps) {
                 <Label htmlFor="variant">{t("store.variant")}</Label>
                 <Select
                   value={selectedVariantId}
-                  onValueChange={(value) => {
-                    console.log("Variant selected in dropdown:", value);
-                    setSelectedVariantId(value);
-                  }}
+                  onValueChange={setSelectedVariantId}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t("store.selectVariant")} />
